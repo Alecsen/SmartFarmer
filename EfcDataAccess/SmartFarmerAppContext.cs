@@ -6,7 +6,6 @@ namespace EfcDataAccess;
 public class SmartFarmerAppContext : DbContext
 {
     public DbSet<AuthenticationUser> Users { get; set; }
-    public DbSet<Post> Posts { get; set; }
     
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -17,7 +16,6 @@ public class SmartFarmerAppContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Post>().HasKey(todo => todo.Id);
         modelBuilder.Entity<AuthenticationUser>().HasKey(user => user.Id);
     }
 }
