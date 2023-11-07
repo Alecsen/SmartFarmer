@@ -15,6 +15,6 @@ public class AuthenticationUser
     public int Age { get; set; }
     public int SecurityLevel { get; set; }
     
-
+    public ICollection<Field> Fields { get; set; }
 
 }

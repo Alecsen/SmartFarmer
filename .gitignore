@@ -9,3 +9,5 @@ data.json
 .git/
 .idea/
 .vs/
+*.db-shm
+*.db-wal
