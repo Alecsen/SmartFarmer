@@ -6,3 +6,6 @@ data.json
 /_ReSharper.Caches/
 /*/obj/
 /*/bin/
+.git/
+.idea/
+.vs/
