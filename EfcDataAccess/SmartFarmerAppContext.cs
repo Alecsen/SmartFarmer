@@ -6,7 +6,6 @@ namespace EfcDataAccess;
 public class SmartFarmerAppContext : DbContext
 {
     public DbSet<AuthenticationUser> Users { get; set; }
-    
     public DbSet<Field> Fields { get; set; }
     public DbSet<Sensor> Sensors { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
