@@ -18,7 +18,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserDao, UserEfcDao>();
+builder.Services.AddScoped<IFieldDao, FieldEfcDao>();
 builder.Services.AddScoped<IUserLogic, UserLogic>();
+builder.Services.AddScoped<IFieldLogic, FieldLogic>();
 builder.Services.AddDbContext<SmartFarmerAppContext>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

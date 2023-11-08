@@ -1,6 +1,6 @@
 ﻿namespace Application.LogicInterface;
 
-public interface ISensorDao
+public interface ISensorLogic
 {
     
 }
