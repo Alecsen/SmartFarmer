@@ -37,3 +37,6 @@ Content-Type: application/json
   "role": "god",
   "age": 24,
   "securityLevel": 5}
+
+###
+GET https://localhost:7107/Field/CreateUser
