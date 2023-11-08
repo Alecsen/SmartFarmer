@@ -58,24 +58,6 @@ else
 
     private AuthenticationUser _user = new();
     private int currentUserId;
-
-    /*
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            currentUsername = authState.User.Identity?.Name ?? "UnknownUser";
-
-            _user = await userService.GetAsync(currentUsername);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
-    */
     
     protected override async Task OnInitializedAsync()
     {
@@ -84,8 +66,6 @@ else
 
         currentUsername = user.Identity?.Name ?? "UnknownUser";
 
-    // Retrieve the user ID from the claims
-        var userIdClaim = user.FindFirst("UserId");
         currentUserId = await userService.GetCurrentUserId();
 
         _user = await userService.GetAsync(currentUsername);
