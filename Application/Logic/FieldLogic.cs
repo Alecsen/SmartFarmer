@@ -15,6 +15,6 @@ public class FieldLogic : IFieldLogic
 
     public Task<IEnumerable<Field>> GetAsync(int OwnerId)
     {
-        IEnumerable<Field> fields = fieldDao.GetFieldsByOwnerId(OwnerId);
+        return fieldDao.GetFieldsByOwnerId(OwnerId);
     }
 }

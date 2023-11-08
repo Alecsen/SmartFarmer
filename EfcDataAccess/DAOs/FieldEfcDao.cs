@@ -1,16 +1,33 @@
 ﻿using Application.DAOInterface;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EfcDataAccess.DAOs;
 
 public class FieldEfcDao : IFieldDao
 {
-    
-    
-    
-    
-    public IEnumerable<Field> GetFieldsByOwnerId(int ownerId)
+
+    private readonly SmartFarmerAppContext context;
+
+    public FieldEfcDao(SmartFarmerAppContext context)
     {
-        throw new NotImplementedException();
+        this.context = context;
+    }
+
+
+    public async Task<IEnumerable<Field>> GetFieldsByOwnerId(int ownerId)
+    {
+        // This will retrieve all Field objects with the matching ownerId
+        var fields = await context.Fields
+            .Where(field => field.Owner.Id == ownerId)
+            .ToListAsync();
+
+        if (!fields.Any())
+        {
+            
+            throw new Exception($"No fields found for owner with ID {ownerId}.");
+        }
+
+        return fields;
     }
 }

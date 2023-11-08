@@ -21,7 +21,7 @@ public class FieldController: ControllerBase
         try
         {
             var fields = await fieldLogic.GetAsync(ownerId);
-        
+            return Ok(fields);
 
         }
         catch (Exception e)
