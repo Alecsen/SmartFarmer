@@ -57,7 +57,7 @@ else
     private string color = "";
 
     private AuthenticationUser _user = new();
-    private string currentUserId;
+    private int currentUserId;
 
     /*
     protected override async Task OnInitializedAsync()
@@ -86,7 +86,7 @@ else
 
     // Retrieve the user ID from the claims
         var userIdClaim = user.FindFirst("UserId");
-        currentUserId = userIdClaim?.Value ?? "UnknownId";
+        currentUserId = await userService.GetCurrentUserId();
 
         _user = await userService.GetAsync(currentUsername);
     }

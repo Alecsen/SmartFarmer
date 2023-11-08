@@ -3,16 +3,19 @@ using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
 using HttpClients.ClientInterfaces;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace HttpClients.Implementations;
 
 public class UserHttpClient : IUserService
 {
     private readonly HttpClient client;
+    private readonly AuthenticationStateProvider authenticationStateProvider;
 
-    public UserHttpClient(HttpClient client)
+    public UserHttpClient(HttpClient client, AuthenticationStateProvider authenticationStateProvider)
     {
         this.client = client;
+        this.authenticationStateProvider = authenticationStateProvider;
     }
 
     public async Task<User> Create(UserCreationDTO dto)
@@ -67,5 +70,19 @@ public class UserHttpClient : IUserService
             PropertyNameCaseInsensitive = true
         })!;
         return user;
+    }
+
+    public async Task<int> GetCurrentUserId()
+    {
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        var userIdClaim = user.FindFirst("UserId");
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+        {
+            return userId;
+        }
+
+        return -1; // Or throw an exception or return a nullable int if you prefer
     }
 }
