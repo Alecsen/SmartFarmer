@@ -34,7 +34,23 @@ public class UsersController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-
+    
+    [HttpGet]
+    [Route("ViewProfile")]
+    public async Task<ActionResult<AuthenticationUser>> GetAsync(string username)
+    {
+        try
+        {
+            UserSearchParametersDTO parameter = new(username);
+            var user = await userLogic.GetAsync(parameter);
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
    
     
 }

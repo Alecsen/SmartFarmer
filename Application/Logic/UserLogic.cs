@@ -53,6 +53,11 @@ public class UserLogic : IUserLogic
 
     }
 
+    public Task<AuthenticationUser> GetAsync(UserSearchParametersDTO dto)
+    {
+        return userDao.GetByUsernameAsync(dto.Username);
+    }
+
     private void ValidateUserName(UserCreationDTO userToCreate)
     {
         string userName = userToCreate.UserName;

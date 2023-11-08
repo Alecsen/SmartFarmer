@@ -1,0 +1,77 @@
+@page "/ViewProfile"
+@using System.Reflection.Emit
+@using Domain.DTOs
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@inject IUserService userService;
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@if (currentUsername.Equals(""))
+{
+    <p>Loading...</p>
+}
+else
+{
+    <AuthorizeView>
+        <div class="container">
+            <h3>ViewProfile</h3>
+            <div class="field-container">
+                <div class="field">
+                    <label>User name:</label>
+                    <input type="text" @bind="currentUsername"/>
+                </div>
+                <div class="field">
+                    <label>Password:</label>
+                    <input type="password" @bind="_user.Password"/>
+                </div>
+                <div class="field">
+                    <label>Email:</label>
+                    <input type="email" @bind="_user.Email"/>
+                </div>
+                <div class="field">
+                    <label>Name:</label>
+                    <input type="text" @bind="_user.Name"/>
+                </div>
+                <div class="field">
+                    <label>Role:</label>
+                    <input type="text" @bind="_user.Role"/>
+                </div>
+                <div class="field">
+                    <label>Age:</label>
+                    <input type="number" @bind="_user.Age"/>
+                </div>
+                @if (!string.IsNullOrEmpty(resultMsg))
+                {
+                    <label style="@color">@resultMsg</label>
+                }
+            </div>
+        </div>
+    </AuthorizeView>
+}
+
+
+@code {
+    private string currentUsername = "";
+    private string resultMsg = "";
+    private string color = "";
+
+    private AuthenticationUser _user = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            currentUsername = authState.User.Identity?.Name ?? "UnknownUser";
+
+            _user = await userService.GetAsync(currentUsername);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+}

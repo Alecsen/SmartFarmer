@@ -46,4 +46,26 @@ public class UserHttpClient : IUserService
         })!;
         return user;
     }
+
+    public async Task<AuthenticationUser> GetAsync(string? username)
+    {
+        string query = "";
+        if (!string.IsNullOrEmpty(username))
+        {
+            query += $"?username={username}";
+        }
+        
+        HttpResponseMessage response = await client.GetAsync("Users/ViewProfile"+query);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
+        AuthenticationUser user = JsonSerializer.Deserialize<AuthenticationUser>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return user;
+    }
 }

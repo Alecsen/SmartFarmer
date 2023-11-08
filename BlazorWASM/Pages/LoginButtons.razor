@@ -8,6 +8,7 @@
 <AuthorizeView>
     <Authorized>
         <img class="icon" src="img/Logout.png" @onclick="Logout"/>
+        <img class="icon" src="img/Profile.png" @onclick="Profile" alt="View profile">
     </Authorized>
     <NotAuthorized>
         <img class="icon" src="img/Login.png" @onclick="Login"/>
@@ -26,6 +27,11 @@
     {
         await authService.LogoutAsync();
         navMgr.NavigateTo("/");
+    }
+
+    private void Profile()
+    {
+        navMgr.NavigateTo("/ViewProfile");
     }
 
 }
