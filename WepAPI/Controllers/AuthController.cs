@@ -77,6 +77,7 @@ public class AuthController : ControllerBase
             new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.Role, user.Role),
             new Claim("DisplayName", user.Name),
+            new Claim("UserId", user.Id.ToString()),
             new Claim("Email", user.Email),
             new Claim("Age", user.Age.ToString()),
             new Claim("Domain", user.Domain),
