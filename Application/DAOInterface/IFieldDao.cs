@@ -1,8 +1,9 @@
-﻿using Domain.Models;
+﻿using Domain.DTOs;
+using Domain.Models;
 
 namespace Application.DAOInterface;
 
 public interface IFieldDao
 {
-    Task<IEnumerable<Field>> GetFieldsByOwnerId(int ownerId);
+    Task<IEnumerable<FieldLookupDto>> GetFieldsByOwnerId(int ownerId);
 }

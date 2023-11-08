@@ -1,4 +1,5 @@
 ﻿using Application.LogicInterface;
+using Domain.DTOs;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ public class FieldController: ControllerBase
     }
 
     [HttpGet("{ownerId}")]
-    public async Task<ActionResult<IEnumerable<Field>>> GetFieldsByOwner(int ownerId)
+    public async Task<ActionResult<IEnumerable<FieldLookupDto>>> GetFieldsByOwner(int ownerId)
     {
         try
         {

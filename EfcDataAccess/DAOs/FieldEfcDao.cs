@@ -1,4 +1,5 @@
 ﻿using Application.DAOInterface;
+using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ public class FieldEfcDao : IFieldDao
     }
 
 
-    public async Task<IEnumerable<Field>> GetFieldsByOwnerId(int ownerId)
+    public async Task<IEnumerable<FieldLookupDto>> GetFieldsByOwnerId(int ownerId)
     {
         // This will retrieve all Field objects with the matching ownerId
         var fields = await context.Fields
@@ -24,10 +25,20 @@ public class FieldEfcDao : IFieldDao
 
         if (!fields.Any())
         {
-            
             throw new Exception($"No fields found for owner with ID {ownerId}.");
         }
 
-        return fields;
+        List<FieldLookupDto> result = new List<FieldLookupDto>();
+
+        foreach (Field field in fields)
+        {
+            FieldLookupDto dto = new FieldLookupDto();
+            dto.Id = field.Id;
+            dto.FieldName = field.Name;
+            
+            result.Add(dto);
+        }
+        
+        return result;
     }
 }

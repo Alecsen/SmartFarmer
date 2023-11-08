@@ -1,5 +1,6 @@
 ﻿using Application.DAOInterface;
 using Application.LogicInterface;
+using Domain.DTOs;
 using Domain.Models;
 
 namespace Application.Logic;
@@ -13,7 +14,7 @@ public class FieldLogic : IFieldLogic
         this.fieldDao = fieldDao;
     }
 
-    public Task<IEnumerable<Field>> GetAsync(int OwnerId)
+    public Task<IEnumerable<FieldLookupDto>> GetAsync(int OwnerId)
     {
         return fieldDao.GetFieldsByOwnerId(OwnerId);
     }
