@@ -19,7 +19,7 @@ else
             <div class="field-container">
                 <div class="field">
                     <label>User name:</label>
-                    <input type="text" @bind="currentUsername"/>
+                    <input type="text" @bind="currentUserId"/>
                 </div>
                 <div class="field">
                     <label>Password:</label>
@@ -57,7 +57,9 @@ else
     private string color = "";
 
     private AuthenticationUser _user = new();
+    private string currentUserId;
 
+    /*
     protected override async Task OnInitializedAsync()
     {
         try
@@ -72,6 +74,21 @@ else
             Console.WriteLine(e);
             throw;
         }
+    }
+    */
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        currentUsername = user.Identity?.Name ?? "UnknownUser";
+
+    // Retrieve the user ID from the claims
+        var userIdClaim = user.FindFirst("UserId");
+        currentUserId = userIdClaim?.Value ?? "UnknownId";
+
+        _user = await userService.GetAsync(currentUsername);
     }
 
 }
