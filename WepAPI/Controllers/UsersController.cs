@@ -51,6 +51,22 @@ public class UsersController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPut]
+    [Route("EditUser")]
+    public async Task<ActionResult<AuthenticationUser>> UpdateAsync(string username, string? email, string? password)
+    {
+        try
+        {
+            var user = await userLogic.GetUpdate(username, email, password);
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
    
     
 }

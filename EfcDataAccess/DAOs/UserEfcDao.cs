@@ -29,4 +29,26 @@ public class UserEfcDao : IUserDao
         );
         return existing;
     }
+    
+    public async Task<AuthenticationUser> UpdateAsync(string username, string? email, string? password)
+    {
+        // Find the user with the given username
+        AuthenticationUser? userToUpdate = await context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+
+        if (userToUpdate != null)
+        {
+            if (email != null)
+                userToUpdate.Email = email;
+
+            if (password != null)
+                userToUpdate.Password = password;
+            
+            context.Users.Update(userToUpdate);
+            await context.SaveChangesAsync();
+
+            return userToUpdate;
+        }
+        
+        throw new InvalidOperationException($"User with username {username} not found.");
+    }
 }
