@@ -1,5 +1,8 @@
-@page "/EditProfile"
+@page "/ViewProfile/EditProfile"
+@using HttpClients.ClientInterfaces
 @using Domain.Models
+@inject IUserService userService;
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <AuthorizeView>
     <div class="container">
@@ -41,6 +44,20 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         username = authState.User.Identity?.Name ?? "UnknownUser";
     }
-    
+
+    private async Task Update()
+    {
+        resultMsg = "";
+        try
+        {
+            await userService.UpdateAsync(username, userEmail, userPassword);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            resultMsg = e.Message;
+            color = "red";
+        }
+    }
     
 }

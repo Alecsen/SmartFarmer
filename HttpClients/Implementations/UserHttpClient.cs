@@ -85,4 +85,19 @@ public class UserHttpClient : IUserService
 
         return -1; // Or throw an exception or return a nullable int if you prefer
     }
+
+    public async Task<AuthenticationUser> UpdateAsync(string username, string userEmail, string userPassword)
+    {
+        HttpResponseMessage response = await client.GetAsync("ViewProfile/EditProfile");
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+        AuthenticationUser user = JsonSerializer.Deserialize<AuthenticationUser>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return user;
+    }
 }
