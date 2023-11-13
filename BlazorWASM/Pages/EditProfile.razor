@@ -1,0 +1,46 @@
+@page "/EditProfile"
+@using Domain.Models
+
+<AuthorizeView>
+    <div class="container">
+        <h3>EditProfile</h3>
+        <div class="field-container">
+            <div class="field">
+                <label @bind="username"></label>
+            </div>
+            <div class="field">
+                <label>Email:</label>
+                <input type="email" @bind="userEmail" />
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" @bind="userPassword"/>
+            </div>
+            <div class="button-row">
+                <button class="updateBTN" @onclick="Update">Update</button>
+            </div>
+             @if (!string.IsNullOrEmpty(resultMsg))
+             {
+                 <label style="@color">@resultMsg</label>
+             }
+        </div>
+    </div>
+</AuthorizeView>
+
+@code {
+    private string userEmail = "";
+    private string userPassword = "";
+    private string username = "";
+    private string resultMsg = "";
+    private string color = "";
+    
+    private AuthenticationUser _user = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        username = authState.User.Identity?.Name ?? "UnknownUser";
+    }
+    
+    
+}
