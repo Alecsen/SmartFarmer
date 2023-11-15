@@ -6,28 +6,32 @@
 
 <AuthorizeView>
     <div class="container">
-        <h3>EditProfile</h3>
-        <div class="field-container">
-            <div class="field">
-                <label @bind="username"></label>
+        <h3>Edit Profile</h3>
+        <form>
+            <div class="field-container">
+                <div class="field">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" value="@username" readonly />
+                </div>
+                <div class="field">
+                    <label for="userEmail">Email:</label>
+                    <input type="email" id="userEmail" @bind="userEmail" />
+                </div>
+                <div class="field">
+                    <label for="userPassword">Password:</label>
+                    <input type="password" id="userPassword" @bind="userPassword" />
+                </div>
+                <div class="button-row">
+                    <button type="button" class="updateBTN" @onclick="Update">Update</button>
+                </div>
             </div>
-            <div class="field">
-                <label>Email:</label>
-                <input type="email" @bind="userEmail" />
-            </div>
-            <div class="field">
-                <label>Password</label>
-                <input type="password" @bind="userPassword"/>
-            </div>
-            <div class="button-row">
-                <button class="updateBTN" @onclick="Update">Update</button>
-            </div>
-             @if (!string.IsNullOrEmpty(resultMsg))
-             {
-                 <label style="@color">@resultMsg</label>
-             }
-        </div>
+        </form>
+        @if (!string.IsNullOrEmpty(resultMsg))
+        {
+            <label style="@color">@resultMsg</label>
+        }
     </div>
+
 </AuthorizeView>
 
 @code {
