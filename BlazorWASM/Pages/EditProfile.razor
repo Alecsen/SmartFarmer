@@ -1,7 +1,9 @@
 @page "/ViewProfile/EditProfile"
 @using HttpClients.ClientInterfaces
 @using Domain.Models
-@inject IUserService userService;
+@using Domain.DTOs
+@inject IUserService userService
+@inject NavigationManager navMgr
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <AuthorizeView>
@@ -35,26 +37,40 @@
 </AuthorizeView>
 
 @code {
+    private ProfileUpdateDto dto = null;
     private string userEmail = "";
     private string userPassword = "";
     private string username = "";
     private string resultMsg = "";
     private string color = "";
-    
-    private AuthenticationUser _user = new();
 
     protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        username = authState.User.Identity?.Name ?? "UnknownUser";
-    }
-
-    private async Task Update()
     {
         resultMsg = "";
         try
         {
-            await userService.UpdateAsync(username, userEmail, userPassword);
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            username = authState.User.Identity?.Name ?? "UnknownUser";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            resultMsg = e.Message;
+        }
+    }
+
+    private async Task Update()
+    {
+        try
+        {
+            dto = new(username)
+            {
+                Email = userEmail,
+                Password = userPassword
+            };
+            
+            await userService.UpdateAsync(dto);
+            navMgr.NavigateTo("/ViewProfile");
         }
         catch (Exception e)
         {

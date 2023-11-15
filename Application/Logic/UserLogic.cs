@@ -58,9 +58,9 @@ public class UserLogic : IUserLogic
         return userDao.GetByUsernameAsync(dto.Username);
     }
 
-    public Task<AuthenticationUser> GetUpdate(string username, string? email, string? password)
+    public Task UpdateAsync(ProfileUpdateDto dto)
     {
-        return userDao.UpdateAsync(username, email, password);
+        return userDao.UpdateAsync(dto);
     }
 
     private void ValidateUserName(UserCreationDTO userToCreate)

@@ -52,14 +52,14 @@ public class UsersController : ControllerBase
         }
     }
 
-    [HttpPut]
+    [HttpPatch]
     [Route("EditUser")]
-    public async Task<ActionResult<AuthenticationUser>> UpdateAsync(string username, string? email, string? password)
+    public async Task<ActionResult> UpdateAsync([FromBody] ProfileUpdateDto dto)
     {
         try
         {
-            var user = await userLogic.GetUpdate(username, email, password);
-            return Ok(user);
+            await userLogic.UpdateAsync(dto);
+            return Ok();
         }
         catch (Exception e)
         {
