@@ -1,0 +1,57 @@
+@page "/ViewField"
+@using Domain.Models
+
+<AuthorizeView>
+    <h3>ViewField</h3>
+    
+    @if (fields == null)
+    {
+        <p>Loading...</p>
+    }
+    else if (!fields.Any())
+    {
+        <p>No fields to display</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Field name</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in fields)
+            {
+                <tr>
+                    <td>@item.FieldName</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    @if (!string.IsNullOrEmpty(msg))
+    {
+        <label style="color: red">@msg</label>
+    }
+    
+</AuthorizeView>
+
+@code {
+    private IEnumerable<Field>? fields;
+    private string msg = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+}
