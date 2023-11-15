@@ -1,5 +1,10 @@
 @page "/ViewField"
-@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs
+@inject IFieldService fieldService
+@inject IUserService userService
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <AuthorizeView>
     <h3>ViewField</h3>
@@ -38,14 +43,23 @@
 </AuthorizeView>
 
 @code {
-    private IEnumerable<Field>? fields;
+    private IEnumerable<FieldLookupDto>? fields;
     private string msg = "";
+    private int currentUserId;
+    private string currentUsername;
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        currentUsername = user.Identity?.Name ?? "UnknownUser";
+
+        currentUserId = await userService.GetCurrentUserId();
+        
         try
         {
-
+            fields = await fieldService.GetFieldsByUserId(currentUserId);
         }
         catch (Exception e)
         {
