@@ -36,6 +36,10 @@ public class FieldEfcDao : IFieldDao
             FieldLookupDto dto = new FieldLookupDto();
             dto.Id = field.Id;
             dto.FieldName = field.Name;
+            dto.locationData = field.LocationData;
+            
+            
+            
             
             result.Add(dto);
         }
