@@ -8,5 +8,5 @@ public class Field
     public AuthenticationUser Owner { get; private set; }
     public string Name { get; set; }
     
-    public string LocationData { get; set; }
+    public string? LocationData { get; set; }
 }
