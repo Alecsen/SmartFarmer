@@ -1,0 +1,19 @@
+﻿@inject IJSRuntime JSRuntime
+@page "/map"
+<h3>MapView</h3>
+
+<div id="mapid" style="height: 400px;"></div>
+
+
+@code {
+    private ElementReference mapElement;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeMap");
+        }
+    }
+}
+
