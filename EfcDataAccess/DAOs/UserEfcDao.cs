@@ -55,23 +55,10 @@ public class UserEfcDao : IUserDao
         }
         
     }
-}
 
-/*
-public Task UpdateAsync(AuthenticationUser toUpdate)
-{
-    AuthenticationUser? existing = context.Users.FirstOrDefault(user => user.Username == toUpdate.Username);
-    if (existing == null)
+    public async Task<AuthenticationUser?> GetByUserIdAsync(int id)
     {
-        throw new Exception($"User with id {toUpdate.Username} does not exist!");
+        AuthenticationUser? existing = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return existing;
     }
-
-    context.Users.Remove(existing);
-    context.Add(toUpdate);
-
-    context.SaveChanges();
-
-    return Task.CompletedTask;
 }
-}
-*/

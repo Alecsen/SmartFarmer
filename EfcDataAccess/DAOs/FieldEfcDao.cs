@@ -2,6 +2,7 @@
 using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess.DAOs;
 
@@ -40,5 +41,12 @@ public class FieldEfcDao : IFieldDao
         }
         
         return result;
+    }
+
+    public async Task<Field> CreateAsync(Field field)
+    {
+        EntityEntry<Field> newField = await context.Fields.AddAsync(field);
+        await context.SaveChangesAsync();
+        return newField.Entity;
     }
 }
