@@ -6,4 +6,5 @@ public interface IUserDao
 {
     Task<AuthenticationUser> CreateAsync(AuthenticationUser user);
     Task<AuthenticationUser?> GetByUsernameAsync(string userName);
+    Task<AuthenticationUser?> GetByUserIdAsync(int id);
 }

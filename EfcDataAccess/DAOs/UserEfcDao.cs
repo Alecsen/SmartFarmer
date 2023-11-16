@@ -29,4 +29,10 @@ public class UserEfcDao : IUserDao
         );
         return existing;
     }
+
+    public async Task<AuthenticationUser?> GetByUserIdAsync(int id)
+    {
+        AuthenticationUser? existing = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return existing;
+    }
 }
