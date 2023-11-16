@@ -1,0 +1,55 @@
+@page "/ViewField"
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs
+@inject IFieldService fieldService
+@inject IUserService userService
+
+<AuthorizeView>
+    <h3>ViewField</h3>
+    
+    @if (fields != null)
+    {
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Field name</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in fields)
+            {
+                <tr>
+                    <td>@item.FieldName</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    @if (!string.IsNullOrEmpty(msg))
+    {
+        <label style="color: red">@msg</label>
+    }
+    
+</AuthorizeView>
+
+@code {
+    private IEnumerable<FieldLookupDto>? fields;
+    private string msg = "";
+    private int currentUserId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUserId = await userService.GetCurrentUserId();
+        
+        try
+        {
+            fields = await fieldService.GetFieldsByUserId(currentUserId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+}

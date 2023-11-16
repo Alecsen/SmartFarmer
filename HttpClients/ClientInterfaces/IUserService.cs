@@ -10,4 +10,5 @@ public interface IUserService
     Task<UserLoginDTO> Login(UserCreationDTO dto);
     Task<AuthenticationUser> GetAsync(string? username);
     Task<int> GetCurrentUserId();
+    Task UpdateAsync(ProfileUpdateDto dto);
 }

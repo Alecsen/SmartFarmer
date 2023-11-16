@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
@@ -84,5 +85,18 @@ public class UserHttpClient : IUserService
         }
 
         return -1; // Or throw an exception or return a nullable int if you prefer
+    }
+    
+    public async Task UpdateAsync(ProfileUpdateDto dto)
+    {
+        string dtoAsJson = JsonSerializer.Serialize(dto);
+        StringContent body = new StringContent(dtoAsJson, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await client.PatchAsync("Users/EditUser", body);
+        if (!response.IsSuccessStatusCode)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+            throw new Exception(content);
+        }
     }
 }

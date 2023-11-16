@@ -58,6 +58,11 @@ public class UserLogic : IUserLogic
         return userDao.GetByUsernameAsync(dto.Username);
     }
 
+    public Task UpdateAsync(ProfileUpdateDto dto)
+    {
+        return userDao.UpdateAsync(dto);
+    }
+
     private void ValidateUserName(UserCreationDTO userToCreate)
     {
         string userName = userToCreate.UserName;

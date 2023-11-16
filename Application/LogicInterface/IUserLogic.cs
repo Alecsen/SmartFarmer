@@ -10,4 +10,5 @@ public interface IUserLogic
     public Task<AuthenticationUser> ValidateLogin(AuthUserLoginDto dto);
     
     public Task<AuthenticationUser> GetAsync(UserSearchParametersDTO dto);
+    public Task UpdateAsync(ProfileUpdateDto dto);
 }

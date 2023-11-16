@@ -1,0 +1,83 @@
+@page "/ViewProfile/EditProfile"
+@using HttpClients.ClientInterfaces
+@using Domain.Models
+@using Domain.DTOs
+@inject IUserService userService
+@inject NavigationManager navMgr
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <div class="container">
+        <h3>Edit Profile</h3>
+        <form>
+            <div class="field-container">
+                <div class="field">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" value="@username" readonly />
+                </div>
+                <div class="field">
+                    <label for="userEmail">Email:</label>
+                    <input type="email" id="userEmail" @bind="userEmail" />
+                </div>
+                <div class="field">
+                    <label for="userPassword">Password:</label>
+                    <input type="password" id="userPassword" @bind="userPassword" />
+                </div>
+                <div class="button-row">
+                    <button type="button" class="updateBTN" @onclick="Update">Update</button>
+                </div>
+            </div>
+        </form>
+        @if (!string.IsNullOrEmpty(resultMsg))
+        {
+            <label style="@color">@resultMsg</label>
+        }
+    </div>
+
+</AuthorizeView>
+
+@code {
+    private ProfileUpdateDto dto = null;
+    private string userEmail = "";
+    private string userPassword = "";
+    private string username = "";
+    private string resultMsg = "";
+    private string color = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        resultMsg = "";
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            username = authState.User.Identity?.Name ?? "UnknownUser";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            resultMsg = e.Message;
+        }
+    }
+
+    private async Task Update()
+    {
+        try
+        {
+            dto = new(username)
+            {
+                Email = userEmail,
+                Password = userPassword
+            };
+            
+            await userService.UpdateAsync(dto);
+            navMgr.NavigateTo("/ViewProfile");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            resultMsg = e.Message;
+            color = "red";
+        }
+    }
+    
+}
