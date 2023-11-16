@@ -23,7 +23,9 @@ public class FieldLogic : IFieldLogic
 
     public async Task<Field> CreateAsync(FieldCreationDto dto)
     {
-
+        //checking if the user exists
+        await userDao.GetByUserIdAsync(dto.OwnerId);
+        
         Field field = new Field
         {
             Name = dto.FieldName,

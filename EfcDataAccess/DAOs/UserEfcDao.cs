@@ -59,6 +59,12 @@ public class UserEfcDao : IUserDao
     public async Task<AuthenticationUser?> GetByUserIdAsync(int id)
     {
         AuthenticationUser? existing = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
-        return existing;
+        if (existing != null)
+        {
+            return existing;
+        }
+        
+        throw new InvalidOperationException($"User with user id is not found.");
+        
     }
 }
