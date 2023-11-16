@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.DTOs;
+using Domain.Models;
 
 namespace Application.DAOInterface;
 
