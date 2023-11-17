@@ -55,6 +55,7 @@
                     await JSRuntime.InvokeVoidAsync("drawPolygonFromCoordinateString", field.locationData);
                 }
             }
+            await JSRuntime.InvokeVoidAsync("zoomToFitAllFields");
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿var map;
 var addMarkerOnClick = false;
+var allBounds = L.latLngBounds();
 
 function initializeMap() {
     map = L.map('mapid').setView([51.505, -0.09], 13);
@@ -14,6 +15,7 @@ function initializeMap() {
             addMarker(e.latlng);
         }
     });
+    
 }
 
 function drawPolygonFromCoordinateString(coordinateString) {
@@ -26,9 +28,21 @@ function drawPolygonFromCoordinateString(coordinateString) {
         return [parseFloat(parts[1]), parseFloat(parts[0])]; // Leaflet expects [lat, lng]
     });
 
-    L.polygon(coordinates, {color: 'blue'}).addTo(map);
+    var polygon = L.polygon(coordinates, {color: 'blue'}).addTo(map);
+
+    // Extend the bounds to include each polygon's bounds
+    allBounds.extend(polygon.getBounds());
 }
 
+
+function zoomToFitAllFields() {
+    if (!allBounds.isValid()) {
+        console.error("Bounds are not valid.");
+        return;
+    }
+
+    map.fitBounds(allBounds);
+}
 
 // Function to add a marker at the given location
 function addMarker(latlng) {
