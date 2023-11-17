@@ -35,4 +35,30 @@ public class UserLogicTests
         user.Should().NotBeNull();
         Assert.Equal(userName, user.Username);
     }
+
+    [Fact]
+    public async Task CreateAsync_CreatesUser_WhenAllConditionsAreMet()
+    {
+        // Arange
+
+        var userCreationDto = new UserCreationDTO
+        {
+            UserName = "newUser"
+        };
+
+        userDaoMock.Setup(dao => dao.GetByUsernameAsync(userCreationDto.UserName)).ReturnsAsync(() =>null);
+        userDaoMock.Setup(dao => dao.CreateAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(new AuthenticationUser());
+        // Act
+
+        var result = await sut.CreateAsync(userCreationDto);
+        
+        // Assert
+        Assert.NotNull(result);
+        userDaoMock.Verify(dao => dao.CreateAsync(It.IsAny<AuthenticationUser>()), Times.Once);
+    }
+    
+    
+    
+    
+    
 }
