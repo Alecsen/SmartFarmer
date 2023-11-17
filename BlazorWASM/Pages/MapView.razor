@@ -1,19 +1,71 @@
 ﻿@inject IJSRuntime JSRuntime
+@inject IFieldService fieldService
+@inject IUserService userService
 @page "/map"
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs
+<AuthorizeView>
 <h3>MapView</h3>
 
 <div id="mapid" style="height: 400px;"></div>
 
-
+<button @onclick="ToggleMarkerPlacement">Toggle Marker Placement</button>
+<button @onclick="DrawAllPolygons">Draw Area</button>
+</AuthorizeView>
 @code {
+    private IEnumerable<FieldLookupDto>? fields;
+    private int currentUserId;
+    private string msg = "";
     private ElementReference mapElement;
 
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUserId = await userService.GetCurrentUserId();
+
+        try
+        {
+            fields = await fieldService.GetFieldsByUserId(currentUserId);
+          
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("initializeMap");
+            await DrawAllPolygons();
         }
     }
+
+
+    private async Task DrawAllPolygons()
+    {
+        if (fields != null)
+        {
+            foreach (var field in fields)
+            {
+                if (!string.IsNullOrWhiteSpace(field.locationData))
+                {
+                    await JSRuntime.InvokeVoidAsync("drawPolygonFromCoordinateString", field.locationData);
+                }
+            }
+        }
+    }
+
+
+    private async Task ToggleMarkerPlacement()
+    {
+        await JSRuntime.InvokeVoidAsync("toggleMarkerPlacement");
+    }
+
+
+    // Mock API call function - replace with your actual API call logic
+
 }
 
