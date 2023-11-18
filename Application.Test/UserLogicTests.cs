@@ -56,8 +56,25 @@ public class UserLogicTests
         Assert.NotNull(result);
         userDaoMock.Verify(dao => dao.CreateAsync(It.IsAny<AuthenticationUser>()), Times.Once);
     }
-    
-    
+
+    [Fact]
+    public async Task CreateAsync_DoesNotCreateUser_WhenUserAlreadyExists()
+    {
+        //Arange
+
+        var usercreationdto = new UserCreationDTO
+        {
+            UserName = "newUser"
+        };
+
+
+        userDaoMock.Setup(dao => dao.GetByUsernameAsync(usercreationdto.UserName))
+            .ReturnsAsync(new AuthenticationUser());
+        
+        //Assert
+        await Assert.ThrowsAsync<Exception>(() => sut.CreateAsync(usercreationdto));
+        userDaoMock.Verify(dao => dao.CreateAsync(It.IsAny<AuthenticationUser>()), Times.Never);
+    }
     
     
     
