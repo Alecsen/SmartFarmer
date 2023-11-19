@@ -75,7 +75,84 @@ public class UserLogicTests
         await Assert.ThrowsAsync<Exception>(() => sut.CreateAsync(usercreationdto));
         userDaoMock.Verify(dao => dao.CreateAsync(It.IsAny<AuthenticationUser>()), Times.Never);
     }
-    
-    
-    
+
+    [Theory]
+    [InlineData("ab")]
+    [InlineData("thisUserNameIsWayTooLongForTheSystem")]
+    public async Task CreateAsync_ThrowsException_ForInvalidUsernames(string invalidUsername)
+    {
+        var userCreationDto = new UserCreationDTO
+        {
+            UserName = invalidUsername,
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<Exception>(() => sut.CreateAsync(userCreationDto));
+    }
+
+    [Fact]
+    public async Task ValidateLogin_ReturnsAUser_WhenAllConditionAreMet()
+    {
+        //Arrange 
+
+        var authUserLoginDto = new AuthUserLoginDto
+        {
+            Username = "alecsen",
+            Password = "123"
+        };
+
+        var authenticationUser = new AuthenticationUser
+        {
+            Username = "alecsen",
+            Password = "123"
+        };
+
+        userDaoMock.Setup(dao => dao.GetByUsernameAsync(authUserLoginDto.Username)).ReturnsAsync(authenticationUser);
+        
+        // act
+
+        var result = await sut.ValidateLogin(authUserLoginDto);
+        
+        //assert
+        result.Should().BeEquivalentTo(authenticationUser);
+    }
+
+    [Fact]
+    public async Task validtateLogin_ThrowsAnException_WhentheUserDoesntExist()
+    {
+        //Arrange
+        var authUserLoginDto = new AuthUserLoginDto
+        {
+            Username = "alecsen",
+            Password = "123"
+        };
+        userDaoMock.Setup(dao => dao.GetByUsernameAsync(authUserLoginDto.Username)).ReturnsAsync(() => null);
+        
+        //act
+
+        Func<Task> act = async () =>  await sut.ValidateLogin(authUserLoginDto);
+        await act.Should().ThrowAsync<Exception>();
+        
+    }
+
+    [Fact]
+    public async Task ValidateLogin_ThrowsAnException_WhenThePassWordIsWrong()
+    {
+        var authUserLoginDto = new AuthUserLoginDto
+        {
+            Username = "alecsen",
+            Password = "WrongPassWord"
+        };
+        var authenticationUser = new AuthenticationUser
+        {
+            Username = "alecsen",
+            Password = "RightPassword"
+        };
+
+
+        userDaoMock.Setup(dao => dao.GetByUsernameAsync(authUserLoginDto.Username)).ReturnsAsync(authenticationUser);
+
+        Func<Task> act = async () => await sut.ValidateLogin(authUserLoginDto);
+        await act.Should().ThrowAsync<Exception>(); // checks that it throws our pass word exception
+    }
 }
