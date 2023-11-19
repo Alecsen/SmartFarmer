@@ -155,4 +155,19 @@ public class UserLogicTests
         Func<Task> act = async () => await sut.ValidateLogin(authUserLoginDto);
         await act.Should().ThrowAsync<Exception>(); // checks that it throws our pass word exception
     }
+
+    [Fact]
+    public async Task UpdateAsync_returnsATask_WithCorrectData()
+    {
+        // Arrange
+        var profileUpdateDto = new ProfileUpdateDto("Username");
+        userDaoMock.Setup(dao => dao.UpdateAsync(It.IsAny<ProfileUpdateDto>())).Returns(Task.CompletedTask);
+
+        // Act
+        await sut.UpdateAsync(profileUpdateDto);
+
+        // Assert
+        userDaoMock.Verify(dao => dao.UpdateAsync(It.Is<ProfileUpdateDto>(dto => dto == profileUpdateDto)), Times.Once);
+    }
+    
 }

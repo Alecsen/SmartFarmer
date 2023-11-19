@@ -2,6 +2,7 @@
 using Application.Logic;
 using Domain.DTOs;
 using Domain.Models;
+using FluentAssertions;
 using Moq;
 
 namespace Application.Test;
@@ -11,13 +12,13 @@ public class FieldLogicTests
 {
     private readonly Mock<IFieldDao> mockFieldDao;
     private readonly Mock<IUserDao> mockUserDao;
-    private readonly FieldLogic fieldLogic;
+    private readonly FieldLogic sut;
 
     public FieldLogicTests()
     {
         mockFieldDao = new Mock<IFieldDao>();
         mockUserDao = new Mock<IUserDao>();
-        fieldLogic = new FieldLogic(mockFieldDao.Object, mockUserDao.Object);
+        sut = new FieldLogic(mockFieldDao.Object, mockUserDao.Object);
     }
 
     [Fact]
@@ -28,6 +29,12 @@ public class FieldLogicTests
 
         mockUserDao.Setup(dao => dao.GetByUserIdAsync(fieldCreationDto.OwnerId)).ReturnsAsync(new AuthenticationUser());
         mockFieldDao.Setup(dao => dao.CreateAsync(It.IsAny<Field>())).ReturnsAsync(expectedField);
+        
+        //act
+
+        var result = await sut.CreateAsync(fieldCreationDto);
+
+        result.Should().BeEquivalentTo(expectedField);
     }
     
 }
