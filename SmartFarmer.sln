@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfcDataAccess", "EfcDataAcc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartFarmer.UnitTest", "SmartFarmer.UnitTest\SmartFarmer.UnitTest.csproj", "{FEF56CD8-ACF1-4CA7-BB60-CEBAA94C4595}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartFarmer.IntegrationTest", "SmartFarmer.IntegrationTest\SmartFarmer.IntegrationTest.csproj", "{C603FA3B-5908-41AE-B20E-414B93BD3B18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{FEF56CD8-ACF1-4CA7-BB60-CEBAA94C4595}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEF56CD8-ACF1-4CA7-BB60-CEBAA94C4595}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEF56CD8-ACF1-4CA7-BB60-CEBAA94C4595}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C603FA3B-5908-41AE-B20E-414B93BD3B18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C603FA3B-5908-41AE-B20E-414B93BD3B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C603FA3B-5908-41AE-B20E-414B93BD3B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C603FA3B-5908-41AE-B20E-414B93BD3B18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
