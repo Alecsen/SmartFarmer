@@ -5,13 +5,23 @@ namespace EfcDataAccess;
 
 public class SmartFarmerAppContext : DbContext
 {
+    public SmartFarmerAppContext(DbContextOptions<SmartFarmerAppContext> options)
+        : base(options)
+    {
+    }
+    
     public DbSet<AuthenticationUser> Users { get; set; }
     public DbSet<Field> Fields { get; set; }
     public DbSet<Sensor> Sensors { get; set; }
+    
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source = ../EfcDataAccess/SmartFarmer.db");
-        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);            
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlite("Data Source = ../EfcDataAccess/SmartFarmer.db");
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        }
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
