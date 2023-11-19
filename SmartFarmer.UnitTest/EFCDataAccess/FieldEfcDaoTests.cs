@@ -1,9 +1,8 @@
-﻿using Domain.Models;
+﻿using EfcDataAccess;
 using EfcDataAccess.DAOs;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 
-namespace EfcDataAccess.Test;
+namespace SmartFarmer.UnitTest.EFCDataAccess;
 
 public class FieldEfcDaoTests
 {

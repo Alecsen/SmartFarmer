@@ -5,7 +5,7 @@ using Domain.Models;
 using FluentAssertions;
 using Moq;
 
-namespace Application.Test;
+namespace SmartFarmer.UnitTest.Application;
 
 
 public class FieldLogicTests
