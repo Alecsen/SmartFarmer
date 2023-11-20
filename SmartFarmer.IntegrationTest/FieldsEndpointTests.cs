@@ -12,6 +12,7 @@ public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
     public FieldEndpointTests(CustomWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
+        factory.SeedDatabase(); // Seed databasen én gang for alle tests i denne klasse
     }
 
     [Fact]
@@ -44,5 +45,6 @@ public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
         var response = await _client.GetAsync(url);
 
         // Assert
+        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
     }
 }
