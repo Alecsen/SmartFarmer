@@ -18,6 +18,11 @@ public class FieldLogic : IFieldLogic
 
     public Task<IEnumerable<FieldLookupDto>> GetAsync(int OwnerId)
     {
+        if (OwnerId == -1)
+        {
+            throw new Exception($"The Id {OwnerId} is not a valid number");
+        }
+        
         return fieldDao.GetFieldsByOwnerId(OwnerId);
     }
 

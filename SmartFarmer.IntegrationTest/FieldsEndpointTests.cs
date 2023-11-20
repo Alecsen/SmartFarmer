@@ -1,16 +1,23 @@
 ﻿
 using System.Net;
+using System.Net.Http.Json;
+using Application.LogicInterface;
 using Domain.DTOs;
+using FluentAssertions;
+using Moq;
 using Newtonsoft.Json;
+using Xunit.Abstractions;
 
 namespace SmartFarmer.IntegrationTest;
 
 public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
 {
+    private readonly ITestOutputHelper testOutputHelper;
     private readonly HttpClient _client;
 
-    public FieldEndpointTests(CustomWebApplicationFactory factory)
+    public FieldEndpointTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
+        this.testOutputHelper = testOutputHelper;
         _client = factory.CreateClient();
         factory.SeedDatabase(); // Seed databasen én gang for alle tests i denne klasse
     }
@@ -45,6 +52,22 @@ public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
         var response = await _client.GetAsync(url);
 
         // Assert
-        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
     }
+    
+    [Fact]
+    public async Task Get_FieldByOwner_ReturnsBadRequestForInvalidInputMinus1()
+    {
+        // Arrange
+        var ownerId = -1;
+        var url = $"/Field/{ownerId}";
+        
+        // Act
+        var response = await _client.GetAsync(url);
+        
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+    }
+ 
+
 }

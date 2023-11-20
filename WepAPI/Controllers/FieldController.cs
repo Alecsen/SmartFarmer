@@ -25,10 +25,6 @@ public class FieldController: ControllerBase
             return Ok(fields);
 
         }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
         catch (Exception e)
         {
             Console.WriteLine(e);
