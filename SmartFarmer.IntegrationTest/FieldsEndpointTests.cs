@@ -11,7 +11,7 @@ public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient client;
 
-    public FieldEndpointTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
+    public FieldEndpointTests(CustomWebApplicationFactory factory)
     {
         client = factory.CreateClient();
         factory.SeedDatabase(); 
