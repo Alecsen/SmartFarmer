@@ -1,10 +1,7 @@
 ﻿
 using System.Net;
-using System.Net.Http.Json;
-using Application.LogicInterface;
 using Domain.DTOs;
 using FluentAssertions;
-using Moq;
 using Newtonsoft.Json;
 using Xunit.Abstractions;
 
@@ -12,13 +9,11 @@ namespace SmartFarmer.IntegrationTest;
 
 public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
 {
-    private readonly ITestOutputHelper testOutputHelper;
-    private readonly HttpClient _client;
+    private readonly HttpClient client;
 
     public FieldEndpointTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
-        this.testOutputHelper = testOutputHelper;
-        _client = factory.CreateClient();
+        client = factory.CreateClient();
         factory.SeedDatabase(); // Seed databasen én gang for alle tests i denne klasse
     }
 
@@ -30,7 +25,7 @@ public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
         var url = $"/Field/{ownerId}";
 
         // Act
-        var response = await _client.GetAsync(url);
+        var response = await client.GetAsync(url);
 
         // Assert
         response.EnsureSuccessStatusCode(); // Dette vil fejle, hvis statuskoden ikke er 200-serien
@@ -49,7 +44,7 @@ public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
         var url = $"/Field/{ownerId}";
 
         // Act
-        var response = await _client.GetAsync(url);
+        var response = await client.GetAsync(url);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
@@ -63,7 +58,7 @@ public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
         var url = $"/Field/{ownerId}";
         
         // Act
-        var response = await _client.GetAsync(url);
+        var response = await client.GetAsync(url);
         
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
