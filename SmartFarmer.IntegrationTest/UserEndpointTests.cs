@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text;
 using Domain.DTOs;
+using Domain.Models;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit.Abstractions;
@@ -59,5 +60,40 @@ public class UserEndpointTests : IClassFixture<CustomWebApplicationFactory>
         HttpResponseMessage response = await _client.PostAsJsonAsync("/users/CreateUser", dto);
         
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+    [Fact]
+    public async Task Get_UserProfile_ReturnsUserData()
+    {
+        // Arrange
+        var username = "Alecsen"; // Erstat med et gyldigt brugernavn
+        var url = $"Users/ViewProfile?username={username}";
+
+        // Act
+        var response = await _client.GetAsync(url);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var user = JsonConvert.DeserializeObject<AuthenticationUser>(responseContent);
+        user.Should().NotBeNull();
+        user.Username.Should().Be(username);
+    }
+    
+    [Fact]
+    public async Task Update_UserProfile_ReturnsSuccess()
+    {
+        // Arrange
+        var dto = new ProfileUpdateDto("alecsen");
+        
+        var json = JsonConvert.SerializeObject(dto);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var url = "Users/EditUser";
+
+        // Act
+        var response = await _client.PatchAsync(url, content);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        
     }
 }
