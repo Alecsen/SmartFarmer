@@ -38,9 +38,6 @@ public class FieldEfcDao : IFieldDao
             dto.FieldName = field.Name;
             dto.locationData = field.LocationData;
             
-            
-            
-            
             result.Add(dto);
         }
         
