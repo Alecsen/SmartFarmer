@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject IFieldService fieldService
 @inject IUserService userService
-@page "/map"
+@page "/MapView"
 @using HttpClients.ClientInterfaces
 @using Domain.DTOs
 <AuthorizeView>
@@ -9,15 +9,21 @@
 
 <div id="mapid" style="height: 400px;"></div>
 
-<button @onclick="ToggleMarkerPlacement">Toggle Marker Placement</button>
-<button @onclick="DrawAllPolygons">Draw Area</button>
+ <div class="buttons">
+        <NavLink class="btn btn-primary" href="FieldView">Tilføj mark</NavLink>
+        <button class="btn">Rediger mark</button>
+        <button class="btn">Slet mark</button>
+        <button class="btn">Importer marker</button>
+    </div>
+    
+    
 </AuthorizeView>
 @code {
     private IEnumerable<FieldLookupDto>? fields;
     private int currentUserId;
     private string msg = "";
     private ElementReference mapElement;
-
+    private string geoLocationData = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,14 +65,6 @@
         }
     }
 
-
-    private async Task ToggleMarkerPlacement()
-    {
-        await JSRuntime.InvokeVoidAsync("toggleMarkerPlacement");
-    }
-
-
-    // Mock API call function - replace with your actual API call logic
-
+   
 }
 
