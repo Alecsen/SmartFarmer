@@ -9,15 +9,17 @@
 
 <div id="mapid" style="height: 400px;"></div>
 
-<button @onclick="ToggleMarkerPlacement">Toggle Marker Placement</button>
-<button @onclick="DrawAllPolygons">Draw Area</button>
+    <button @onclick="ToggleMarkerPlacement">Toggle Marker Placement</button>
+    <button @onclick="DrawAllPolygons">Draw Area</button>
+    <button @onclick="EnableDrawingMode">Register a New Field</button>
+    <button @onclick="AddNewField">Create Field</button>
 </AuthorizeView>
 @code {
     private IEnumerable<FieldLookupDto>? fields;
     private int currentUserId;
     private string msg = "";
     private ElementReference mapElement;
-
+    private string geoLocationData = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,7 +61,11 @@
         }
     }
 
-
+    private async Task EnableDrawingMode()
+    {
+        Console.WriteLine("trying to enable this");
+        await JSRuntime.InvokeVoidAsync("toggleDrawingMode");
+    }
     private async Task ToggleMarkerPlacement()
     {
         await JSRuntime.InvokeVoidAsync("toggleMarkerPlacement");
@@ -67,6 +73,19 @@
 
 
     // Mock API call function - replace with your actual API call logic
+
+    private async Task AddNewField()
+    {
+        await JSRuntime.InvokeVoidAsync("createField");
+    }
+
+    [JSInvokable]
+    public static Task ReceiveDataFromJs(string locationData)
+    {
+        Console.WriteLine($"Received location data: {locationData}");
+    // Yderligere logik til at håndtere locationData
+        return Task.CompletedTask;
+    }
 
 }
 
