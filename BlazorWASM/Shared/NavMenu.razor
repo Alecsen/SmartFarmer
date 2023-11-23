@@ -1,6 +1,6 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">BlazorWASM</a>
+        <a class="navbar-brand" href="">Smart Farmer</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -11,31 +11,21 @@
             <nav class="flex-column">
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                        <span class="oi oi-home" aria-hidden="true"></span> Forside
                     </NavLink>
                 </div>
                 <AuthorizeView>
                 <NotAuthorized>
                     <div class="nav-item px-3">
                         <NavLink class="nav-link" href="createuser">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Create User
+                            <span class="oi oi-plus" aria-hidden="true"></span> Opret bruger
                         </NavLink>
                     </div>
-                    <div class="nav-item px-3">
-                        <NavLink class="nav-link" href="fieldView">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> View Posts
-                            </NavLink>
-                        </div>
                 </NotAuthorized>
                 <Authorized>
                     <div class="nav-item px-3">
-                        <NavLink class="nav-link" href="ViewField">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> View Fields
-                        </NavLink>
-                    </div>
-                    <div class="nav-item px-3">
                         <NavLink class="nav-link" href="MapView">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Marker
+                            <span class="oi oi-map" aria-hidden="true"></span>Dine marker
                         </NavLink>
                     </div>
                 </Authorized>

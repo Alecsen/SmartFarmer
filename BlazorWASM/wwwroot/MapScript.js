@@ -12,13 +12,29 @@ function initializeMap() {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+    
+    
+    // Event listener for map click, only adds marker if addMarkerOnClick is true
+    map.on('click', function(e) {
+        if (addMarkerOnClick) {
+            addMarker(e.latlng);
+        }
+    });
+    
+}
+function initializeMapEditable() {
+    map = L.map('mapid').setView([51.505, -0.09], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
     var drawControl = new L.Control.Draw();
     map.addControl(drawControl);
 
     var drawnFeatures = new L.FeatureGroup();
     map.addLayer(drawnFeatures);
-    
+
     // Event listener for map click, only adds marker if addMarkerOnClick is true
     map.on('click', function(e) {
         if (addMarkerOnClick) {
@@ -34,7 +50,7 @@ function initializeMap() {
             drawnFeatures.addLayer(layer);
         })
     }
-    
+
 }
 function createPolygonFromPoints() {
     map.o

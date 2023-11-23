@@ -6,14 +6,14 @@
 <AuthorizeView>
     <NotAuthorized>
         <div class="card">
-            <h3>Create User</h3>
+            <h3>Opret bruger</h3>
             <div class="form-group">
                 <div class="field">
-                    <label>User name:</label>
+                    <label>Brugernavn:</label>
                     <input type="text" @bind="username" @bind:event="oninput"/>
                 </div>
                 <div class="field">
-                    <label>Password:</label>
+                    <label>Adgangskods:</label>
                     <input type="password" @bind="password" @bind:event="oninput"/>
                 </div>
                 <div class="field">
@@ -25,15 +25,15 @@
                     <input type="text" @bind="domain" @bind:event="oninput"/>
                 </div>
                 <div class="field">
-                    <label>Name:</label>
+                    <label>Navn:</label>
                     <input type="text" @bind="name" @bind:event="oninput"/>
                 </div>
                 <div class="field">
-                    <label>Role:</label>
+                    <label>Rolle:</label>
                     <input type="text" @bind="role" @bind:event="oninput"/>
                 </div>
                 <div class="field">
-                    <label>Age:</label>
+                    <label>Alder:</label>
                     <input type="number" @bind="age" @bind:event="oninput"/>
                 </div>
                 <div class="field">
