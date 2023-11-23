@@ -28,11 +28,8 @@ public class UserEndpointTests : IClassFixture<CustomWebApplicationFactory>
         {
             UserName = "wuwuwuwuwu",
             PassWord = "passWord",
-            Age = 10,
-            Domain = "somethinj",
             Name = "adsasd",
             Role = "afasd",
-            SecurityLevel = 10,
             Email = "alexander@gmail.comn"
         };
         var url = "/users/CreateUser";
@@ -49,11 +46,8 @@ public class UserEndpointTests : IClassFixture<CustomWebApplicationFactory>
         {
             UserName = "wuwuwuwuwu",
             PassWord = "passWord",
-            Age = 10,
-            Domain = "somethinj",
             Name = "adsasd",
             Role = "afasd",
-            SecurityLevel = 10,
         };
         var url = "/users/CreateUser";
 

@@ -8,11 +8,11 @@ public class DatabaseInitializer
     {
         return new List<AuthenticationUser>
         {
-                new AuthenticationUser { Id = 1, Username = "Rolf", Password = "1234", Email = "user1@example.com", Domain = "Domain1", Name = "User One", Role = "Admin", Age = 30, SecurityLevel = 1 },
-                new AuthenticationUser { Id = 2, Username = "Alecsen", Password = "1234", Email = "user2@example.com", Domain = "Domain2", Name = "User Two", Role = "User", Age = 25, SecurityLevel = 2 },
-                new AuthenticationUser { Id = 3,  Username = "Maria", Password = "1234", Email = "user3@example.com", Domain = "Domain3", Name = "User Three", Role = "User", Age = 28, SecurityLevel = 2 },
-                new AuthenticationUser { Id = 4,  Username = "Røde", Password = "1234", Email = "user4@example.com", Domain = "Domain4", Name = "User Four", Role = "Manager", Age = 32, SecurityLevel = 3 },
-                new AuthenticationUser { Id = 5, Username = "user5", Password = "1234", Email = "user5@example.com", Domain = "Domain5", Name = "User Five", Role = "Manager", Age = 35, SecurityLevel = 3 }
+                new AuthenticationUser { Id = 1, Username = "Rolf", Password = "1234", Email = "user1@example.com", Name = "User One", Role = "Admin" },
+                new AuthenticationUser { Id = 2, Username = "Alecsen", Password = "1234", Email = "user2@example.com", Name = "User Two", Role = "User" },
+                new AuthenticationUser { Id = 3,  Username = "Maria", Password = "1234", Email = "user3@example.com", Name = "User Three", Role = "User" },
+                new AuthenticationUser { Id = 4,  Username = "Røde", Password = "1234", Email = "user4@example.com", Name = "User Four", Role = "Manager" },
+                new AuthenticationUser { Id = 5, Username = "user5", Password = "1234", Email = "user5@example.com", Name = "User Five", Role = "Manager" }
         };
     }
 
@@ -50,11 +50,11 @@ public class DatabaseInitializer
     {
         return new List<AuthenticationUser>
         {
-                new AuthenticationUser {  Username = "Rolf", Password = "1234", Email = "user1@example.com", Domain = "Domain1", Name = "User One", Role = "Admin", Age = 30, SecurityLevel = 1 },
-                new AuthenticationUser {  Username = "Alecsen", Password = "1234", Email = "user2@example.com", Domain = "Domain2", Name = "User Two", Role = "User", Age = 25, SecurityLevel = 2 },
-                new AuthenticationUser {   Username = "Maria", Password = "1234", Email = "user3@example.com", Domain = "Domain3", Name = "User Three", Role = "User", Age = 28, SecurityLevel = 2 },
-                new AuthenticationUser {   Username = "Røde", Password = "1234", Email = "user4@example.com", Domain = "Domain4", Name = "User Four", Role = "Manager", Age = 32, SecurityLevel = 3 },
-                new AuthenticationUser {  Username = "user5", Password = "1234", Email = "user5@example.com", Domain = "Domain5", Name = "User Five", Role = "Manager", Age = 35, SecurityLevel = 3 }
+                new AuthenticationUser {  Username = "Rolf", Password = "1234", Email = "user1@example.com", Name = "User One", Role = "Admin" },
+                new AuthenticationUser {  Username = "Alecsen", Password = "1234", Email = "user2@example.com", Name = "User Two", Role = "User" },
+                new AuthenticationUser {   Username = "Maria", Password = "1234", Email = "user3@example.com", Name = "User Three", Role = "User" },
+                new AuthenticationUser {   Username = "Røde", Password = "1234", Email = "user4@example.com", Name = "User Four", Role = "Manager" },
+                new AuthenticationUser {  Username = "user5", Password = "1234", Email = "user5@example.com", Name = "User Five", Role = "Manager" }
         };
     }
 

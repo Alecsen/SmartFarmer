@@ -6,14 +6,14 @@
 <AuthorizeView>
     <NotAuthorized>
         <div class="card">
-            <h3>Opret bruger</h3>
+            <h3>Create User</h3>
             <div class="form-group">
                 <div class="field">
-                    <label>Brugernavn:</label>
+                    <label>User name:</label>
                     <input type="text" @bind="username" @bind:event="oninput"/>
                 </div>
                 <div class="field">
-                    <label>Adgangskods:</label>
+                    <label>Password:</label>
                     <input type="password" @bind="password" @bind:event="oninput"/>
                 </div>
                 <div class="field">
@@ -21,24 +21,8 @@
                     <input type="email" @bind="email" @bind:event="oninput"/>
                 </div>
                 <div class="field">
-                    <label>Domain:</label>
-                    <input type="text" @bind="domain" @bind:event="oninput"/>
-                </div>
-                <div class="field">
-                    <label>Navn:</label>
+                    <label>Name:</label>
                     <input type="text" @bind="name" @bind:event="oninput"/>
-                </div>
-                <div class="field">
-                    <label>Rolle:</label>
-                    <input type="text" @bind="role" @bind:event="oninput"/>
-                </div>
-                <div class="field">
-                    <label>Alder:</label>
-                    <input type="number" @bind="age" @bind:event="oninput"/>
-                </div>
-                <div class="field">
-                    <label>Security Level:</label>
-                    <input type="number" @bind="securityLevel" @bind:event="oninput"/>
                 </div>
                 @if (!string.IsNullOrEmpty(resultMsg))
                 {
@@ -57,11 +41,8 @@
     private string username = "";
     private string password = "";
     private string email = "";
-    private string domain = "";
     private string name = "";
-    private string role = "";
-    private int age = 0;
-    private int securityLevel = 0;
+    private string role = "user";
     private string resultMsg = "";
     private string color = "";
 
@@ -79,11 +60,8 @@
                 UserName = username,
                 PassWord = password,
                 Email = email,
-                Domain = domain,
                 Name = name,
                 Role = role,
-                Age = age,
-                SecurityLevel = securityLevel
             };
 
             await userService.Create(newUser);
@@ -104,10 +82,7 @@
         username = "";
         password = "";
         email = "";
-        domain = "";
         name = "";
         role = "";
-        age = 0;
-        securityLevel = 0;
     }
 }

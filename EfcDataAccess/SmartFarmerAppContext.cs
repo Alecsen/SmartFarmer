@@ -29,8 +29,11 @@ public class SmartFarmerAppContext : DbContext
         modelBuilder.Entity<AuthenticationUser>().HasKey(user => user.Id);
         modelBuilder.Entity<Field>().HasKey(field => field.Id);
         modelBuilder.Entity<Sensor>().HasKey(sensor => sensor.Id);
+        
+        
         modelBuilder.Entity<AuthenticationUser>().HasData(DatabaseInitializer.GetAuthenticationUsers());
         modelBuilder.Entity<Field>().HasData(DatabaseInitializer.GetFields());
         modelBuilder.Entity<Sensor>().HasData(DatabaseInitializer.GetSensors());
+        
     }
 }
