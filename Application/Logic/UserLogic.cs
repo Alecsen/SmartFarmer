@@ -24,13 +24,10 @@ public class UserLogic : IUserLogic
         AuthenticationUser toCreate = new AuthenticationUser()
         {
             Username = dto.UserName,
-            Age = dto.Age,
-            Domain = dto.Domain,
             Email = dto.Email,
             Name = dto.Name,
             Password = dto.PassWord,
             Role = dto.Role,
-            SecurityLevel = dto.SecurityLevel
         };
         
         AuthenticationUser created = await userDao.CreateAsync(toCreate);

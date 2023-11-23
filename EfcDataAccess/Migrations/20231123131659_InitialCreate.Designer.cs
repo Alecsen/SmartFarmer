@@ -10,27 +10,20 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfcDataAccess.Migrations
 {
     [DbContext(typeof(SmartFarmerAppContext))]
-    [Migration("20231116143519_InitialCreate")]
+    [Migration("20231123131659_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
 
             modelBuilder.Entity("Domain.Models.AuthenticationUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<int>("Age")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Domain")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -48,9 +41,6 @@ namespace EfcDataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SecurityLevel")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -63,61 +53,46 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            Age = 30,
-                            Domain = "Domain1",
                             Email = "user1@example.com",
                             Name = "User One",
                             Password = "1234",
                             Role = "Admin",
-                            SecurityLevel = 1,
                             Username = "Rolf"
                         },
                         new
                         {
                             Id = 2,
-                            Age = 25,
-                            Domain = "Domain2",
                             Email = "user2@example.com",
                             Name = "User Two",
                             Password = "1234",
                             Role = "User",
-                            SecurityLevel = 2,
                             Username = "Alecsen"
                         },
                         new
                         {
                             Id = 3,
-                            Age = 28,
-                            Domain = "Domain3",
                             Email = "user3@example.com",
                             Name = "User Three",
                             Password = "1234",
                             Role = "User",
-                            SecurityLevel = 2,
                             Username = "Maria"
                         },
                         new
                         {
                             Id = 4,
-                            Age = 32,
-                            Domain = "Domain4",
                             Email = "user4@example.com",
                             Name = "User Four",
                             Password = "1234",
                             Role = "Manager",
-                            SecurityLevel = 3,
                             Username = "Røde"
                         },
                         new
                         {
                             Id = 5,
-                            Age = 35,
-                            Domain = "Domain5",
                             Email = "user5@example.com",
                             Name = "User Five",
                             Password = "1234",
                             Role = "Manager",
-                            SecurityLevel = 3,
                             Username = "user5"
                         });
                 });
