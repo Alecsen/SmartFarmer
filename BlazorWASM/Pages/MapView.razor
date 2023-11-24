@@ -1,9 +1,12 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject IFieldService fieldService
 @inject IUserService userService
+@inject ISensorService sensorService
+
 @page "/MapView"
 @using HttpClients.ClientInterfaces
 @using Domain.DTOs
+@using Domain.Models
 <AuthorizeView>
 <h3>Dine marker</h3>
 
@@ -20,6 +23,7 @@
 </AuthorizeView>
 @code {
     private IEnumerable<FieldLookupDto>? fields;
+    private IEnumerable<SensorLookupDto>? sensors;
     private int currentUserId;
     private string msg = "";
     private ElementReference mapElement;
@@ -46,9 +50,9 @@
         {
             await JSRuntime.InvokeVoidAsync("initializeMap");
             await DrawAllPolygons();
+            await AddPoint();
         }
     }
-//Hejjj
 
     private async Task DrawAllPolygons()
     {
@@ -59,12 +63,27 @@
                 if (!string.IsNullOrWhiteSpace(field.locationData))
                 {
                     await JSRuntime.InvokeVoidAsync("drawPolygonFromCoordinateString", field.locationData);
+                    fields = await fieldService.GetFieldsByUserId(currentUserId);
+                    sensors = await sensorService.GetSensorsByFieldId(field.Id);
                 }
             }
             await JSRuntime.InvokeVoidAsync("zoomToFitAllFields");
         }
     }
-
-   
+    private async Task AddPoint()
+    {
+        if (sensors != null)
+        {
+            foreach (var sensor in sensors)
+            {
+                double latitude = sensor.Latitude;
+                double longitude = sensor.Longitude;
+                double moistureLevel = sensor.MoistureLevel;
+            
+                await JSRuntime.InvokeVoidAsync("addPointToMap", latitude, longitude, moistureLevel);
+            }
+        }
+        
+    }
 }
 
