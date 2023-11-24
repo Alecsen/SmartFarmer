@@ -19,7 +19,7 @@ public class UserHttpClient : IUserService
         this.authenticationStateProvider = authenticationStateProvider;
     }
 
-    public async Task<User> Create(UserCreationDTO dto)
+    public async Task<AuthenticationUser> Create(UserCreationDTO dto)
     {
         HttpResponseMessage response = await client.PostAsJsonAsync("/users/CreateUser", dto);
         string result = await response.Content.ReadAsStringAsync();
@@ -28,7 +28,7 @@ public class UserHttpClient : IUserService
             throw new Exception(result);
         }
 
-        User user = JsonSerializer.Deserialize<User>(result, new JsonSerializerOptions
+        AuthenticationUser user = JsonSerializer.Deserialize<AuthenticationUser>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;

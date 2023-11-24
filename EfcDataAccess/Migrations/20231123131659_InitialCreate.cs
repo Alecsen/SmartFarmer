@@ -21,11 +21,8 @@ namespace EfcDataAccess.Migrations
                     Username = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Domain = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Role = table.Column<string>(type: "TEXT", nullable: false),
-                    Age = table.Column<int>(type: "INTEGER", nullable: false),
-                    SecurityLevel = table.Column<int>(type: "INTEGER", nullable: false)
+                    Role = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,14 +75,14 @@ namespace EfcDataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Age", "Domain", "Email", "Name", "Password", "Role", "SecurityLevel", "Username" },
+                columns: new[] { "Id", "Email", "Name", "Password", "Role", "Username" },
                 values: new object[,]
                 {
-                    { 1, 30, "Domain1", "user1@example.com", "User One", "1234", "Admin", 1, "Rolf" },
-                    { 2, 25, "Domain2", "user2@example.com", "User Two", "1234", "User", 2, "Alecsen" },
-                    { 3, 28, "Domain3", "user3@example.com", "User Three", "1234", "User", 2, "Maria" },
-                    { 4, 32, "Domain4", "user4@example.com", "User Four", "1234", "Manager", 3, "Røde" },
-                    { 5, 35, "Domain5", "user5@example.com", "User Five", "1234", "Manager", 3, "user5" }
+                    { 1, "user1@example.com", "User One", "1234", "Admin", "Rolf" },
+                    { 2, "user2@example.com", "User Two", "1234", "User", "Alecsen" },
+                    { 3, "user3@example.com", "User Three", "1234", "User", "Maria" },
+                    { 4, "user4@example.com", "User Four", "1234", "Manager", "Røde" },
+                    { 5, "user5@example.com", "User Five", "1234", "Manager", "user5" }
                 });
 
             migrationBuilder.InsertData(

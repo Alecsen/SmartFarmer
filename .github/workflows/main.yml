@@ -1,0 +1,28 @@
+name : Run Tests
+
+on: 
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v2
+    
+        - name: Setup .NET Core
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: '7.0.x' # Adjust the version as needed
+    
+        - name: Install dependencies
+          run: dotnet restore
+    
+        - name: Build
+          run: dotnet build --no-restore
+    
+        - name: Run Unit Tests
+          run: dotnet test ./SmartFarmer.UnitTest/SmartFarmer.UnitTest.csproj --no-restore --verbosity normal
+    
+        - name: Run Integration Tests
+          run: dotnet test ./SmartFarmer.IntegrationTest/SmartFarmer.IntegrationTest.csproj --no-restore --verbosity normal
