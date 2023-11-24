@@ -25,6 +25,8 @@ public class Program
         builder.Services.AddScoped<IFieldDao, FieldEfcDao>();
         builder.Services.AddScoped<IUserLogic, UserLogic>();
         builder.Services.AddScoped<IFieldLogic, FieldLogic>();
+        builder.Services.AddScoped<ISensorLogic, SensorLogic>();
+        builder.Services.AddScoped<ISensorDao, SensorEfcDao>();
         builder.Services.AddDbContext<SmartFarmerAppContext>();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {

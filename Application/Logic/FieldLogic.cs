@@ -16,14 +16,14 @@ public class FieldLogic : IFieldLogic
         this.userDao = userDao;
     }
 
-    public Task<IEnumerable<FieldLookupDto>> GetAsync(int OwnerId)
+    public Task<IEnumerable<FieldLookupDto>> GetAsync(int ownerId)
     {
-        if (OwnerId == -1)
+        if (ownerId == -1)
         {
-            throw new Exception($"The Id {OwnerId} is not a valid number");
+            throw new Exception($"The Id {ownerId} is not a valid number");
         }
         
-        return fieldDao.GetFieldsByOwnerId(OwnerId);
+        return fieldDao.GetFieldsByOwnerId(ownerId);
     }
 
     public async Task<Field> CreateAsync(FieldCreationDto dto)
