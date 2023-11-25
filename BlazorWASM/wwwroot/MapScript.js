@@ -94,31 +94,6 @@ function toggleMarkerPlacement() {
     addMarkerOnClick = !addMarkerOnClick;
 }
 
-/*
-function toggleDrawingMode() {
-    console.log("Method being called in Js")
-    isDrawingMode = !isDrawingMode;
-    if (!isDrawingMode) {
-        // Complete the polygon drawing here
-        completePolygonDrawing();
-    }
-    
-   
-
-    map.on("draw:created", function (e) {
-        var layer = e.layer;
-        geoJsonDataFromPoly = layer.toGeoJSON();
-        console.log(geoJsonDataFromPoly)
-        drawnFeatures.addLayer(layer);
-    })
-    
-    map.on('click', function (e) {
-        if (isDrawingMode) {
-            addVertexToPolygon(e.latlng);
-        }
-    });
-}
-*/
 function createField(){
     if (!geoJsonDataFromPoly) {
         console.error("GeoJSON data is not defined");
