@@ -23,12 +23,7 @@ public class FieldEfcDao : IFieldDao
         var fields = await context.Fields
             .Where(field => field.Owner.Id == ownerId)
             .ToListAsync();
-
-        if (!fields.Any())
-        {
-            throw new Exception($"No fields found for owner with ID {ownerId}.");
-        }
-
+        
         List<FieldLookupDto> result = new List<FieldLookupDto>();
 
         foreach (Field field in fields)
