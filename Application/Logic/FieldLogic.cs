@@ -34,7 +34,8 @@ public class FieldLogic : IFieldLogic
         Field field = new Field
         {
             Name = dto.FieldName,
-            OwnerId = dto.OwnerId
+            OwnerId = dto.OwnerId,
+            LocationData = dto.LocationData
         };
 
         Field created = await fieldDao.CreateAsync(field);
