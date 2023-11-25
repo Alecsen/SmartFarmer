@@ -12,13 +12,29 @@ function initializeMap() {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+    
+    
+    // Event listener for map click, only adds marker if addMarkerOnClick is true
+    map.on('click', function(e) {
+        if (addMarkerOnClick) {
+            addMarker(e.latlng);
+        }
+    });
+    
+}
+function initializeMapEditable() {
+    map = L.map('mapid').setView([51.505, -0.09], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
     var drawControl = new L.Control.Draw();
     map.addControl(drawControl);
 
     var drawnFeatures = new L.FeatureGroup();
     map.addLayer(drawnFeatures);
-    
+
     // Event listener for map click, only adds marker if addMarkerOnClick is true
     map.on('click', function(e) {
         if (addMarkerOnClick) {
@@ -34,7 +50,7 @@ function initializeMap() {
             drawnFeatures.addLayer(layer);
         })
     }
-    
+
 }
 function createPolygonFromPoints() {
     map.o
@@ -78,31 +94,6 @@ function toggleMarkerPlacement() {
     addMarkerOnClick = !addMarkerOnClick;
 }
 
-/*
-function toggleDrawingMode() {
-    console.log("Method being called in Js")
-    isDrawingMode = !isDrawingMode;
-    if (!isDrawingMode) {
-        // Complete the polygon drawing here
-        completePolygonDrawing();
-    }
-    
-   
-
-    map.on("draw:created", function (e) {
-        var layer = e.layer;
-        geoJsonDataFromPoly = layer.toGeoJSON();
-        console.log(geoJsonDataFromPoly)
-        drawnFeatures.addLayer(layer);
-    })
-    
-    map.on('click', function (e) {
-        if (isDrawingMode) {
-            addVertexToPolygon(e.latlng);
-        }
-    });
-}
-*/
 function createField(){
     if (!geoJsonDataFromPoly) {
         console.error("GeoJSON data is not defined");
@@ -150,9 +141,20 @@ function convertGeoJsonToCoordinatesString(geoJson) {
         if (i === 0 ||
             !(coordinates[i][0].toFixed(3) === coordinates[i - 1][0].toFixed(3) &&
                 coordinates[i][1].toFixed(3) === coordinates[i - 1][1].toFixed(3))) {
-            formattedCoordinates.push("(" + coordinates[i][1].toFixed(3) + ", " + coordinates[i][0].toFixed(3) + ")");
+            formattedCoordinates.push("(" + coordinates[i][0].toFixed(3) + ", " + coordinates[i][1].toFixed(3) + ")");
         }
     }
 
     return formattedCoordinates.join(", ");
 }
+function addPointToMap(latitude, longitude, moistureLevel) {
+    var latlng = L.latLng(latitude, longitude);
+    addPoint(latlng, moistureLevel);
+}
+
+function addPoint(latlng, moistureLevel) {
+    L.marker(latlng).addTo(map)
+        .bindPopup("<b>New Marker</b><br>Moisture level: " + moistureLevel)
+        .openPopup();
+}
+

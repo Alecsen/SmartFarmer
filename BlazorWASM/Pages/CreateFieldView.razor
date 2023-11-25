@@ -1,0 +1,110 @@
+﻿@page "/FieldView"
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs
+@using System.Runtime.CompilerServices
+@inject IJSRuntime JSRuntime
+@inject IFieldService fieldService
+@inject IUserService userService
+
+
+<div class="main-content">
+   
+    <AuthorizeView>
+        <h3>Opret Mark</h3>
+        <div id="mapid" style="height: 400px;"></div>
+
+        <div class="buttons">
+            <button class="btn"@onclick="CreateField">Tilføj mark</button>
+        </div>
+
+        <div class="list-section">
+              @if (fields != null)
+                {
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Field name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in fields)
+                        {
+                            <tr>
+                                <td>@item.FieldName</td>
+                            </tr>
+                            <tr>
+                                <td>@item.locationData</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                @if (!string.IsNullOrEmpty(msg))
+                {
+                    <label style="color: red">@msg</label>
+                }
+        </div>
+    </AuthorizeView>
+     
+    
+</div>
+@code {
+    private IEnumerable<FieldLookupDto>? fields;
+    private string msg = "";
+    private int currentUserId;
+    private FieldCreationDto fieldToCreate;
+    private string fieldToCreateLocationData;
+    public static event Action<string> OnLocationDataReceived;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        currentUserId = await userService.GetCurrentUserId();
+        
+        try
+        {
+            fields = await fieldService.GetFieldsByUserId(currentUserId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+        OnLocationDataReceived += HandleLocationDataReceived;
+    }
+    
+    private void HandleLocationDataReceived(string locationData)
+    {
+        fieldToCreateLocationData = locationData;
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeMapEditable");
+        }
+    }
+
+    private async void CreateField()
+    {
+        await JSRuntime.InvokeVoidAsync("createField");
+
+        fieldToCreate = new FieldCreationDto
+        {
+            FieldName = "placeHolder",
+            LocationData = fieldToCreateLocationData,
+            OwnerId = currentUserId
+        };
+
+        await fieldService.CreateField(fieldToCreate);
+    }
+
+    [JSInvokable]
+    public static Task ReceiveDataFromJs(string locationData)
+    {
+        Console.WriteLine($"Received location data: {locationData}");
+        Console.WriteLine("this is the Locationdata from the polygon: " + locationData);
+        OnLocationDataReceived?.Invoke(locationData);
+        return Task.CompletedTask;
+
+    }
+}

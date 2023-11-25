@@ -24,7 +24,14 @@ public class FieldLogicTests
     [Fact]
     public async Task CreateAsync_CreatesField_WhenDtoIsValid()
     {
-        var fieldCreationDto = new FieldCreationDto(ownerId: 1, fieldName: "TestField");
+
+        var fieldCreationDto = new FieldCreationDto
+        {
+            OwnerId = 1,
+            FieldName = "testField",
+            LocationData = "placeholder LocationData"
+        };
+        
         var expectedField = new Field { Name = fieldCreationDto.FieldName, OwnerId = fieldCreationDto.OwnerId };
 
         mockUserDao.Setup(dao => dao.GetByUserIdAsync(fieldCreationDto.OwnerId)).ReturnsAsync(new AuthenticationUser());

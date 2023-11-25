@@ -2,12 +2,8 @@ namespace Domain.DTOs;
 
 public class FieldCreationDto
 {
-    public int OwnerId { get; }
-    public string FieldName { get; }
-
-    public FieldCreationDto(int ownerId, string fieldName)
-    {
-        OwnerId = ownerId;
-        FieldName = fieldName;
-    }
+    public int OwnerId { get; set; }
+    public string? FieldName { get; set; }
+    public string? LocationData { get; set; }
+   
 }

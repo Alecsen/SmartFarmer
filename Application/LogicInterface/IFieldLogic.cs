@@ -5,7 +5,7 @@ namespace Application.LogicInterface;
 
 public interface IFieldLogic
 {
-    public Task<IEnumerable<FieldLookupDto>> GetAsync(int OwnerId);
+    public Task<IEnumerable<FieldLookupDto>> GetAsync(int ownerId);
 
     Task<Field> CreateAsync(FieldCreationDto dto);
 }

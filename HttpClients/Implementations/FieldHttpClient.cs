@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
 using HttpClients.ClientInterfaces;
@@ -33,5 +34,22 @@ public class FieldHttpClient : IFieldService
                 PropertyNameCaseInsensitive = true
             })!;
         return fields;
+    }
+
+    public async Task<Field> CreateField(FieldCreationDto dto)
+    {
+        HttpResponseMessage response = await client.PostAsJsonAsync("/Field", dto);
+        string result = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
+        Field field = JsonSerializer.Deserialize<Field>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return field; 
     }
 }
