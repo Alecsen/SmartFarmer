@@ -3,6 +3,8 @@ var addMarkerOnClick = false;
 var allBounds = L.latLngBounds();
 var polygonVertices = [];
 var geoJsonDataFromPoly = null;
+var drawnFeatures = new L.FeatureGroup();
+var currentPolygons = [];
 
 // Flag to check if drawing mode is active
 var isDrawingMode = false;
@@ -31,8 +33,7 @@ function initializeMapEditable() {
 
     var drawControl = new L.Control.Draw();
     map.addControl(drawControl);
-
-    var drawnFeatures = new L.FeatureGroup();
+    
     map.addLayer(drawnFeatures);
 
     // Event listener for map click, only adds marker if addMarkerOnClick is true
@@ -57,17 +58,22 @@ function createPolygonFromPoints() {
 }
 
 function drawPolygonFromCoordinateString(coordinateString) {
+
+    currentPolygons.forEach(polygon => map.removeLayer(polygon));
+    currentPolygons = [];
+    
     var coordinatePairs = coordinateString.match(/\(([^)]+)\)/g).map(function(coord) {
         return coord.replace(/[()]/g, '');
     });
-
+    
     var coordinates = coordinatePairs.map(function(pair) {
         var parts = pair.split(', ');
         return [parseFloat(parts[1]), parseFloat(parts[0])]; // Leaflet expects [lat, lng]
     });
 
     var polygon = L.polygon(coordinates, {color: 'blue'}).addTo(map);
-    console.log(coordinateString);
+    currentPolygons.push(polygon);
+    
     // Extend the bounds to include each polygon's bounds
     allBounds.extend(polygon.getBounds());
 }
@@ -88,7 +94,9 @@ function addMarker(latlng) {
         .bindPopup("<b>New Marker</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng)
         .openPopup();
 }
-
+function clearMapEditor() {
+    drawnFeatures.clearLayers(); // Antager at 'drawnFeatures' er din featuregruppe på kortet
+}
 // Function to toggle marker placement on and off
 function toggleMarkerPlacement() {
     addMarkerOnClick = !addMarkerOnClick;
@@ -139,9 +147,9 @@ function convertGeoJsonToCoordinatesString(geoJson) {
     for (var i = 0; i < coordinates.length; i++) {
         // Tjekker for at undgå gentagne koordinater i streg
         if (i === 0 ||
-            !(coordinates[i][0].toFixed(3) === coordinates[i - 1][0].toFixed(3) &&
-                coordinates[i][1].toFixed(3) === coordinates[i - 1][1].toFixed(3))) {
-            formattedCoordinates.push("(" + coordinates[i][0].toFixed(3) + ", " + coordinates[i][1].toFixed(3) + ")");
+            !(coordinates[i][0].toFixed(6) === coordinates[i - 1][0].toFixed(3) &&
+                coordinates[i][1].toFixed(6) === coordinates[i - 1][1].toFixed(3))) {
+            formattedCoordinates.push("(" + coordinates[i][0].toFixed(6) + ", " + coordinates[i][1].toFixed(6) + ")");
         }
     }
 
@@ -158,3 +166,30 @@ function addPoint(latlng, moistureLevel) {
         .openPopup();
 }
 
+function drawPolygons(coordinateStrings) {
+    // Fjern eksisterende polygoner først
+    currentPolygons.forEach(polygon => map.removeLayer(polygon));
+    currentPolygons = [];
+
+    coordinateStrings.forEach(coordinateString => {
+        var coordinatePairs = coordinateString.match(/\(([^)]+)\)/g).map(function(coord) {
+            return coord.replace(/[()]/g, '');
+        });
+
+        var coordinates = coordinatePairs.map(function(pair) {
+            var parts = pair.split(', ');
+            return [parseFloat(parts[1]), parseFloat(parts[0])]; // Leaflet expects [lat, lng]
+        });
+
+        var polygon = L.polygon(coordinates, {color: 'blue'}).addTo(map);
+        currentPolygons.push(polygon); // Gem referencen til det nye polygon
+        allBounds.extend(polygon.getBounds());
+    });
+
+    if (!allBounds.isValid()) {
+        console.error("Bounds are not valid.");
+        return;
+    }
+
+    map.fitBounds(allBounds);
+}

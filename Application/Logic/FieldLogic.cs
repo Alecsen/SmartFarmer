@@ -30,6 +30,11 @@ public class FieldLogic : IFieldLogic
     {
         //checking if the user exists
         await userDao.GetByUserIdAsync(dto.OwnerId);
+
+        if (dto.LocationData == null)
+        {
+            throw new Exception("There is not location data so field cannot be created");
+        }
         
         Field field = new Field
         {
