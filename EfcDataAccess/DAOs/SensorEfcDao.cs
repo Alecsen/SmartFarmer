@@ -13,7 +13,7 @@ public class SensorEfcDao: ISensorDao
     {
         this.context = context;
     }
-
+    
     public async Task<IEnumerable<SensorLookupDto>> GetSensorBySensorId(int fieldId)
     {
         var sensors = await context.Sensors
