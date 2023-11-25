@@ -1,6 +1,7 @@
 ﻿@page "/FieldView"
 @using HttpClients.ClientInterfaces
 @using Domain.DTOs
+@using System.Runtime.CompilerServices
 @inject IJSRuntime JSRuntime
 @inject IFieldService fieldService
 @inject IUserService userService
@@ -51,6 +52,8 @@
     private IEnumerable<FieldLookupDto>? fields;
     private string msg = "";
     private int currentUserId;
+    private FieldCreationDto fieldToCreate;
+    private string fieldToCreateLocationData;
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,13 +81,24 @@
     private async void CreateField()
     {
         await JSRuntime.InvokeVoidAsync("createField");
+
+        fieldToCreate = new FieldCreationDto
+        {
+            FieldName = "placeHolder",
+            LocationData = fieldToCreateLocationData,
+            OwnerId = currentUserId
+        };
+
+        await fieldService.CreateField(fieldToCreate);
     }
 
     [JSInvokable]
-    public static Task ReceiveDataFromJs(string locationData)
+    public Task ReceiveDataFromJs(string locationData)
     {
         Console.WriteLine($"Received location data: {locationData}");
-    // Yderligere logik til at håndtere locationData
+
+        fieldToCreateLocationData = locationData;
+        
         return Task.CompletedTask;
     }
 }
