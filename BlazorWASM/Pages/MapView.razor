@@ -28,7 +28,7 @@
     private string msg = "";
     private ElementReference mapElement;
     private string geoLocationData = null;
-
+    private string testData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)";
     protected override async Task OnInitializedAsync()
     {
         currentUserId = await userService.GetCurrentUserId();
@@ -36,7 +36,23 @@
         try
         {
             fields = await fieldService.GetFieldsByUserId(currentUserId);
-          
+            if (fields != null)
+            {
+                try
+                {
+                    foreach (FieldLookupDto field in fields)
+                    {
+                        sensors = await sensorService.GetSensorsByFieldId(field.Id);
+                    }
+                    
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    msg = e.Message;
+                }
+            }
+            
         }
         catch (Exception e)
         {
@@ -50,7 +66,7 @@
         {
             await JSRuntime.InvokeVoidAsync("initializeMap");
             await DrawAllPolygons();
-            await AddPoint();
+           await AddPoint();
         }
     }
 
@@ -63,12 +79,11 @@
                 if (!string.IsNullOrWhiteSpace(field.locationData))
                 {
                     await JSRuntime.InvokeVoidAsync("drawPolygonFromCoordinateString", field.locationData);
-                    fields = await fieldService.GetFieldsByUserId(currentUserId);
-                    sensors = await sensorService.GetSensorsByFieldId(field.Id);
                 }
             }
             await JSRuntime.InvokeVoidAsync("zoomToFitAllFields");
         }
+        
     }
     private async Task AddPoint()
     {
@@ -79,7 +94,7 @@
                 double latitude = sensor.Latitude;
                 double longitude = sensor.Longitude;
                 double moistureLevel = sensor.MoistureLevel;
-            
+                Console.WriteLine($"this is a sensor with location {latitude} {longitude}");
                 await JSRuntime.InvokeVoidAsync("addPointToMap", latitude, longitude, moistureLevel);
             }
         }

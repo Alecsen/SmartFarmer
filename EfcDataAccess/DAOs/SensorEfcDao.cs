@@ -31,7 +31,7 @@ public class SensorEfcDao: ISensorDao
             SensorLookupDto dto = new SensorLookupDto();
             dto.Id = sensor.Id;
             dto.Latitude = sensor.Latitude;
-            dto.Longitude = sensor.Latitude;
+            dto.Longitude = sensor.Longitude;
             dto.MoistureLevel = sensor.MoistureLevel;
             
             result.Add(dto);
