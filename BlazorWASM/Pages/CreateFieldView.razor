@@ -54,7 +54,8 @@
     private int currentUserId;
     private FieldCreationDto fieldToCreate;
     private string fieldToCreateLocationData;
-
+    public static event Action<string> OnLocationDataReceived;
+    
     protected override async Task OnInitializedAsync()
     {
         currentUserId = await userService.GetCurrentUserId();
@@ -68,8 +69,13 @@
             Console.WriteLine(e);
             msg = e.Message;
         }
+        OnLocationDataReceived += HandleLocationDataReceived;
     }
     
+    private void HandleLocationDataReceived(string locationData)
+    {
+        fieldToCreateLocationData = locationData;
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -93,12 +99,12 @@
     }
 
     [JSInvokable]
-    public Task ReceiveDataFromJs(string locationData)
+    public static Task ReceiveDataFromJs(string locationData)
     {
         Console.WriteLine($"Received location data: {locationData}");
-
-        fieldToCreateLocationData = locationData;
-        
+        Console.WriteLine("this is the Locationdata from the polygon: " + locationData);
+        OnLocationDataReceived?.Invoke(locationData);
         return Task.CompletedTask;
+
     }
 }

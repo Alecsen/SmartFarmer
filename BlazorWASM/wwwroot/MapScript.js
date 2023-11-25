@@ -141,7 +141,7 @@ function convertGeoJsonToCoordinatesString(geoJson) {
         if (i === 0 ||
             !(coordinates[i][0].toFixed(3) === coordinates[i - 1][0].toFixed(3) &&
                 coordinates[i][1].toFixed(3) === coordinates[i - 1][1].toFixed(3))) {
-            formattedCoordinates.push("(" + coordinates[i][1].toFixed(3) + ", " + coordinates[i][0].toFixed(3) + ")");
+            formattedCoordinates.push("(" + coordinates[i][0].toFixed(3) + ", " + coordinates[i][1].toFixed(3) + ")");
         }
     }
 
