@@ -172,3 +172,14 @@ function convertGeoJsonToCoordinatesString(geoJson) {
 
     return formattedCoordinates.join(", ");
 }
+function addPointToMap(latitude, longitude, moistureLevel) {
+    var latlng = L.latLng(latitude, longitude);
+    addPoint(latlng, moistureLevel);
+}
+
+function addPoint(latlng, moistureLevel) {
+    L.marker(latlng).addTo(map)
+        .bindPopup("<b>New Marker</b><br>Moisture level: " + moistureLevel)
+        .openPopup();
+}
+

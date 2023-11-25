@@ -17,6 +17,7 @@ builder.Services.AddScoped<IFieldService, FieldHttpClient>();
 builder.Services.AddScoped<IUserService, UserHttpClient>();
 builder.Services.AddScoped<IAuthService, JwtAuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
+builder.Services.AddScoped<ISensorService, SensorHttpClient>();
 AuthorizationPolicies.AddPolicies(builder.Services);
 builder.Services.AddScoped(
     sp => 
