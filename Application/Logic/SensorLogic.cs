@@ -2,6 +2,7 @@
 using Application.DAOInterface;
 using Application.LogicInterface;
 using Domain.DTOs;
+using Domain.Models;
 
 namespace Application.Logic;
 
@@ -17,5 +18,10 @@ public class SensorLogic : ISensorLogic
     public Task<IEnumerable<SensorLookupDto>> GetAsync(int fieldId)
     {
         return sensorDao.GetSensorBySensorId(fieldId);
+    }
+
+    public Task<Sensor> CreateSensorAsync(SensorCreationDto dto)
+    {
+        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Application.LogicInterface;
 using Domain.DTOs;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WepAPI.Controllers;
@@ -28,5 +29,21 @@ public class SensorController: ControllerBase
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<Sensor>> CreateSensorAsync(SensorCreationDto dto)
+    {
+        try
+        {
+            var sensor = await sensorLogic.CreateSensorAsync(dto);
+            return Ok(sensor);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500,e.Message);
+        }
+        
     }
 }
