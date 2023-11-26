@@ -1,7 +1,10 @@
 ﻿@page "/CreateUser"
 @using Domain.DTOs
+@using HttpClients.AuthServices
 @using HttpClients.ClientInterfaces
 @inject IUserService userService;
+@inject IAuthService authService
+@inject NavigationManager navMgr
 
 <AuthorizeView>
     <NotAuthorized>
@@ -60,7 +63,7 @@
     private string name = "";
     private string role = "user";
     private string address = "";
-    private DateTime birthday = DateTime.Today;
+    private DateTime birthday = new DateTime(2000, 01, 01);
     private string sex = "";
     private string phone = "";
     private string resultMsg = "";
@@ -89,6 +92,7 @@
             };
 
             await userService.Create(newUser);
+            await LoginAsync();
             ClearForm();
             resultMsg = "User successfully created";
             color = "green";
@@ -109,8 +113,23 @@
         name = "";
         role = "";
         address = "";
-        birthday = DateTime.MinValue;
+        birthday = new DateTime(2000, 01, 01);
         sex = "";
         phone = "";
+    }
+    
+    private async Task LoginAsync()
+    {
+        resultMsg = "";
+        try
+        {
+            await authService.LoginAsync(username, password);
+            navMgr.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            resultMsg = $"Error: {e.Message}";
+        }
     }
 }
