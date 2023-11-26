@@ -66,12 +66,10 @@
     {
     // This method is called whenever parameters are set, including when navigating to the page
     // You can perform additional actions here, such as calling JavaScript interop methods
-        if (fields != null && sensors != null)
-        {
             await JSRuntime.InvokeVoidAsync("initializeMap");
             await DrawAllPolygons();
             await AddPoint();
-        }
+        
     }
 
     private async Task DrawAllPolygons()

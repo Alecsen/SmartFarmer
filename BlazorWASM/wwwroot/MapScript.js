@@ -14,15 +14,15 @@ function initializeMap() {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-    
-    
+
+
     // Event listener for map click, only adds marker if addMarkerOnClick is true
     map.on('click', function(e) {
         if (addMarkerOnClick) {
             addMarker(e.latlng);
         }
     });
-    
+
 }
 function initializeMapEditable() {
     map = L.map('mapid').setView([51.505, -0.09], 13);
@@ -33,7 +33,7 @@ function initializeMapEditable() {
 
     var drawControl = new L.Control.Draw();
     map.addControl(drawControl);
-    
+
     map.addLayer(drawnFeatures);
 
     // Event listener for map click, only adds marker if addMarkerOnClick is true
@@ -61,11 +61,11 @@ function drawPolygonFromCoordinateString(coordinateString) {
 
     currentPolygons.forEach(polygon => map.removeLayer(polygon));
     currentPolygons = [];
-    
+
     var coordinatePairs = coordinateString.match(/\(([^)]+)\)/g).map(function(coord) {
         return coord.replace(/[()]/g, '');
     });
-    
+
     var coordinates = coordinatePairs.map(function(pair) {
         var parts = pair.split(', ');
         return [parseFloat(parts[1]), parseFloat(parts[0])]; // Leaflet expects [lat, lng]
@@ -73,7 +73,7 @@ function drawPolygonFromCoordinateString(coordinateString) {
 
     var polygon = L.polygon(coordinates, {color: 'blue'}).addTo(map);
     currentPolygons.push(polygon);
-    
+
     // Extend the bounds to include each polygon's bounds
     allBounds.extend(polygon.getBounds());
 }
@@ -110,15 +110,15 @@ function createField(){
 
     var dataToBlazor = convertGeoJsonToCoordinatesString(geoJsonDataFromPoly);
     console.log(dataToBlazor);
-    
-        DotNet.invokeMethodAsync('BlazorWASM', 'ReceiveDataFromJs', dataToBlazor)
-            .then(result => {
-                console.log('Data sent to Blazor successfully');
-            }).catch(error => {
-            console.error('Error in sending data to Blazor', error);
-    
-        });
-     
+
+    DotNet.invokeMethodAsync('BlazorWASM', 'ReceiveDataFromJs', dataToBlazor)
+        .then(result => {
+            console.log('Data sent to Blazor successfully');
+        }).catch(error => {
+        console.error('Error in sending data to Blazor', error);
+
+    });
+
 }
 function addVertexToPolygon(latlng) {
     console.log("Adding vertex: ", latlng);
