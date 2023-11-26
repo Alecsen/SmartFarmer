@@ -13,30 +13,45 @@
 else
 {
     <AuthorizeView>
-        <div class="profile-container">
-            <h3>Personlige oplysninger</h3>
+        <header class="profile-info" tabindex="-1">
+            <h1>Personlige oplysninger</h1>
+            <div>Her kan du se din profil og hvilke oplysniger du har angivet - samt har du mulighed for at opdatere dine oplysninger</div>
+        </header>
+    <div class="profile-container">
+        <h3>Grundlæggende oplysninger</h3>
+        <table class="profile-table">
+            <tr>
+                <td>Navn</td>
+                <td><div class="field-value">@_user.Name</div></td>
+            </tr>
+            <tr>
+                <td>Fødselsdato</td>
+                <td><div class="field-value">@_user.Birthday.ToString("dd-MM-yyyy")</div></td>
+            </tr>
+            <tr>
+                <td>Køn</td>
+                <td><div class="field-value">@_user.Sex</div></td>
+            </tr>
+        </table>
+    </div>
+    <div class="profile-container">
+            <h3>Kontaktoplysninger</h3>
             <table class="profile-table">
                 <tr>
-                    <td>Brugernavn</td>
-                    <td><div class="field-value">@currentUsername</div></td>
-                </tr>
-                <tr>
-                    <td>Kodeord</td>
-                    <td><div class="field-value">********</div></td>
-                </tr>
-                <tr>
-                    <td>Email</td>
+                    <td>Mailadresse</td>
                     <td><div class="field-value">@_user.Email</div></td>
                 </tr>
                 <tr>
-                    <td>Navn</td>
-                    <td><div class="field-value">@_user.Name</div></td>
+                    <td>Telefon</td>
+                    <td><div class="field-value">@_user.Phone</div></td>
                 </tr>
                 <tr>
-                    <td>Role:</td>
-                    <td><div class="field-value">@_user.Role</div></td>
+                    <td>Adresse</td>
+                    <td><div class="field-value">@_user.Address</div></td>
                 </tr>
-            </table>
+                </table>
+    </div>
+                
             <div class="button-row">
                 <button @onclick="EditPage" class="edit-btn">Opdater profil</button>
             </div>
@@ -44,7 +59,6 @@ else
             {
                 <div style="@color" class="result-message">@resultMsg</div>
             }
-        </div>
 
     </AuthorizeView>
 }
