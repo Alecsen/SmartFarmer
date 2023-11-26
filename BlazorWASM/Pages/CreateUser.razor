@@ -10,20 +10,38 @@
             <div class="form-group">
                 <div class="field">
                     <label>User name:</label>
-                    <input type="text" @bind="username" @bind:event="oninput"/>
+                    <input type="text" @bind="username" @bind:event="oninput" />
                 </div>
                 <div class="field">
                     <label>Password:</label>
-                    <input type="password" @bind="password" @bind:event="oninput"/>
+                    <input type="password" @bind="password" @bind:event="oninput" />
                 </div>
                 <div class="field">
                     <label>Email:</label>
-                    <input type="email" @bind="email" @bind:event="oninput"/>
+                    <input type="email" @bind="email" @bind:event="oninput" />
                 </div>
                 <div class="field">
                     <label>Name:</label>
-                    <input type="text" @bind="name" @bind:event="oninput"/>
+                    <input type="text" @bind="name" @bind:event="oninput" />
                 </div>
+                <!-- Add labels for missing variables -->
+                <div class="field">
+                    <label>Address:</label>
+                    <input type="text" @bind="address" @bind:event="oninput" />
+                </div>
+                <div class="field">
+                    <label>Birth Date:</label>
+                    <input type="date" @bind="birthDate" @bind:event="oninput" />
+                </div>
+                <div class="field">
+                    <label>Sex:</label>
+                    <input type="text" @bind="sex" @bind:event="oninput" />
+                </div>
+                <div class="field">
+                    <label>Phone:</label>
+                    <input type="tel" @bind="phone" @bind:event="oninput" />
+                </div>
+
                 @if (!string.IsNullOrEmpty(resultMsg))
                 {
                     <label style="color: @color">@resultMsg</label>
@@ -36,17 +54,20 @@
     </NotAuthorized>
 </AuthorizeView>
 
-
 @code {
     private string username = "";
     private string password = "";
     private string email = "";
     private string name = "";
     private string role = "user";
+    private string address = "";
+    private DateOnly birthday;
+    private string sex = "";
+    private string phone = "";
     private string resultMsg = "";
     private string color = "";
 
-    private bool IsCreateButtonDisabled() => 
+    private bool IsCreateButtonDisabled() =>
         string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password);
 
     private async Task Create()
@@ -62,6 +83,10 @@
                 Email = email,
                 Name = name,
                 Role = role,
+                Address = address,
+                Birthday = birthday,
+                Sex = sex,
+                Phone = phone
             };
 
             await userService.Create(newUser);
@@ -84,5 +109,9 @@
         email = "";
         name = "";
         role = "";
+        address = "";
+        birthDate = DateOnly.MinValue;
+        sex = "";
+        phone = "";
     }
 }

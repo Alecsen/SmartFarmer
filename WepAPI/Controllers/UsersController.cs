@@ -21,11 +21,11 @@ public class UsersController : ControllerBase
     
     [HttpPost]
     [Route("CreateUser")]
-    public async Task<ActionResult<AuthenticationUser>> CreateAsync(UserCreationDTO dto)
+    public async Task<ActionResult<User>> CreateAsync(UserCreationDTO dto)
     {
         try
         {
-            AuthenticationUser user = await userLogic.CreateAsync(dto);
+            User user = await userLogic.CreateAsync(dto);
             return Created($"/users/{user.Username}", user);
         }
         catch (Exception e)
@@ -37,7 +37,7 @@ public class UsersController : ControllerBase
     
     [HttpGet]
     [Route("ViewProfile")]
-    public async Task<ActionResult<AuthenticationUser>> GetAsync(string username)
+    public async Task<ActionResult<User>> GetAsync(string username)
     {
         try
         {

@@ -34,7 +34,7 @@ public class FieldLogicTests
         
         var expectedField = new Field { Name = fieldCreationDto.FieldName, OwnerId = fieldCreationDto.OwnerId };
 
-        mockUserDao.Setup(dao => dao.GetByUserIdAsync(fieldCreationDto.OwnerId)).ReturnsAsync(new AuthenticationUser());
+        mockUserDao.Setup(dao => dao.GetByUserIdAsync(fieldCreationDto.OwnerId)).ReturnsAsync(new User());
         mockFieldDao.Setup(dao => dao.CreateAsync(It.IsAny<Field>())).ReturnsAsync(expectedField);
         
         //act

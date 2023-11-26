@@ -4,15 +4,15 @@ namespace EfcDataAccess;
 
 public class DatabaseInitializer
 {
-    public static List<AuthenticationUser> GetAuthenticationUsers()
+    public static List<User> GetAuthenticationUsers()
     {
-        return new List<AuthenticationUser>
+        return new List<User>
         {
-                new AuthenticationUser { Id = 1, Username = "Rolf", Password = "1234", Email = "user1@example.com", Name = "User One", Role = "Admin" },
-                new AuthenticationUser { Id = 2, Username = "Alecsen", Password = "1234", Email = "user2@example.com", Name = "User Two", Role = "User" },
-                new AuthenticationUser { Id = 3,  Username = "Maria", Password = "1234", Email = "user3@example.com", Name = "User Three", Role = "User" },
-                new AuthenticationUser { Id = 4,  Username = "Røde", Password = "1234", Email = "user4@example.com", Name = "User Four", Role = "Manager" },
-                new AuthenticationUser { Id = 5, Username = "user5", Password = "1234", Email = "user5@example.com", Name = "User Five", Role = "Manager" }
+                new User { Id = 1, Username = "Rolf", Password = "1234", Email = "user1@example.com", Name = "User One", Role = "Admin", Address = "Hallssti 29", Phone = "53299870", Sex = "male"},
+                new User { Id = 2, Username = "Alecsen", Password = "1234", Email = "user2@example.com", Name = "User Two", Role = "User", Address = "Hallssti 29", Phone = "53299870", Sex = "male" },
+                new User { Id = 3,  Username = "Maria", Password = "1234", Email = "user3@example.com", Name = "User Three", Role = "User", Address = "Hallssti 29", Phone = "53299870", Sex = "male" },
+                new User { Id = 4,  Username = "Røde", Password = "1234", Email = "user4@example.com", Name = "User Four", Role = "Manager", Address = "Hallssti 29", Phone = "53299870", Sex = "male" },
+                new User { Id = 5, Username = "user5", Password = "1234", Email = "user5@example.com", Name = "User Five", Role = "Manager", Address = "Hallssti 29", Phone = "53299870", Sex = "male" }
         };
     }
 
@@ -46,15 +46,15 @@ public class DatabaseInitializer
         };
     }
     
-     public static List<AuthenticationUser> GetAuthenticationUsersNoId()
+     public static List<User> GetAuthenticationUsersNoId()
     {
-        return new List<AuthenticationUser>
+        return new List<User>
         {
-                new AuthenticationUser {  Username = "Rolf", Password = "1234", Email = "user1@example.com", Name = "User One", Role = "Admin" },
-                new AuthenticationUser {  Username = "Alecsen", Password = "1234", Email = "user2@example.com", Name = "User Two", Role = "User" },
-                new AuthenticationUser {   Username = "Maria", Password = "1234", Email = "user3@example.com", Name = "User Three", Role = "User" },
-                new AuthenticationUser {   Username = "Røde", Password = "1234", Email = "user4@example.com", Name = "User Four", Role = "Manager" },
-                new AuthenticationUser {  Username = "user5", Password = "1234", Email = "user5@example.com", Name = "User Five", Role = "Manager" }
+                new User {  Username = "Rolf", Password = "1234", Email = "user1@example.com", Name = "User One", Role = "Admin" },
+                new User {  Username = "Alecsen", Password = "1234", Email = "user2@example.com", Name = "User Two", Role = "User" },
+                new User {   Username = "Maria", Password = "1234", Email = "user3@example.com", Name = "User Three", Role = "User" },
+                new User {   Username = "Røde", Password = "1234", Email = "user4@example.com", Name = "User Four", Role = "Manager" },
+                new User {  Username = "user5", Password = "1234", Email = "user5@example.com", Name = "User Five", Role = "Manager" }
         };
     }
 

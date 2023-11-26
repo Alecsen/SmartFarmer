@@ -31,7 +31,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            AuthenticationUser user = await userLogic.ValidateLogin(userLoginDto);
+            User user = await userLogic.ValidateLogin(userLoginDto);
             string token = GenerateJwt(user);
     
             return Ok(token);
@@ -45,7 +45,7 @@ public class AuthController : ControllerBase
     }
     
     
-    private string GenerateJwt(AuthenticationUser user)
+    private string GenerateJwt(User user)
     {
         List<Claim> claims = GenerateClaims(user);
     
@@ -67,7 +67,7 @@ public class AuthController : ControllerBase
         return serializedToken;
     }
     
-    private List<Claim> GenerateClaims(AuthenticationUser user)
+    private List<Claim> GenerateClaims(User user)
     {
         var claims = new[]
         {
@@ -79,6 +79,9 @@ public class AuthController : ControllerBase
             new Claim("DisplayName", user.Name),
             new Claim("UserId", user.Id.ToString()),
             new Claim("Email", user.Email),
+            new Claim("Sex", user.Sex),
+            new Claim("Phone", user.Phone),
+            new Claim("Address", user.Address)
         };
         return claims.ToList();
     }

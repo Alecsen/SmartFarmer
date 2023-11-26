@@ -16,16 +16,16 @@ public class UserEfcDao : IUserDao
         this.context = context;
     }
 
-    public async Task<AuthenticationUser> CreateAsync(AuthenticationUser user)
+    public async Task<User> CreateAsync(User user)
     {
-        EntityEntry<AuthenticationUser> newUser = await context.Users.AddAsync(user);
+        EntityEntry<User> newUser = await context.Users.AddAsync(user);
         await context.SaveChangesAsync();
         return newUser.Entity;
     }
 
-    public async Task<AuthenticationUser?> GetByUsernameAsync(string userName)
+    public async Task<User?> GetByUsernameAsync(string userName)
     {
-        AuthenticationUser? existing = await context.Users.FirstOrDefaultAsync(u =>
+        User? existing = await context.Users.FirstOrDefaultAsync(u =>
             u.Username.ToLower().Equals(userName.ToLower())
         );
         return existing;
@@ -35,7 +35,7 @@ public class UserEfcDao : IUserDao
     public async Task UpdateAsync(ProfileUpdateDto dto)
     {
         // Find the user with the given username
-        AuthenticationUser? userToUpdate =
+        User? userToUpdate =
             await context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == dto.Username.ToLower());
 
         if (userToUpdate != null)
@@ -56,9 +56,9 @@ public class UserEfcDao : IUserDao
         
     }
 
-    public async Task<AuthenticationUser?> GetByUserIdAsync(int id)
+    public async Task<User?> GetByUserIdAsync(int id)
     {
-        AuthenticationUser? existing = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        User? existing = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
         if (existing != null)
         {
             return existing;

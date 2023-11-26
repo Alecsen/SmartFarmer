@@ -68,7 +68,7 @@ public class UserEndpointTests : IClassFixture<CustomWebApplicationFactory>
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var responseContent = await response.Content.ReadAsStringAsync();
-        var user = JsonConvert.DeserializeObject<AuthenticationUser>(responseContent);
+        var user = JsonConvert.DeserializeObject<User>(responseContent);
         user.Should().NotBeNull();
         user.Username.Should().Be(username);
     }
