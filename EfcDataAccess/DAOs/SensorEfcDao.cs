@@ -2,6 +2,7 @@
 using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess.DAOs;
 
@@ -38,5 +39,12 @@ public class SensorEfcDao: ISensorDao
         }
 
         return result;
+    }
+
+    public async Task<Sensor> CreateSensorAsync(Sensor sensor)
+    {
+        EntityEntry<Sensor> newSensor = await context.Sensors.AddAsync(sensor);
+        await context.SaveChangesAsync();
+        return newSensor.Entity;
     }
 }
