@@ -11,9 +11,10 @@ public class SensorLogic : ISensorLogic
 {
     private readonly ISensorDao sensorDao;
     private readonly IFieldDao fieldDao;
-    public SensorLogic(ISensorDao sensorDao)
+    public SensorLogic(ISensorDao sensorDao, IFieldDao fieldDao)
     {
         this.sensorDao = sensorDao;
+        this.fieldDao = fieldDao;
     }
 
     public Task<IEnumerable<SensorLookupDto>> GetAsync(int fieldId)
