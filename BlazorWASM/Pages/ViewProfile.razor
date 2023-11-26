@@ -13,38 +13,39 @@
 else
 {
     <AuthorizeView>
-        <div class="container">
-            <h3>ViewProfile</h3>
-            <div class="field-container">
-                <div class="field">
-                    <label>User name:</label>
-                    <input type="text" @bind="currentUsername"/>
-                </div>
-                <div class="field">
-                    <label>Password:</label>
-                    <input type="password" @bind="_user.Password"/>
-                </div>
-                <div class="field">
-                    <label>Email:</label>
-                    <input type="email" @bind="_user.Email"/>
-                </div>
-                <div class="field">
-                    <label>Name:</label>
-                    <input type="text" @bind="_user.Name"/>
-                </div>
-                <div class="field">
-                    <label>Role:</label>
-                    <input type="text" @bind="_user.Role"/>
-                </div>
-                <div class="button-row">
-                    <button @onclick="EditPage" class="editBtn">Edit profile</button>
-                </div>
-                @if (!string.IsNullOrEmpty(resultMsg))
-                {
-                    <label style="@color">@resultMsg</label>
-                }
+        <div class="profile-container">
+            <h3>Personlige oplysninger</h3>
+            <table class="profile-table">
+                <tr>
+                    <td>Brugernavn</td>
+                    <td><div class="field-value">@currentUsername</div></td>
+                </tr>
+                <tr>
+                    <td>Kodeord</td>
+                    <td><div class="field-value">********</div></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><div class="field-value">@_user.Email</div></td>
+                </tr>
+                <tr>
+                    <td>Navn</td>
+                    <td><div class="field-value">@_user.Name</div></td>
+                </tr>
+                <tr>
+                    <td>Role:</td>
+                    <td><div class="field-value">@_user.Role</div></td>
+                </tr>
+            </table>
+            <div class="button-row">
+                <button @onclick="EditPage" class="edit-btn">Opdater profil</button>
             </div>
+            @if (!string.IsNullOrEmpty(resultMsg))
+            {
+                <div style="@color" class="result-message">@resultMsg</div>
+            }
         </div>
+
     </AuthorizeView>
 }
 

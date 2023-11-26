@@ -1,0 +1,50 @@
+.profile-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.profile-table td {
+    padding: 8px;
+    border-top: none; /* Remove top border */
+    border-left: none; /* Remove left border */
+    border-right: none; /* Remove right border */
+    border-bottom: 1px solid #ddd; /* Add bottom border */
+}
+
+label {
+    font-weight: bold;
+}
+
+.field-value {
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.button-row {
+    margin-top: 20px;
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.result-message {
+    margin-top: 10px;
+    padding: 8px;
+    font-size: 14px;
+}

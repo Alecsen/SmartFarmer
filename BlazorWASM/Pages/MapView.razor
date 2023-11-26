@@ -61,13 +61,16 @@
             msg = e.Message;
         }
     }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    
+    protected override async Task OnParametersSetAsync()
     {
-        if (firstRender)
+    // This method is called whenever parameters are set, including when navigating to the page
+    // You can perform additional actions here, such as calling JavaScript interop methods
+        if (fields != null && sensors != null)
         {
             await JSRuntime.InvokeVoidAsync("initializeMap");
             await DrawAllPolygons();
-           await AddPoint();
+            await AddPoint();
         }
     }
 
