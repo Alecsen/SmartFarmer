@@ -81,7 +81,8 @@ public class AuthController : ControllerBase
             new Claim("Email", user.Email),
             new Claim("Sex", user.Sex),
             new Claim("Phone", user.Phone),
-            new Claim("Address", user.Address)
+            new Claim("Address", user.Address),
+            new Claim("Birthday", user.Birthday.ToString())
         };
         return claims.ToList();
     }

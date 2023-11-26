@@ -6,8 +6,7 @@ namespace EfcDataAccess;
 public class SmartFarmerAppContext : DbContext
 {
     
-    
-    
+   
     
     public DbSet<User> Users { get; set; }
     public DbSet<Field> Fields { get; set; }

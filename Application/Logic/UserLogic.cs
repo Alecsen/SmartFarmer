@@ -29,6 +29,7 @@ public class UserLogic : IUserLogic
             Password = dto.PassWord,
             Role = dto.Role,
             Address = dto.Address,
+            Birthday = dto.Birthday,
             Sex = dto.Sex,
             Phone = dto.Phone
         };

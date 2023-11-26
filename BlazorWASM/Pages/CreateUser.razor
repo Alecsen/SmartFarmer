@@ -24,15 +24,14 @@
                     <label>Name:</label>
                     <input type="text" @bind="name" @bind:event="oninput" />
                 </div>
-                <!-- Add labels for missing variables -->
                 <div class="field">
                     <label>Address:</label>
                     <input type="text" @bind="address" @bind:event="oninput" />
                 </div>
                 <div class="field">
                     <label>Birth Date:</label>
-                    <input type="date" @bind="birthDate" @bind:event="oninput" />
-                </div>
+                    <InputDate @bind-Value="birthday" />
+                    </div>
                 <div class="field">
                     <label>Sex:</label>
                     <input type="text" @bind="sex" @bind:event="oninput" />
@@ -61,7 +60,7 @@
     private string name = "";
     private string role = "user";
     private string address = "";
-    private DateOnly birthday;
+    private DateTime birthday = DateTime.Today;
     private string sex = "";
     private string phone = "";
     private string resultMsg = "";
@@ -110,7 +109,7 @@
         name = "";
         role = "";
         address = "";
-        birthDate = DateOnly.MinValue;
+        birthday = DateTime.MinValue;
         sex = "";
         phone = "";
     }
