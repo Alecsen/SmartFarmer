@@ -20,8 +20,9 @@ main {
     height: 3.5rem;
     display: flex;
     align-items: center;
+    position: relative;
+    z-index: 1000; /* Adjust the value based on your needs */
 }
-
   
     .top-row a:first-child {
         overflow: hidden;
