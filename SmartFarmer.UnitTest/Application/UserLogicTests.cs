@@ -24,7 +24,7 @@ public class UserLogicTests
         // Arrange
         var userName = "alecsen";
         var UserSearchParameters = new UserSearchParametersDTO(userName);
-        var expectedUser = new AuthenticationUser { Username = userName };
+        var expectedUser = new User { Username = userName };
 
         userDaoMock.Setup(dao => dao.GetByUsernameAsync(userName)).ReturnsAsync(expectedUser);
         
@@ -47,14 +47,14 @@ public class UserLogicTests
         };
 
         userDaoMock.Setup(dao => dao.GetByUsernameAsync(userCreationDto.UserName)).ReturnsAsync(() =>null);
-        userDaoMock.Setup(dao => dao.CreateAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(new AuthenticationUser());
+        userDaoMock.Setup(dao => dao.CreateAsync(It.IsAny<User>())).ReturnsAsync(new User());
         // Act
 
         var result = await sut.CreateAsync(userCreationDto);
         
         // Assert
         Assert.NotNull(result);
-        userDaoMock.Verify(dao => dao.CreateAsync(It.IsAny<AuthenticationUser>()), Times.Once);
+        userDaoMock.Verify(dao => dao.CreateAsync(It.IsAny<User>()), Times.Once);
     }
 
     [Fact]
@@ -69,11 +69,11 @@ public class UserLogicTests
 
 
         userDaoMock.Setup(dao => dao.GetByUsernameAsync(usercreationdto.UserName))
-            .ReturnsAsync(new AuthenticationUser());
+            .ReturnsAsync(new User());
         
         //Assert
         await Assert.ThrowsAsync<Exception>(() => sut.CreateAsync(usercreationdto));
-        userDaoMock.Verify(dao => dao.CreateAsync(It.IsAny<AuthenticationUser>()), Times.Never);
+        userDaoMock.Verify(dao => dao.CreateAsync(It.IsAny<User>()), Times.Never);
     }
 
     [Theory]
@@ -101,7 +101,7 @@ public class UserLogicTests
             Password = "123"
         };
 
-        var authenticationUser = new AuthenticationUser
+        var authenticationUser = new User
         {
             Username = "alecsen",
             Password = "123"
@@ -143,7 +143,7 @@ public class UserLogicTests
             Username = "alecsen",
             Password = "WrongPassWord"
         };
-        var authenticationUser = new AuthenticationUser
+        var authenticationUser = new User
         {
             Username = "alecsen",
             Password = "RightPassword"

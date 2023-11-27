@@ -5,10 +5,10 @@ namespace Application.LogicInterface;
 
 public interface IUserLogic
 {
-    public Task<AuthenticationUser> CreateAsync(UserCreationDTO dto);
+    public Task<User> CreateAsync(UserCreationDTO dto);
 
-    public Task<AuthenticationUser> ValidateLogin(AuthUserLoginDto dto);
+    public Task<User> ValidateLogin(AuthUserLoginDto dto);
     
-    public Task<AuthenticationUser> GetAsync(UserSearchParametersDTO dto);
+    public Task<User> GetAsync(UserSearchParametersDTO dto);
     public Task UpdateAsync(ProfileUpdateDto dto);
 }

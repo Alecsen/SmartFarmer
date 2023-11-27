@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -21,6 +22,10 @@ namespace EfcDataAccess.Migrations
                     Username = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    Birthday = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Sex = table.Column<string>(type: "TEXT", nullable: false),
+                    Phone = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Role = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -75,14 +80,14 @@ namespace EfcDataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "Name", "Password", "Role", "Username" },
+                columns: new[] { "Id", "Address", "Birthday", "Email", "Name", "Password", "Phone", "Role", "Sex", "Username" },
                 values: new object[,]
                 {
-                    { 1, "user1@example.com", "User One", "1234", "Admin", "Rolf" },
-                    { 2, "user2@example.com", "User Two", "1234", "User", "Alecsen" },
-                    { 3, "user3@example.com", "User Three", "1234", "User", "Maria" },
-                    { 4, "user4@example.com", "User Four", "1234", "Manager", "Røde" },
-                    { 5, "user5@example.com", "User Five", "1234", "Manager", "user5" }
+                    { 1, "Hallssti 29", new DateTime(1998, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "user1@example.com", "User One", "1234", "53299870", "Admin", "male", "Rolf" },
+                    { 2, "Hallssti 29", new DateTime(1998, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2@example.com", "User Two", "1234", "53299870", "User", "male", "Alecsen" },
+                    { 3, "Hallssti 29", new DateTime(1998, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3@example.com", "User Three", "1234", "53299870", "User", "male", "Maria" },
+                    { 4, "Hallssti 29", new DateTime(1998, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "user4@example.com", "User Four", "1234", "53299870", "Manager", "male", "Røde" },
+                    { 5, "Hallssti 29", new DateTime(1998, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "user5@example.com", "User Five", "1234", "53299870", "Manager", "male", "user5" }
                 });
 
             migrationBuilder.InsertData(

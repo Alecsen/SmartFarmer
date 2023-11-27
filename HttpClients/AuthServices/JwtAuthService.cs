@@ -53,7 +53,7 @@ public class JwtAuthService : IAuthService
         return Task.CompletedTask;
     }
 
-    public async Task RegisterAsync(AuthenticationUser user)
+    public async Task RegisterAsync(User user)
     {
         string userAsJson = JsonSerializer.Serialize(user);
         StringContent content = new(userAsJson, Encoding.UTF8, "application/json");

@@ -35,20 +35,7 @@ public class FieldEndpointTests : IClassFixture<CustomWebApplicationFactory>
         Assert.NotNull(fields); 
         Assert.NotEmpty(fields); 
     }
-
-    [Fact]
-    public async Task Get_FieldByOwner_DoesNotReturnFieldWhenWrongOwnerId()
-    {
-        // Arrange
-        var ownerId = 1000; 
-        var url = $"/Field/{ownerId}";
-
-        // Act
-        var response = await client.GetAsync(url);
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
-    }
+    
     
     [Fact]
     public async Task Get_FieldByOwner_ReturnsBadRequestForInvalidInputMinus1()

@@ -5,10 +5,10 @@ namespace HttpClients.ClientInterfaces;
 
 public interface IUserService
 {
-    Task<AuthenticationUser> Create(UserCreationDTO dto);
+    Task<User> Create(UserCreationDTO dto);
 
     Task<UserLoginDTO> Login(UserCreationDTO dto);
-    Task<AuthenticationUser> GetAsync(string? username);
+    Task<User> GetAsync(string? username);
     Task<int> GetCurrentUserId();
     Task UpdateAsync(ProfileUpdateDto dto);
 }

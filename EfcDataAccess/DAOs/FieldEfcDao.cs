@@ -23,12 +23,7 @@ public class FieldEfcDao : IFieldDao
         var fields = await context.Fields
             .Where(field => field.Owner.Id == ownerId)
             .ToListAsync();
-
-        if (!fields.Any())
-        {
-            throw new Exception($"No fields found for owner with ID {ownerId}.");
-        }
-
+        
         List<FieldLookupDto> result = new List<FieldLookupDto>();
 
         foreach (Field field in fields)
@@ -49,5 +44,27 @@ public class FieldEfcDao : IFieldDao
         EntityEntry<Field> newField = await context.Fields.AddAsync(field);
         await context.SaveChangesAsync();
         return newField.Entity;
+    }
+
+    public async Task<Field> GetFieldById(int fieldId)
+    {
+        var field = await context.Fields
+            .Where(field => field.Id == fieldId)
+            .ToListAsync();
+
+        if (!field.Any())
+        {
+            throw new Exception($"There is not any fields with the id of {fieldId}");
+        }
+        
+        if (field.Count > 1)
+        {
+            throw new Exception($"There are multiple fields containing the same ID of {fieldId}");
+        }
+
+        Field returnField = field[0];
+        Console.WriteLine($"this is what fields contain {returnField}");
+
+        return returnField;
     }
 }

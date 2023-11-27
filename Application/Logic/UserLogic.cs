@@ -14,30 +14,34 @@ public class UserLogic : IUserLogic
         this.userDao = userDao;
     }
 
-    public async Task<AuthenticationUser> CreateAsync(UserCreationDTO dto)
+    public async Task<User> CreateAsync(UserCreationDTO dto)
     {
-        AuthenticationUser? existing = await userDao.GetByUsernameAsync(dto.UserName);
+        User? existing = await userDao.GetByUsernameAsync(dto.UserName);
         if (existing != null)
             throw new Exception("Username already taken!");
 
         ValidateUserName(dto);
-        AuthenticationUser toCreate = new AuthenticationUser()
+        User toCreate = new User()
         {
             Username = dto.UserName,
             Email = dto.Email,
             Name = dto.Name,
             Password = dto.PassWord,
             Role = dto.Role,
+            Address = dto.Address,
+            Birthday = dto.Birthday,
+            Sex = dto.Sex,
+            Phone = dto.Phone
         };
         
-        AuthenticationUser created = await userDao.CreateAsync(toCreate);
+        User created = await userDao.CreateAsync(toCreate);
         
         return created;
     }
 
-    public async Task<AuthenticationUser> ValidateLogin(AuthUserLoginDto dto)
+    public async Task<User> ValidateLogin(AuthUserLoginDto dto)
     {
-        AuthenticationUser? existing = await userDao.GetByUsernameAsync(dto.Username);
+        User? existing = await userDao.GetByUsernameAsync(dto.Username);
         if (existing == null)
             throw new Exception("User does not exist!");
 
@@ -50,7 +54,7 @@ public class UserLogic : IUserLogic
 
     }
 
-    public Task<AuthenticationUser> GetAsync(UserSearchParametersDTO dto)
+    public Task<User> GetAsync(UserSearchParametersDTO dto)
     {
         return userDao.GetByUsernameAsync(dto.Username);
     }

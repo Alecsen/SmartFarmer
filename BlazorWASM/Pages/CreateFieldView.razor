@@ -81,9 +81,24 @@
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("initializeMapEditable");
+            await DrawAllPolygons();
         }
     }
-
+    
+    private async Task ReloadFields()
+    {
+        try
+        {
+            fields = await fieldService.GetFieldsByUserId(currentUserId);
+            await DrawAllPolygons();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+ 
     private async void CreateField()
     {
         await JSRuntime.InvokeVoidAsync("createField");
@@ -96,6 +111,11 @@
         };
 
         await fieldService.CreateField(fieldToCreate);
+        
+        await JSRuntime.InvokeVoidAsync("clearMapEditor");
+        
+        await ReloadFields();
+        fieldToCreateLocationData = null;
     }
 
     [JSInvokable]
@@ -106,5 +126,16 @@
         OnLocationDataReceived?.Invoke(locationData);
         return Task.CompletedTask;
 
+    }
+    private async Task DrawAllPolygons()
+    {
+        if (fields != null)
+        {
+            var coordinateStrings = fields.Where(field => !string.IsNullOrWhiteSpace(field.locationData))
+                .Select(field => field.locationData)
+                .ToList();
+
+            await JSRuntime.InvokeVoidAsync("drawPolygons", coordinateStrings);
+        }
     }
 }
