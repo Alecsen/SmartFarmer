@@ -1,7 +1,6 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject IFieldService fieldService
 @inject IUserService userService
-@inject ISensorService sensorService
 
 @page "/MapView"
 @using HttpClients.ClientInterfaces
@@ -23,7 +22,6 @@
 </AuthorizeView>
 @code {
     private IEnumerable<FieldLookupDto>? fields;
-    private IEnumerable<SensorLookupDto>? sensors;
     private int currentUserId;
     private string msg = "";
     private ElementReference mapElement;
@@ -37,23 +35,6 @@
         try
         {
             fields = await fieldService.GetFieldsByUserId(currentUserId);
-            if (fields != null)
-            {
-                try
-                {
-                    foreach (FieldLookupDto field in fields)
-                    {
-                        sensors = await sensorService.GetSensorsByFieldId(field.Id);
-                    }
-                    
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    msg = e.Message;
-                }
-            }
-            
         }
         catch (Exception e)
         {
@@ -68,8 +49,6 @@
     // You can perform additional actions here, such as calling JavaScript interop methods
             await JSRuntime.InvokeVoidAsync("initializeMap");
             await DrawAllPolygons();
-            await AddPoint();
-        
     }
 
     private async Task DrawAllPolygons()
@@ -82,21 +61,6 @@
 
             await JSRuntime.InvokeVoidAsync("drawPolygons", coordinateStrings);
         }
-    }
-    private async Task AddPoint()
-    {
-        if (sensors != null)
-        {
-            foreach (var sensor in sensors)
-            {
-                double latitude = sensor.Latitude;
-                double longitude = sensor.Longitude;
-                double moistureLevel = sensor.MoistureLevel;
-                Console.WriteLine($"this is a sensor with location {latitude} {longitude}");
-                await JSRuntime.InvokeVoidAsync("addPointToMap", latitude, longitude, moistureLevel);
-            }
-        }
-        
     }
 }
 

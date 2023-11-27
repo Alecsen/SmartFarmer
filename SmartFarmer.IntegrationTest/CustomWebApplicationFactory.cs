@@ -39,7 +39,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         {
             DatabaseInitializer.GetAuthenticationUsersNoId().ToList().ForEach(user => db.Users.Add(user));
             DatabaseInitializer.GetFieldsNoId().ToList().ForEach(field => db.Fields.Add(field));
-            DatabaseInitializer.GetSensorsNoId().ToList().ForEach(sensor => db.Sensors.Add(sensor));
             db.SaveChanges();
         }
     }

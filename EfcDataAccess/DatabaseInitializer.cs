@@ -28,23 +28,6 @@ public class DatabaseInitializer
             
         };
     }
-
-    public static List<Sensor> GetSensors()
-    {
-        return new List<Sensor>
-        {
-            new Sensor {Id = 1,FieldId = 1, Longitude = -100.3, Latitude = 50.3, MoistureLevel = 50 },
-            new Sensor {Id = 2,FieldId = 1, Longitude = -100.3, Latitude = 50.4, MoistureLevel = 55 },
-            new Sensor {Id = 3,FieldId = 2, Longitude = -100.5, Latitude = 51.3, MoistureLevel = 60 },
-            new Sensor {Id = 4,FieldId = 2, Longitude = -100.3, Latitude = 51.3, MoistureLevel = 65 },
-            new Sensor {Id = 5,FieldId = 3, Longitude = -102.2, Latitude = 52.4, MoistureLevel = 50 },
-            new Sensor {Id = 6, FieldId = 3, Longitude = -102.4, Latitude = 52.4, MoistureLevel = 55 },
-            new Sensor {Id = 7,FieldId = 4, Longitude = -103.2, Latitude = 53.4, MoistureLevel = 60 },
-            new Sensor {Id = 8,FieldId = 4, Longitude = -103.4, Latitude = 53.4, MoistureLevel = 65 },
-            new Sensor {Id = 9,FieldId = 5, Longitude = -104.2, Latitude = 54.4, MoistureLevel = 50 },
-            new Sensor {Id = 10,FieldId = 5, Longitude = -104.4, Latitude = 54.4, MoistureLevel = 55 },
-        };
-    }
     
      public static List<User> GetAuthenticationUsersNoId()
     {
@@ -70,21 +53,5 @@ public class DatabaseInitializer
             
         };
     }
-
-    public static List<Sensor> GetSensorsNoId()
-    {
-        return new List<Sensor>
-        {
-            new Sensor {FieldId = 1, Longitude = -100.3, Latitude = 50.3, MoistureLevel = 50 },
-            new Sensor {FieldId = 1, Longitude = -100.3, Latitude = 50.4, MoistureLevel = 55 },
-            new Sensor {FieldId = 2, Longitude = -100.5, Latitude = 51.3, MoistureLevel = 60 },
-            new Sensor {FieldId = 2, Longitude = -100.3, Latitude = 51.3, MoistureLevel = 65 },
-            new Sensor {FieldId = 3, Longitude = -102.2, Latitude = 52.4, MoistureLevel = 50 },
-            new Sensor { FieldId = 3, Longitude = -102.4, Latitude = 52.4, MoistureLevel = 55 },
-            new Sensor {FieldId = 4, Longitude = -103.2, Latitude = 53.4, MoistureLevel = 60 },
-            new Sensor {FieldId = 4, Longitude = -103.4, Latitude = 53.4, MoistureLevel = 65 },
-            new Sensor {FieldId = 5, Longitude = -104.2, Latitude = 54.4, MoistureLevel = 50 },
-            new Sensor {FieldId = 5, Longitude = -104.4, Latitude = 54.4, MoistureLevel = 55 },
-        };
-    }
+    
 }
