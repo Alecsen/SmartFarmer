@@ -28,6 +28,17 @@ public class DatabaseInitializer
             
         };
     }
+
+    public static List<WeatherStation> GetWeatherStations()
+    {
+        return new List<WeatherStation>
+        {
+            new WeatherStation{Id = 1, Vindretning = "Syd", Vindhastighed = 4, Nedboer = 2.5, Fordampningsniveau = 0},
+            new WeatherStation{Id = 2, Vindretning = "Nord", Vindhastighed = 2, Nedboer = 1, Fordampningsniveau = -1},
+            new WeatherStation{Id = 3, Vindretning = "Syd", Vindhastighed = 6, Nedboer = 0, Fordampningsniveau = -4},
+            new WeatherStation{Id = 4, Vindretning = "Vest", Vindhastighed = 8, Nedboer = 2.5, Fordampningsniveau = 0}
+        };
+    }
     
      public static List<User> GetAuthenticationUsersNoId()
     {

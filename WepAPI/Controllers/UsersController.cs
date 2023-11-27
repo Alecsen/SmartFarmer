@@ -41,7 +41,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            UserSearchParametersDTO parameter = new(username);
+            UserLookupDto parameter = new(username);
             var user = await userLogic.GetAsync(parameter);
             return Ok(user);
         }

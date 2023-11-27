@@ -54,7 +54,7 @@ public class UserLogic : IUserLogic
 
     }
 
-    public Task<User> GetAsync(UserSearchParametersDTO dto)
+    public Task<User> GetAsync(UserLookupDto dto)
     {
         return userDao.GetByUsernameAsync(dto.Username);
     }
