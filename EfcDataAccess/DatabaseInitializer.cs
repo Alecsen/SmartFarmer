@@ -50,11 +50,11 @@ public class DatabaseInitializer
     {
         return new List<User>
         {
-                new User {  Username = "Rolf", Password = "1234", Email = "user1@example.com", Name = "User One", Role = "Admin" },
-                new User {  Username = "Alecsen", Password = "1234", Email = "user2@example.com", Name = "User Two", Role = "User" },
-                new User {   Username = "Maria", Password = "1234", Email = "user3@example.com", Name = "User Three", Role = "User" },
-                new User {   Username = "Røde", Password = "1234", Email = "user4@example.com", Name = "User Four", Role = "Manager" },
-                new User {  Username = "user5", Password = "1234", Email = "user5@example.com", Name = "User Five", Role = "Manager" }
+                new User {  Username = "Rolf", Password = "1234", Email = "user1@example.com", Name = "User One", Role = "Admin", Birthday = new DateTime(1998, 4, 19), Phone = "53299870", Sex = "male" ,Address = "Hallssti 29"},
+                new User {  Username = "Alecsen", Password = "1234", Email = "user2@example.com", Name = "User Two", Role = "User", Birthday = new DateTime(1998, 4, 19), Phone = "53299870", Sex = "male",Address = "Hallssti 29" },
+                new User {   Username = "Maria", Password = "1234", Email = "user3@example.com", Name = "User Three", Role = "User", Birthday = new DateTime(1998, 4, 19), Phone = "53299870", Sex = "male" ,Address = "Hallssti 29"},
+                new User {   Username = "Røde", Password = "1234", Email = "user4@example.com", Name = "User Four", Role = "Manager", Birthday = new DateTime(1998, 4, 19), Phone = "53299870", Sex = "male",Address = "Hallssti 29" },
+                new User {  Username = "user5", Password = "1234", Email = "user5@example.com", Name = "User Five", Role = "Manager", Birthday = new DateTime(1998, 4, 19), Phone = "53299870", Sex = "male",Address = "Hallssti 29" }
         };
     }
 

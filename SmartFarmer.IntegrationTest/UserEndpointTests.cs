@@ -30,7 +30,11 @@ public class UserEndpointTests : IClassFixture<CustomWebApplicationFactory>
             PassWord = "passWord",
             Name = "adsasd",
             Role = "afasd",
-            Email = "alexander@gmail.comn"
+            Email = "alexander@gmail.comn",
+            Birthday = DateTime.Now,
+            Address = "adasdas",
+            Phone = "4553386087",
+            Sex = "Yes"
         };
         var url = "/users/CreateUser";
 
