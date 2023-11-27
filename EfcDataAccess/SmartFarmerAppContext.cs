@@ -5,11 +5,12 @@ namespace EfcDataAccess;
 
 public class SmartFarmerAppContext : DbContext
 {
-    
+    /*
     public SmartFarmerAppContext(DbContextOptions<SmartFarmerAppContext> options)
         : base(options)
     {
     }
+    */
     
     public DbSet<User> Users { get; set; }
     public DbSet<Field> Fields { get; set; }

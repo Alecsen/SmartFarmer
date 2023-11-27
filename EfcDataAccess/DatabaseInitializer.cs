@@ -33,10 +33,10 @@ public class DatabaseInitializer
     {
         return new List<WeatherStation>
         {
-            new WeatherStation{Id = 1, Vindretning = "Syd", Vindhastighed = 4, Nedboer = 2.5, Fordampningsniveau = 0},
-            new WeatherStation{Id = 2, Vindretning = "Nord", Vindhastighed = 2, Nedboer = 1, Fordampningsniveau = -1},
-            new WeatherStation{Id = 3, Vindretning = "Syd", Vindhastighed = 6, Nedboer = 0, Fordampningsniveau = -4},
-            new WeatherStation{Id = 4, Vindretning = "Vest", Vindhastighed = 8, Nedboer = 2.5, Fordampningsniveau = 0}
+            new WeatherStation{Id = 1, WindDirection = "Syd", WindSpeed = 4, Precipitation = 2.5, Evaporation = 0},
+            new WeatherStation{Id = 2, WindDirection = "Nord", WindSpeed = 2, Precipitation = 1, Evaporation = -1},
+            new WeatherStation{Id = 3, WindDirection = "Syd", WindSpeed = 6, Precipitation = 0, Evaporation = -4},
+            new WeatherStation{Id = 4, WindDirection = "Vest", WindSpeed = 8, Precipitation = 2.5, Evaporation = 0}
         };
     }
     

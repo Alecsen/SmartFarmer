@@ -6,6 +6,7 @@ namespace EfcDataAccess.DAOs;
 
 public class WeatherStationDao : IWeatherStationDao
 {
+    
     public Task<WeatherStationLookupDto> GetById(int id)
     {
         throw new NotImplementedException();
