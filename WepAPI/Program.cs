@@ -25,9 +25,10 @@ public class Program
         builder.Services.AddScoped<IFieldDao, FieldEfcDao>();
         builder.Services.AddScoped<IUserLogic, UserLogic>();
         builder.Services.AddScoped<IFieldLogic, FieldLogic>();
-        builder.Services.AddScoped<IWeatherStationDao, WeatherStationDao>();
+        builder.Services.AddScoped<IWeatherStationDao, WeatherEfcStationDao>();
         builder.Services.AddScoped<IWeatherStationLogic, WeatherStationLogic>();
         builder.Services.AddDbContext<SmartFarmerAppContext>();
+        builder.Services.AddHostedService<WeatherStationDataGenerator>();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
             options.RequireHttpsMetadata = false;
