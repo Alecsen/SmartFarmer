@@ -42,7 +42,7 @@ namespace EfcDataAccess.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     FieldId = table.Column<int>(type: "INTEGER", nullable: false),
                     WindDirection = table.Column<string>(type: "TEXT", nullable: false),
-                    WindSpeed = table.Column<int>(type: "INTEGER", nullable: false),
+                    WindSpeed = table.Column<double>(type: "REAL", nullable: false),
                     Precipitation = table.Column<double>(type: "REAL", nullable: false),
                     Evaporation = table.Column<double>(type: "REAL", nullable: false)
                 },
@@ -89,10 +89,10 @@ namespace EfcDataAccess.Migrations
                 columns: new[] { "Id", "Evaporation", "FieldId", "Precipitation", "WindDirection", "WindSpeed" },
                 values: new object[,]
                 {
-                    { 1, 0.0, 0, 2.5, "Syd", 4 },
-                    { 2, -1.0, 0, 1.0, "Nord", 2 },
-                    { 3, -4.0, 0, 0.0, "Syd", 6 },
-                    { 4, 0.0, 0, 2.5, "Vest", 8 }
+                    { 1, 0.0, 0, 2.5, "Syd", 4.0 },
+                    { 2, -1.0, 0, 1.0, "Nord", 2.0 },
+                    { 3, -4.0, 0, 0.0, "Syd", 6.0 },
+                    { 4, 0.0, 0, 2.5, "Vest", 8.0 }
                 });
 
             migrationBuilder.InsertData(

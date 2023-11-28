@@ -96,8 +96,8 @@ namespace EfcDataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("WindSpeed")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("WindSpeed")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 
@@ -111,7 +111,7 @@ namespace EfcDataAccess.Migrations
                             FieldId = 0,
                             Precipitation = 2.5,
                             WindDirection = "Syd",
-                            WindSpeed = 4
+                            WindSpeed = 4.0
                         },
                         new
                         {
@@ -120,7 +120,7 @@ namespace EfcDataAccess.Migrations
                             FieldId = 0,
                             Precipitation = 1.0,
                             WindDirection = "Nord",
-                            WindSpeed = 2
+                            WindSpeed = 2.0
                         },
                         new
                         {
@@ -129,7 +129,7 @@ namespace EfcDataAccess.Migrations
                             FieldId = 0,
                             Precipitation = 0.0,
                             WindDirection = "Syd",
-                            WindSpeed = 6
+                            WindSpeed = 6.0
                         },
                         new
                         {
@@ -138,7 +138,7 @@ namespace EfcDataAccess.Migrations
                             FieldId = 0,
                             Precipitation = 2.5,
                             WindDirection = "Vest",
-                            WindSpeed = 8
+                            WindSpeed = 8.0
                         });
                 });
 

@@ -52,20 +52,63 @@ namespace Application.Logic;
 
                 // Opdater stationens data
                 station.WindDirection = GenerateNextWindDirection(station.WindDirection, random);
-                station.WindSpeed = random.Next(0, 100);
+                station.WindSpeed = GenerateWindSpeed(random);
                 station.Precipitation = GenerateNextPrecipitation(station, lastPrecipitation, random);
-                station.Evaporation = station.Precipitation > 0 ? 0 : random.Next(-10, 0);
+                station.Evaporation = station.Precipitation > 0 ? 0 : -0.1;
             }
             return stations;
         }
 
         private string GenerateNextWindDirection(string currentDirection, Random random)
         {
-            // Implementer logik for realistisk ændring af vindretning
-            // ...
-            return currentDirection; // Returner opdateret vindretning
-        }
+            if (random.NextDouble() < 0.6)
+            {
+                return currentDirection;
+            }
+            // Definer alle mulige vindretninger
+            string[] directions = { "N", "NØ", "Ø", "SØ", "S", "SV", "V", "NV" };
 
+            // Vægtning for hver retning baseret på sandsynlighed for at forekomme
+            var weights = new Dictionary<string, int>
+            {
+                {"N", 5}, {"NØ", 5}, {"Ø", 6}, {"SØ", 5}, 
+                {"S", 5}, {"SV", 17}, {"V", 40}, {"NV", 17}
+            };
+
+            // Liste til at holde alle retninger baseret på deres vægtning
+            var weightedDirections = new List<string>();
+
+            foreach (var direction in directions)
+            {
+                for (int i = 0; i < weights[direction]; i++)
+                {
+                    weightedDirections.Add(direction);
+                }
+            }
+
+            // Vælg en ny tilfældig retning med hensyntagen til vægtning
+            string newDirection = weightedDirections[random.Next(weightedDirections.Count)];
+
+            // Logik for gradvis ændring af vindretningen
+            int currentIndex = Array.IndexOf(directions, currentDirection);
+            int newIndex = Array.IndexOf(directions, newDirection);
+
+            // Kontrollér, om den nye retning er inden for ét skridt fra den nuværende retning
+            if (Math.Abs(currentIndex - newIndex) <= 1 || Math.Abs(currentIndex - newIndex) == directions.Length - 1)
+            {
+                return newDirection; // Tillad ændringen hvis den er gradvis
+            }
+            else
+            {
+                // Hvis ændringen ikke er gradvis, vælg den nærmeste retning til nuværende
+                if (currentIndex == 0 && newIndex == directions.Length - 1)
+                    return directions[currentIndex - 1];
+                else if (currentIndex == directions.Length - 1 && newIndex == 0)
+                    return directions[0];
+                else
+                    return currentIndex > newIndex ? directions[currentIndex - 1] : directions[currentIndex + 1];
+            }
+        }
         private double GenerateNextPrecipitation(WeatherStation station, double lastPrecipitation, Random random)
         {
             double heavyRainThreshold = 5.0; //tærskel for "meget regn"
@@ -105,10 +148,22 @@ namespace Application.Logic;
             // Ingen regn
             return 0;
         }
-
-        private string GenerateWindDirection(Random random)
+        
+        private double GenerateWindSpeed(Random random)
         {
-            string[] directions = { "Nord", "Nordøst", "Øst", "Sydøst", "Syd", "Sydvest", "Vest", "Nordvest" };
-            return directions[random.Next(directions.Length)];
+            double mean = 4.5; // Middelværdi for vindhastighed
+            double stdDev = 2.0; // Standardafvigelse
+
+            // Brug Box-Muller metoden til at generere en normalfordelt værdi
+            double u1 = 1.0 - random.NextDouble(); // Uniform(0,1] tilfældige doubles
+            double u2 = 1.0 - random.NextDouble();
+            double normalRandom = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
+
+            // Skaler og skift den normalfordelte værdi
+            double windSpeed = mean + stdDev * normalRandom;
+
+            // Sørg for, at vindhastigheden ikke er negativ
+            return Math.Max(windSpeed, 0);
         }
+       
     }
