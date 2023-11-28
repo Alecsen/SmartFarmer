@@ -23,6 +23,13 @@ namespace EfcDataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("CropType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ImportanceLevel")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LocationData")
                         .HasColumnType("TEXT");
 
@@ -43,6 +50,8 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 1,
+                            CropType = "Wheat",
+                            ImportanceLevel = 1,
                             LocationData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)",
                             Name = "RolfMark1",
                             OwnerId = 1
@@ -50,6 +59,8 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 2,
+                            CropType = "Barly",
+                            ImportanceLevel = 3,
                             LocationData = "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)",
                             Name = "RolfMark2",
                             OwnerId = 1
@@ -57,6 +68,8 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 3,
+                            CropType = "Soybeans",
+                            ImportanceLevel = 1,
                             LocationData = "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)",
                             Name = "AlecsenMark1",
                             OwnerId = 2
@@ -64,6 +77,8 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 4,
+                            CropType = "Oat",
+                            ImportanceLevel = 3,
                             LocationData = "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)",
                             Name = "AlecsenMark2",
                             OwnerId = 2
@@ -71,6 +86,8 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 5,
+                            CropType = "Wheat",
+                            ImportanceLevel = 1,
                             LocationData = "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)",
                             Name = "MariasMark1",
                             OwnerId = 3

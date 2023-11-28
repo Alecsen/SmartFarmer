@@ -40,7 +40,9 @@ public class FieldLogic : IFieldLogic
         {
             Name = dto.FieldName,
             OwnerId = dto.OwnerId,
-            LocationData = dto.LocationData
+            LocationData = dto.LocationData,
+            CropType = dto.CropType,
+            ImportanceLevel = dto.ImportanceLevel
         };
 
         Field created = await fieldDao.CreateAsync(field);

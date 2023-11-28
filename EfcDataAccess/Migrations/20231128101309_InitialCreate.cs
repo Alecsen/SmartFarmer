@@ -58,6 +58,8 @@ namespace EfcDataAccess.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     OwnerId = table.Column<int>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
+                    CropType = table.Column<string>(type: "TEXT", nullable: false),
+                    ImportanceLevel = table.Column<int>(type: "INTEGER", nullable: true),
                     LocationData = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -96,14 +98,14 @@ namespace EfcDataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Fields",
-                columns: new[] { "Id", "LocationData", "Name", "OwnerId" },
+                columns: new[] { "Id", "CropType", "ImportanceLevel", "LocationData", "Name", "OwnerId" },
                 values: new object[,]
                 {
-                    { 1, "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)", "RolfMark1", 1 },
-                    { 2, "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)", "RolfMark2", 1 },
-                    { 3, "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)", "AlecsenMark1", 2 },
-                    { 4, "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)", "AlecsenMark2", 2 },
-                    { 5, "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)", "MariasMark1", 3 }
+                    { 1, "Wheat", 1, "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)", "RolfMark1", 1 },
+                    { 2, "Barly", 3, "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)", "RolfMark2", 1 },
+                    { 3, "Soybeans", 1, "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)", "AlecsenMark1", 2 },
+                    { 4, "Oat", 3, "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)", "AlecsenMark2", 2 },
+                    { 5, "Wheat", 1, "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)", "MariasMark1", 3 }
                 });
 
             migrationBuilder.CreateIndex(
