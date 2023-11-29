@@ -1,10 +1,35 @@
 ﻿@page "/"
-
+@using Domain.DTOs
+@using HttpClients.ClientInterfaces
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IFieldService fieldService
+@inject IUserService userService
 <PageTitle>Index</PageTitle>
 
 <h1>Velkommen til Smart Farmer!</h1>
 
 
-<p><strong>Vi tilbyder software løsninger, der kan effektivisere din vandning.</strong></p>
 
-<p>Som virksomhed har vi stor fokus på landmænds behov, og hvordan vi kan gøre jeres arbejds opgaver nemmer og billigere</p>
+
+@code{
+    
+    private IEnumerable<FieldLookupDto>? fields;
+    private string msg = "";
+    private int currentUserId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUserId = await userService.GetCurrentUserId();
+        
+        try
+        {
+            fields = await fieldService.GetFieldsByUserId(currentUserId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+}
