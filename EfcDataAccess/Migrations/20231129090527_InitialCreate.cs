@@ -41,7 +41,7 @@ namespace EfcDataAccess.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     WindDirection = table.Column<string>(type: "TEXT", nullable: false),
-                    WindSpeed = table.Column<int>(type: "INTEGER", nullable: false),
+                    WindSpeed = table.Column<double>(type: "REAL", nullable: false),
                     Precipitation = table.Column<double>(type: "REAL", nullable: false),
                     Evaporation = table.Column<double>(type: "REAL", nullable: false)
                 },
@@ -60,6 +60,9 @@ namespace EfcDataAccess.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     CropType = table.Column<string>(type: "TEXT", nullable: false),
                     ImportanceLevel = table.Column<int>(type: "INTEGER", nullable: true),
+                    FieldCapacity = table.Column<double>(type: "REAL", nullable: false),
+                    SoilType = table.Column<int>(type: "INTEGER", nullable: false),
+                    MoistureLevel = table.Column<double>(type: "REAL", nullable: false),
                     LocationData = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -90,22 +93,22 @@ namespace EfcDataAccess.Migrations
                 columns: new[] { "Id", "Evaporation", "Precipitation", "WindDirection", "WindSpeed" },
                 values: new object[,]
                 {
-                    { 1, 0.0, 2.5, "Syd", 4 },
-                    { 2, -1.0, 1.0, "Nord", 2 },
-                    { 3, -4.0, 0.0, "Syd", 6 },
-                    { 4, 0.0, 2.5, "Vest", 8 }
+                    { 1, 0.0, 2.5, "Syd", 4.0 },
+                    { 2, -1.0, 1.0, "Nord", 2.0 },
+                    { 3, -4.0, 0.0, "Syd", 6.0 },
+                    { 4, 0.0, 2.5, "Vest", 8.0 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Fields",
-                columns: new[] { "Id", "CropType", "ImportanceLevel", "LocationData", "Name", "OwnerId" },
+                columns: new[] { "Id", "CropType", "FieldCapacity", "ImportanceLevel", "LocationData", "MoistureLevel", "Name", "OwnerId", "SoilType" },
                 values: new object[,]
                 {
-                    { 1, "Wheat", 1, "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)", "RolfMark1", 1 },
-                    { 2, "Barly", 3, "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)", "RolfMark2", 1 },
-                    { 3, "Soybeans", 1, "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)", "AlecsenMark1", 2 },
-                    { 4, "Oat", 3, "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)", "AlecsenMark2", 2 },
-                    { 5, "Wheat", 1, "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)", "MariasMark1", 3 }
+                    { 1, "Wheat", 10.0, 1, "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)", 2.5, "RolfMark1", 1, 4 },
+                    { 2, "Barly", 10.0, 3, "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)", 2.5, "RolfMark2", 1, 0 },
+                    { 3, "Soybeans", 10.0, 1, "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)", 2.5, "AlecsenMark1", 2, 0 },
+                    { 4, "Oat", 10.0, 3, "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)", 2.5, "AlecsenMark2", 2, 0 },
+                    { 5, "Wheat", 10.0, 1, "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)", 2.5, "MariasMark1", 3, 0 }
                 });
 
             migrationBuilder.CreateIndex(

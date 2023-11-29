@@ -27,17 +27,26 @@ namespace EfcDataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("FieldCapacity")
+                        .HasColumnType("REAL");
+
                     b.Property<int?>("ImportanceLevel")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LocationData")
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("MoistureLevel")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("OwnerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SoilType")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -51,46 +60,61 @@ namespace EfcDataAccess.Migrations
                         {
                             Id = 1,
                             CropType = "Wheat",
+                            FieldCapacity = 10.0,
                             ImportanceLevel = 1,
                             LocationData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)",
+                            MoistureLevel = 2.5,
                             Name = "RolfMark1",
-                            OwnerId = 1
+                            OwnerId = 1,
+                            SoilType = 4
                         },
                         new
                         {
                             Id = 2,
                             CropType = "Barly",
+                            FieldCapacity = 10.0,
                             ImportanceLevel = 3,
                             LocationData = "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)",
+                            MoistureLevel = 2.5,
                             Name = "RolfMark2",
-                            OwnerId = 1
+                            OwnerId = 1,
+                            SoilType = 0
                         },
                         new
                         {
                             Id = 3,
                             CropType = "Soybeans",
+                            FieldCapacity = 10.0,
                             ImportanceLevel = 1,
                             LocationData = "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)",
+                            MoistureLevel = 2.5,
                             Name = "AlecsenMark1",
-                            OwnerId = 2
+                            OwnerId = 2,
+                            SoilType = 0
                         },
                         new
                         {
                             Id = 4,
                             CropType = "Oat",
+                            FieldCapacity = 10.0,
                             ImportanceLevel = 3,
                             LocationData = "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)",
+                            MoistureLevel = 2.5,
                             Name = "AlecsenMark2",
-                            OwnerId = 2
+                            OwnerId = 2,
+                            SoilType = 0
                         },
                         new
                         {
                             Id = 5,
                             CropType = "Wheat",
+                            FieldCapacity = 10.0,
                             ImportanceLevel = 1,
                             LocationData = "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)",
+                            MoistureLevel = 2.5,
                             Name = "MariasMark1",
-                            OwnerId = 3
+                            OwnerId = 3,
+                            SoilType = 0
                         });
                 });
 
@@ -110,8 +134,8 @@ namespace EfcDataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("WindSpeed")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("WindSpeed")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 
@@ -124,7 +148,7 @@ namespace EfcDataAccess.Migrations
                             Evaporation = 0.0,
                             Precipitation = 2.5,
                             WindDirection = "Syd",
-                            WindSpeed = 4
+                            WindSpeed = 4.0
                         },
                         new
                         {
@@ -132,7 +156,7 @@ namespace EfcDataAccess.Migrations
                             Evaporation = -1.0,
                             Precipitation = 1.0,
                             WindDirection = "Nord",
-                            WindSpeed = 2
+                            WindSpeed = 2.0
                         },
                         new
                         {
@@ -140,7 +164,7 @@ namespace EfcDataAccess.Migrations
                             Evaporation = -4.0,
                             Precipitation = 0.0,
                             WindDirection = "Syd",
-                            WindSpeed = 6
+                            WindSpeed = 6.0
                         },
                         new
                         {
@@ -148,7 +172,7 @@ namespace EfcDataAccess.Migrations
                             Evaporation = 0.0,
                             Precipitation = 2.5,
                             WindDirection = "Vest",
-                            WindSpeed = 8
+                            WindSpeed = 8.0
                         });
                 });
 

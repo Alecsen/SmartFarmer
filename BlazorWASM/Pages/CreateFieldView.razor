@@ -58,8 +58,9 @@
     private string fieldToCreateLocationData;
     public static event Action<string> OnLocationDataReceived;
     private FieldPopup fieldPopup;
-    private string FieldName;
-    private string CropType;
+    private string fieldName;
+    private string cropType;
+    private int soilType;
 
     private void ShowPopup()
     {
@@ -68,8 +69,8 @@
 
     private void SaveFieldHandler((string fieldName, string cropType) fieldData)
     {
-        FieldName = fieldData.fieldName;
-        CropType = fieldData.cropType;
+        fieldName = fieldData.fieldName;
+        cropType = fieldData.cropType;
         CreateField();
     }
     
@@ -122,10 +123,10 @@
 
         fieldToCreate = new FieldCreationDto
         {
-            FieldName = FieldName,
+            FieldName = fieldName,
             LocationData = fieldToCreateLocationData,
             OwnerId = currentUserId,
-            CropType = CropType
+            CropType = cropType
         };
 
         await fieldService.CreateField(fieldToCreate);
