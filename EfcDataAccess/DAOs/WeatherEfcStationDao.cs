@@ -15,7 +15,16 @@ public class WeatherEfcStationDao : IWeatherStationDao
         this.context = context;
     }
 
-    
+
+    public Task<WeatherStation> CreateWeatherStationAsync(int fieldId)
+    {
+        WeatherStation toCreate = new WeatherStation
+        {
+
+        };
+        throw new NotImplementedException();
+    }
+
     public Task<WeatherStationLookupDto> GetById(int id)
     {
         throw new NotImplementedException();

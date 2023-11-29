@@ -78,7 +78,7 @@ namespace EfcDataAccess.Migrations
                             MoistureLevel = 2.5,
                             Name = "RolfMark2",
                             OwnerId = 1,
-                            SoilType = 0
+                            SoilType = 4
                         },
                         new
                         {
@@ -90,7 +90,7 @@ namespace EfcDataAccess.Migrations
                             MoistureLevel = 2.5,
                             Name = "AlecsenMark1",
                             OwnerId = 2,
-                            SoilType = 0
+                            SoilType = 4
                         },
                         new
                         {
@@ -102,7 +102,7 @@ namespace EfcDataAccess.Migrations
                             MoistureLevel = 2.5,
                             Name = "AlecsenMark2",
                             OwnerId = 2,
-                            SoilType = 0
+                            SoilType = 4
                         },
                         new
                         {
@@ -114,7 +114,7 @@ namespace EfcDataAccess.Migrations
                             MoistureLevel = 2.5,
                             Name = "MariasMark1",
                             OwnerId = 3,
-                            SoilType = 0
+                            SoilType = 4
                         });
                 });
 
@@ -126,6 +126,9 @@ namespace EfcDataAccess.Migrations
 
                     b.Property<double>("Evaporation")
                         .HasColumnType("REAL");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double>("Precipitation")
                         .HasColumnType("REAL");
@@ -146,6 +149,7 @@ namespace EfcDataAccess.Migrations
                         {
                             Id = 1,
                             Evaporation = 0.0,
+                            FieldId = 0,
                             Precipitation = 2.5,
                             WindDirection = "Syd",
                             WindSpeed = 4.0
@@ -154,6 +158,7 @@ namespace EfcDataAccess.Migrations
                         {
                             Id = 2,
                             Evaporation = -1.0,
+                            FieldId = 0,
                             Precipitation = 1.0,
                             WindDirection = "Nord",
                             WindSpeed = 2.0
@@ -162,6 +167,7 @@ namespace EfcDataAccess.Migrations
                         {
                             Id = 3,
                             Evaporation = -4.0,
+                            FieldId = 0,
                             Precipitation = 0.0,
                             WindDirection = "Syd",
                             WindSpeed = 6.0
@@ -170,6 +176,7 @@ namespace EfcDataAccess.Migrations
                         {
                             Id = 4,
                             Evaporation = 0.0,
+                            FieldId = 0,
                             Precipitation = 2.5,
                             WindDirection = "Vest",
                             WindSpeed = 8.0
