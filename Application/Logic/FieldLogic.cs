@@ -9,11 +9,13 @@ public class FieldLogic : IFieldLogic
 {
     private readonly IFieldDao fieldDao;
     private readonly IUserDao userDao;
+    private readonly IWeatherStationDao weatherStationDao;
 
-    public FieldLogic(IFieldDao fieldDao, IUserDao userDao)
+    public FieldLogic(IFieldDao fieldDao, IUserDao userDao, IWeatherStationDao weatherStationDao)
     {
         this.fieldDao = fieldDao;
         this.userDao = userDao;
+        this.weatherStationDao = weatherStationDao;
     }
 
     public Task<IEnumerable<FieldLookupDto>> GetAsync(int ownerId)
@@ -46,8 +48,10 @@ public class FieldLogic : IFieldLogic
             SoilType = dto.SoilType,
             FieldCapacity = dto.FieldCapacity
         };
+        var created = await fieldDao.CreateAsync(field);
 
-        Field created = await fieldDao.CreateAsync(field);
+        await weatherStationDao.CreateWeatherStationAsync(created.Id);
+        
         return created;
     }
 }
