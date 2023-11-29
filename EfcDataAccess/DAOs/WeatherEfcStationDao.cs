@@ -2,6 +2,7 @@ using Application.DAOInterface;
 using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess.DAOs;
 
@@ -16,13 +17,19 @@ public class WeatherEfcStationDao : IWeatherStationDao
     }
 
 
-    public Task<WeatherStation> CreateWeatherStationAsync(int fieldId)
+    public async Task<WeatherStation> CreateWeatherStationAsync(int fieldId)
     {
         WeatherStation toCreate = new WeatherStation
         {
-
+            FieldId = fieldId,
+            WindDirection = " ",
+            Evaporation = 0,
+            WindSpeed = 0,
+            Precipitation = 0,
         };
-        throw new NotImplementedException();
+        EntityEntry<WeatherStation> newWeatherStation = await context.WeatherStations.AddAsync(toCreate);
+        await context.SaveChangesAsync();
+        return newWeatherStation.Entity;
     }
 
     public Task<WeatherStationLookupDto> GetById(int id)
