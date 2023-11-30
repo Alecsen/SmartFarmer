@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfcDataAccess.Migrations
 {
     [DbContext(typeof(SmartFarmerAppContext))]
-    [Migration("20231129145736_InitialCreate")]
+    [Migration("20231130090730_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -119,6 +119,26 @@ namespace EfcDataAccess.Migrations
                             OwnerId = 3,
                             SoilType = 4
                         });
+                });
+
+            modelBuilder.Entity("Domain.Models.IrrigationMachine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRunning")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("WaterAmount")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IrrigationMachines");
                 });
 
             modelBuilder.Entity("Domain.Models.WeatherStation", b =>
