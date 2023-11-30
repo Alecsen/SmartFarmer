@@ -21,8 +21,8 @@ public class IrrigationMachineController: ControllerBase
     {
         try
         {
-            var fields = await irrigationMachineLogic.GetAsync(fieldId);
-            return Ok(fields);
+            var irrigationMachines = await irrigationMachineLogic.GetAsync(fieldId);
+            return Ok(irrigationMachines);
 
         }
         catch (Exception e)
