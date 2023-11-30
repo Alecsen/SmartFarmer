@@ -118,6 +118,26 @@ namespace EfcDataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Models.IrrigationMachine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRunning")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("WaterAmount")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IrrigationMachines");
+                });
+
             modelBuilder.Entity("Domain.Models.WeatherStation", b =>
                 {
                     b.Property<int>("Id")

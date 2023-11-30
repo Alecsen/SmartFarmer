@@ -14,6 +14,21 @@ namespace EfcDataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "IrrigationMachines",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FieldId = table.Column<int>(type: "INTEGER", nullable: false),
+                    WaterAmount = table.Column<double>(type: "REAL", nullable: false),
+                    IsRunning = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IrrigationMachines", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -123,6 +138,9 @@ namespace EfcDataAccess.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Fields");
+
+            migrationBuilder.DropTable(
+                name: "IrrigationMachines");
 
             migrationBuilder.DropTable(
                 name: "WeatherStations");

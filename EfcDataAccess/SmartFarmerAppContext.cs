@@ -15,6 +15,7 @@ public class SmartFarmerAppContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Field> Fields { get; set; }
     public DbSet<WeatherStation> WeatherStations { get; set; }
+    public DbSet<IrrigationMachine> IrrigationMachines { get; set; }
     
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,6 +32,7 @@ public class SmartFarmerAppContext : DbContext
         modelBuilder.Entity<User>().HasKey(user => user.Id);
         modelBuilder.Entity<Field>().HasKey(field => field.Id);
         modelBuilder.Entity<WeatherStation>().HasKey(weatherStation => weatherStation.Id);
+        modelBuilder.Entity<IrrigationMachine>().HasKey(irrigationMachine => irrigationMachine.Id);
         
         modelBuilder.Entity<User>().HasData(DatabaseInitializer.GetAuthenticationUsers());
         modelBuilder.Entity<Field>().HasData(DatabaseInitializer.GetFields());
