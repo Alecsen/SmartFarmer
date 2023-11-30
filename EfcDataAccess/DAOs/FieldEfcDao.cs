@@ -26,13 +26,15 @@ public class FieldEfcDao : IFieldDao
         
         List<FieldLookupDto> result = new List<FieldLookupDto>();
 
+        //transfers the object from a Field to a FieldLookupDTO. 
         foreach (Field field in fields)
         {
             FieldLookupDto dto = new FieldLookupDto();
             dto.Id = field.Id;
             dto.FieldName = field.Name;
             dto.locationData = field.LocationData;
-            
+            dto.FieldCapacity = field.FieldCapacity;
+            dto.MoistureLevel = field.MoistureLevel;
             result.Add(dto);
         }
         
