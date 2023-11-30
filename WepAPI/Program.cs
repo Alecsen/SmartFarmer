@@ -3,6 +3,7 @@ using Application.DAOInterface;
 using Application.Logic;
 using Application.LogicInterface;
 using Domain.Auth;
+using Domain.Models;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +29,8 @@ public class Program
         builder.Services.AddScoped<WeatherStationDataGenerator>();
         builder.Services.AddScoped<IWeatherStationDao, WeatherEfcStationDao>();
         builder.Services.AddScoped<IWeatherStationLogic, WeatherStationLogic>();
+        builder.Services.AddScoped<IIrrigationMachineDao, IrrigationMachineEfcDao>();
+        builder.Services.AddScoped<IIrrigationMachineLogic, IrrigationMachineLogic>();
         builder.Services.AddDbContext<SmartFarmerAppContext>();
         builder.Services.AddHostedService<WeatherStationDataGenerator>();
         builder.Services.AddScoped<FieldLogic>();
