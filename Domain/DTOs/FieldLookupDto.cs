@@ -6,4 +6,5 @@ public class FieldLookupDto
     public string FieldName { get; set; }
     
     public string? locationData { get; set; }
+    public string? CropType { get; set; }
 }

@@ -5,29 +5,55 @@
 @page "/MapView"
 @using HttpClients.ClientInterfaces
 @using Domain.DTOs
-@using Domain.Models
-@using Microsoft.AspNetCore.Components
-<AuthorizeView>
-<h3>Dine marker</h3>
 
-<div id="mapid" style="height: 400px;"></div>
+@if (currentUserId == -1)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <AuthorizeView>
+        <Header>
+            <h3>Dine marker</h3>
+            <div>Her kan du se et overblik over alle dine marker og du har mulighed for at filtrere, ændre og slette marker</div>
+        </Header>
 
- <div class="buttons">
-        <NavLink class="btn btn-primary" href="FieldView">Tilføj mark</NavLink>
-        <button class="btn">Rediger mark</button>
-        <button class="btn">Slet mark</button>
-        <button class="btn">Importer marker</button>
-    </div>
-    
-    
-</AuthorizeView>
+        <div id="mapid" style="height: 400px;"></div>
+
+        <div class="buttons">
+            <NavLink class="btn btn-primary" href="FieldView">Tilføj mark</NavLink>
+            <button class="btn">Rediger mark</button>
+            <button class="btn">Slet mark</button>
+            <button class="btn">Importer marker</button>
+        </div>
+
+        <h2>Dine marker</h2>
+        @if (fields != null)
+        {
+            foreach (var item in fields)
+            {
+                <div class="fields-container">
+                    <table class="fields-table">
+                        <tr>
+                            <td>Navn</td>
+                            <td><div class="field-value">@item.FieldName</div></td>
+                        </tr>
+                        <tr>
+                            <td>Crop type</td>
+                            <td><div class="field-value">@item.CropType</div></td>
+                        </tr>
+                    </table>
+                </div>
+            }
+        }
+    </AuthorizeView>
+}
+
 @code {
     private IEnumerable<FieldLookupDto>? fields;
     private int currentUserId;
     private string msg = "";
     private ElementReference mapElement;
-    private string geoLocationData = null;
-    private string testData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)";
     
     protected override async Task OnInitializedAsync()
     {
