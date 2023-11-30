@@ -25,10 +25,12 @@ public class Program
         builder.Services.AddScoped<IFieldDao, FieldEfcDao>();
         builder.Services.AddScoped<IUserLogic, UserLogic>();
         builder.Services.AddScoped<IFieldLogic, FieldLogic>();
+        builder.Services.AddScoped<WeatherStationDataGenerator>();
         builder.Services.AddScoped<IWeatherStationDao, WeatherEfcStationDao>();
         builder.Services.AddScoped<IWeatherStationLogic, WeatherStationLogic>();
         builder.Services.AddDbContext<SmartFarmerAppContext>();
         builder.Services.AddHostedService<WeatherStationDataGenerator>();
+        builder.Services.AddScoped<FieldLogic>();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
             options.RequireHttpsMetadata = false;
@@ -42,10 +44,21 @@ public class Program
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
             };
         });
+        
+        // Alec
+        using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+        {
+            var weatherStation = scope.ServiceProvider.GetRequiredService<WeatherStationDataGenerator>();
+            var fieldLogic = scope.ServiceProvider.GetRequiredService<FieldLogic>();
+
+            // Subscribe the display device to weather changes
+            fieldLogic.SubscribeToWeatherChanges(weatherStation);
+        }
 
         AuthorizationPolicies.AddPolicies(builder.Services);
 
         var app = builder.Build();
+        
 
         app.UseCors(x => x
             .AllowAnyMethod()

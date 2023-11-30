@@ -9,11 +9,21 @@ namespace Application.Logic;
  public class WeatherStationDataGenerator : BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        private WeatherStation _lastGeneratedData;
+        private WeatherStation _lastGeneratedData = new();
+        
+        //Alec
+        public event EventHandler? WeatherChanged;
 
         public WeatherStationDataGenerator(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
+        }
+        
+        // Alec
+        private void OnWeatherChanged()
+        {
+            Console.WriteLine("Weather changed");
+            WeatherChanged?.Invoke(this, EventArgs.Empty);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -40,6 +50,10 @@ namespace Application.Logic;
 
             await weatherStationDao.UpdateWeatherStations(updatedStations);
             _lastGeneratedData = updatedStations.FirstOrDefault(); // Opdater med den seneste genererede data
+            
+            // Alec
+            OnWeatherChanged();
+            Console.WriteLine("Weather changed in Generate");
         }
 
         private IEnumerable<WeatherStation> UpdateWeatherStationsGeneratedData(IEnumerable<WeatherStation> stations)
