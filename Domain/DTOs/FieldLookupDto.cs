@@ -7,4 +7,6 @@ public class FieldLookupDto
     
     public string? locationData { get; set; }
     public string? CropType { get; set; }
+    
+    public double? Area { get; set; }
 }

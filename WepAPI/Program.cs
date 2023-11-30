@@ -48,16 +48,6 @@ public class Program
             };
         });
         
-        // Alec
-        using (var scope = builder.Services.BuildServiceProvider().CreateScope())
-        {
-            var weatherStation = scope.ServiceProvider.GetRequiredService<WeatherStationDataGenerator>();
-            var fieldLogic = scope.ServiceProvider.GetRequiredService<FieldLogic>();
-
-            // Subscribe the display device to weather changes
-            fieldLogic.SubscribeToWeatherChanges(weatherStation);
-        }
-
         AuthorizationPolicies.AddPolicies(builder.Services);
 
         var app = builder.Build();

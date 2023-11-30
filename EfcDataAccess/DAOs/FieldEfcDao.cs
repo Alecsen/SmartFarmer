@@ -33,6 +33,7 @@ public class FieldEfcDao : IFieldDao
             dto.FieldName = field.Name;
             dto.locationData = field.LocationData;
             dto.CropType = field.CropType;
+            dto.Area = field.Area;
             
             result.Add(dto);
         }
