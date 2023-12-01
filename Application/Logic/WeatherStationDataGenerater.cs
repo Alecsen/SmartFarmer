@@ -1,7 +1,10 @@
 using System.Threading.Channels;
 using Application.DAOInterface;
+using Application.EventHandlers;
+using Application.Events;
 using Domain.DTOs;
 using Domain.Models;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -10,20 +13,18 @@ namespace Application.Logic;
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private WeatherStation _lastGeneratedData = new();
-        
-        //Alec
-        public event EventHandler? WeatherChanged;
+        private readonly IMediator _mediator;
 
-        public WeatherStationDataGenerator(IServiceScopeFactory scopeFactory)
+        public WeatherStationDataGenerator(IServiceScopeFactory scopeFactory, IMediator mediator)
         {
             _scopeFactory = scopeFactory;
+            _mediator = mediator;
         }
         
         // Alec
         private void OnWeatherChanged()
         {
             Console.WriteLine("Weather changed");
-            WeatherChanged?.Invoke(this, EventArgs.Empty);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -51,9 +52,9 @@ namespace Application.Logic;
             await weatherStationDao.UpdateWeatherStations(updatedStations);
             _lastGeneratedData = updatedStations.FirstOrDefault(); // Opdater med den seneste genererede data
             
-            // Alec
-            OnWeatherChanged();
             Console.WriteLine("Weather changed in Generate");
+            await _mediator.Publish(new WeatherUpdateEvent());
+           
         }
 
         private IEnumerable<WeatherStation> UpdateWeatherStationsGeneratedData(IEnumerable<WeatherStation> stations)

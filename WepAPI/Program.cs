@@ -1,5 +1,8 @@
+using System.Reflection;
 using System.Text;
+using Application;
 using Application.DAOInterface;
+using Application.EventHandlers;
 using Application.Logic;
 using Application.LogicInterface;
 using Domain.Auth;
@@ -34,6 +37,7 @@ public class Program
         builder.Services.AddDbContext<SmartFarmerAppContext>();
         builder.Services.AddHostedService<WeatherStationDataGenerator>();
         builder.Services.AddScoped<FieldLogic>();
+        builder.Services.AddMediatR(c=> c.RegisterServicesFromAssemblyContaining<MediatREnetryRegrisation>());
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
             options.RequireHttpsMetadata = false;
@@ -48,16 +52,6 @@ public class Program
             };
         });
         
-        // Alec
-        using (var scope = builder.Services.BuildServiceProvider().CreateScope())
-        {
-            var weatherStation = scope.ServiceProvider.GetRequiredService<WeatherStationDataGenerator>();
-            var fieldLogic = scope.ServiceProvider.GetRequiredService<FieldLogic>();
-
-            // Subscribe the display device to weather changes
-            fieldLogic.SubscribeToWeatherChanges(weatherStation);
-        }
-
         AuthorizationPolicies.AddPolicies(builder.Services);
 
         var app = builder.Build();

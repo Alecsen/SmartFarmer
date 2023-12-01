@@ -54,18 +54,10 @@ public class FieldLogic : IFieldLogic
         
         return created;
     }
-    
-    //Alec
-    public void SubscribeToWeatherChanges(WeatherStationDataGenerator weatherStation)
+
+    public Task PerformCalculation()
     {
-        Console.WriteLine("Subscribe function called");
-        weatherStation.WeatherChanged += WeatherChangedHandler;
-    }
-    
-    //Alec
-    private void WeatherChangedHandler(object sender, EventArgs e)
-    {
-        Console.WriteLine($"Weather update received. Updating display...");
-        // Logic to update display based on new weather data
+        Console.WriteLine("Jeg tror hvis den her bliver kaldt 1 gang i sekundet så virker det");
+        return Task.CompletedTask;
     }
 }
