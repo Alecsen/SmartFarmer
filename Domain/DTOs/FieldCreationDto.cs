@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace Domain.DTOs;
 
 public class FieldCreationDto
@@ -9,5 +11,6 @@ public class FieldCreationDto
     public int? ImportanceLevel { get; set; }
     public int SoilType { get; set; }
     public double FieldCapacity { get; set; }
+    public double? Area { get; set; }
    
 }

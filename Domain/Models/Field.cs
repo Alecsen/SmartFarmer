@@ -11,7 +11,6 @@ public class Field
     public double FieldCapacity { get; set; }
     public int SoilType { get; set; }
     public double MoistureLevel { get; set; }
-    
     public string? LocationData { get; set; }
-    
+    public double? Area { get; set; }
 }

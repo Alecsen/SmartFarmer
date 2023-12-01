@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfcDataAccess.Migrations
 {
     [DbContext(typeof(SmartFarmerAppContext))]
-    [Migration("20231130090730_InitialCreate")]
+    [Migration("20231130165533_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,6 +25,9 @@ namespace EfcDataAccess.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<double?>("Area")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("CropType")
                         .IsRequired()
@@ -62,6 +65,7 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 1,
+                            Area = 255.0,
                             CropType = "Wheat",
                             FieldCapacity = 10.0,
                             ImportanceLevel = 1,
@@ -74,6 +78,7 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 2,
+                            Area = 255.0,
                             CropType = "Barly",
                             FieldCapacity = 10.0,
                             ImportanceLevel = 3,
@@ -86,6 +91,7 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 3,
+                            Area = 255.0,
                             CropType = "Soybeans",
                             FieldCapacity = 10.0,
                             ImportanceLevel = 1,
@@ -98,6 +104,7 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 4,
+                            Area = 255.0,
                             CropType = "Oat",
                             FieldCapacity = 10.0,
                             ImportanceLevel = 3,
@@ -110,6 +117,7 @@ namespace EfcDataAccess.Migrations
                         new
                         {
                             Id = 5,
+                            Area = 255.0,
                             CropType = "Wheat",
                             FieldCapacity = 10.0,
                             ImportanceLevel = 1,

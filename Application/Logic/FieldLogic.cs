@@ -46,7 +46,8 @@ public class FieldLogic : IFieldLogic
             CropType = dto.CropType,
             ImportanceLevel = dto.ImportanceLevel,
             SoilType = dto.SoilType,
-            FieldCapacity = dto.FieldCapacity
+            FieldCapacity = dto.FieldCapacity,
+            Area = CalculatePolygonArea(dto.LocationData)
         };
         var created = await fieldDao.CreateAsync(field);
 
@@ -57,7 +58,74 @@ public class FieldLogic : IFieldLogic
 
     public Task PerformCalculation()
     {
-        Console.WriteLine("Jeg tror hvis den her bliver kaldt 1 gang i sekundet så virker det");
-        return Task.CompletedTask;
+            Console.WriteLine("Jeg tror hvis den her bliver kaldt 1 gang i sekundet så virker det");
+            return Task.CompletedTask;
     }
+
+
+    private static double CalculatePolygonArea(string coordinatesString)
+{
+    // Parse the input string to extract coordinates
+    IList<MapPoint> coordinates = ParseCoordinatesString(coordinatesString);
+
+    double area = 0;
+
+    if (coordinates.Count > 2)
+    {
+        for (var i = 0; i < coordinates.Count - 1; i++)
+        {
+            MapPoint p1 = coordinates[i];
+            MapPoint p2 = coordinates[i + 1];
+            area += ConvertToRadian(p2.Longitude - p1.Longitude) * (2 + Math.Sin(ConvertToRadian(p1.Latitude)) + Math.Sin(ConvertToRadian(p2.Latitude)));
+        }
+
+        area = area * 6378137 * 6378137 / 2;
+    }
+
+    double absoluteArea = Math.Abs(area);
+
+    return absoluteArea;
+
+
+}
+
+    private static IList<MapPoint> ParseCoordinatesString(string coordinatesString)
+{
+        List<MapPoint> coordinates = new List<MapPoint>();
+
+        // Split the input string into individual coordinate pairs
+        string[] pairs = coordinatesString.Split(new[] { "), (" }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var pair in pairs)
+        {
+            // Remove parentheses and split the pair into latitude and longitude
+            string[] values = pair.Replace("(", "").Replace(")", "").Split(new[] { ", " }, StringSplitOptions.None);
+
+            // Parse latitude and longitude and add to the coordinates list
+            double latitude = double.Parse(values[1]);  // Latitude is the second value
+            double longitude = double.Parse(values[0]); // Longitude is the first value
+
+            coordinates.Add(new MapPoint(latitude, longitude));
+        }
+
+        return coordinates;
+    }
+
+    private static double ConvertToRadian(double input){
+        return input * Math.PI / 180;
+    }
+
+    // Assuming you have a MapPoint class defined as follows:
+    public class MapPoint
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+
+        public MapPoint(double latitude, double longitude)
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+        }
+    
+       
 }
