@@ -32,6 +32,8 @@ public class FieldEfcDao : IFieldDao
             dto.Id = field.Id;
             dto.FieldName = field.Name;
             dto.locationData = field.LocationData;
+            dto.FieldCapacity = field.FieldCapacity;
+            dto.MoistureLevel = field.MoistureLevel;
             dto.CropType = field.CropType;
             dto.Area = field.Area;
             

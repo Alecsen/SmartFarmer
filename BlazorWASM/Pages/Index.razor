@@ -1,10 +1,66 @@
 ﻿@page "/"
+@using Domain.DTOs
+@using HttpClients.ClientInterfaces
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IFieldService fieldService
+@inject IUserService userService
+<AuthorizeView>
+    <NotAuthorized>
+    <PageTitle>Index</PageTitle>
 
-<PageTitle>Index</PageTitle>
 
-<h1>Velkommen til Smart Farmer!</h1>
+    <h1>Velkommen til Smart Farmer!</h1>
+    
+        <p>Vær venlig at logge ind :)</p>
+    </NotAuthorized>
 
 
-<p><strong>Vi tilbyder software løsninger, der kan effektivisere din vandning.</strong></p>
+    <Authorized>
+    <div class="dashboard-container">
+        @if (fields != null && fields.Any())
+        {
+            var topFields = fields.OrderBy(f => f.MoistureLevel).Take(3);
+            foreach (var field in topFields)
+            {
+                <div class="field-card">
+                    <h3>@field.FieldName</h3>
+                    <p>Field Capacity: @field.FieldCapacity</p>
+                    <RadzenProgressBar Unit="@GetProgressBarUnit(field)" class=".rz-color-black" ProgressBarStyle="ProgressBarStyle.Light" Value="@field.MoistureLevel" Max="field.FieldCapacity" Style="height: 20px" Color="@(field.MoistureLevel < 5 ? "red" : (field.MoistureLevel > 5 ? "yellow" : "green"))"/>
+                </div>
+            }
+        }
+        else
+        {
+            <p>@msg</p>
+        }
+    </div>
+    </Authorized>
+</AuthorizeView>
 
-<p>Som virksomhed har vi stor fokus på landmænds behov, og hvordan vi kan gøre jeres arbejds opgaver nemmer og billigere</p>
+@code{
+    
+    private IEnumerable<FieldLookupDto>? fields;
+    private string msg = "";
+    private int currentUserId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUserId = await userService.GetCurrentUserId();
+        
+        try
+        {
+            fields = await fieldService.GetFieldsByUserId(currentUserId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+    private string GetProgressBarUnit(FieldLookupDto field)
+    {
+        return $" ud af {field.FieldCapacity}";
+    }
+
+}
