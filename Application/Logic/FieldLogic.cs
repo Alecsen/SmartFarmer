@@ -56,23 +56,35 @@ public class FieldLogic : IFieldLogic
         return created;
     }
     
-    static double CalculatePolygonArea(string coordinatesString)
+    private static double CalculatePolygonArea(string coordinatesString)
+{
+    // Parse the input string to extract coordinates
+    IList<MapPoint> coordinates = ParseCoordinatesString(coordinatesString);
+
+    double area = 0;
+
+    if (coordinates.Count > 2)
     {
-        // Parse the input string to extract coordinates
-        List<(double, double)> coordinates = ParseCoordinatesString(coordinatesString);
+        for (var i = 0; i < coordinates.Count - 1; i++)
+        {
+            MapPoint p1 = coordinates[i];
+            MapPoint p2 = coordinates[i + 1];
+            area += ConvertToRadian(p2.Longitude - p1.Longitude) * (2 + Math.Sin(ConvertToRadian(p1.Latitude)) + Math.Sin(ConvertToRadian(p2.Latitude)));
+        }
 
-        // Apply the shoelace formula to calculate the area
-        double area = ShoelaceFormula(coordinates);
-
-        // Convert the area to acres (1 square meter is approximately 0.000247105 acres)
-        double areaInAcres = area * 0.000247105;
-
-        return areaInAcres;
+        area = area * 6378137 * 6378137 / 2;
     }
 
-    static List<(double, double)> ParseCoordinatesString(string coordinatesString)
-    {
-        List<(double, double)> coordinates = new List<(double, double)>();
+    double absoluteArea = Math.Abs(area);
+
+    return absoluteArea;
+
+
+}
+
+    private static IList<MapPoint> ParseCoordinatesString(string coordinatesString)
+{
+        List<MapPoint> coordinates = new List<MapPoint>();
 
         // Split the input string into individual coordinate pairs
         string[] pairs = coordinatesString.Split(new[] { "), (" }, StringSplitOptions.RemoveEmptyEntries);
@@ -83,31 +95,31 @@ public class FieldLogic : IFieldLogic
             string[] values = pair.Replace("(", "").Replace(")", "").Split(new[] { ", " }, StringSplitOptions.None);
 
             // Parse latitude and longitude and add to the coordinates list
-            double latitude = double.Parse(values[0]);
-            double longitude = double.Parse(values[1]);
+            double latitude = double.Parse(values[1]);  // Latitude is the second value
+            double longitude = double.Parse(values[0]); // Longitude is the first value
 
-            coordinates.Add((latitude, longitude));
+            coordinates.Add(new MapPoint(latitude, longitude));
         }
 
         return coordinates;
     }
 
-    static double ShoelaceFormula(List<(double, double)> coordinates)
+    private static double ConvertToRadian(double input)
     {
-        double sum = 0;
+        return input * Math.PI / 180;
+    }
 
-        for (int i = 0; i < coordinates.Count - 1; i++)
+    // Assuming you have a MapPoint class defined as follows:
+    public class MapPoint
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+
+        public MapPoint(double latitude, double longitude)
         {
-            sum += coordinates[i].Item1 * coordinates[i + 1].Item2 - coordinates[i + 1].Item1 * coordinates[i].Item2;
+            Latitude = latitude;
+            Longitude = longitude;
         }
-
-        // Add the last term
-        sum += coordinates[coordinates.Count - 1].Item1 * coordinates[0].Item2 - coordinates[0].Item1 * coordinates[coordinates.Count - 1].Item2;
-
-        // Take the absolute value and divide by 2
-        double area = Math.Abs(sum) / 2;
-
-        return area;
     }
     
 }

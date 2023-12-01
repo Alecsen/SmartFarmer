@@ -1,6 +1,7 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject IFieldService fieldService
 @inject IUserService userService
+@inject NavigationManager navMgr;
 
 @page "/MapView"
 @using HttpClients.ClientInterfaces
@@ -28,27 +29,29 @@ else
         </div>
 
         <h2>Dine marker</h2>
+        <div class="flex-container">
         @if (fields != null)
         {
             foreach (var item in fields)
             {
-                <div class="fields-container">
+                <div class="fields-container" @onclick="ViewField">
                     <table class="fields-table">
                         <tr>
                             <td><b>@item.FieldName</b></td>
                         </tr>
                         <tr>
-                            <td style="width: 30%;">Crop type:</td>
+                            <td style="width: 30%;"><b>Crop type</b>:</td>
                             <td style="width: 70%;"><div class="field-value">@item.CropType</div></td>
                         </tr>
                         <tr>
-                            <td style="width: 30%;">Area:</td>
+                            <td style="width: 30%;"><b>Area:</b></td>
                             <td style="width: 70%;"><div class="field-value">@item.Area</div></td>
                         </tr>
                     </table>
                 </div>
             }
         }
+        </div>
     </AuthorizeView>
 }
 
@@ -91,6 +94,11 @@ else
 
             await JSRuntime.InvokeVoidAsync("drawPolygons", coordinateStrings);
         }
+    }
+
+    private void ViewField()
+    {
+        navMgr.NavigateTo("/ViewField");
     }
 }
 
