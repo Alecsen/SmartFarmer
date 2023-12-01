@@ -126,6 +126,7 @@ public class FieldLogic : IFieldLogic
             Latitude = latitude;
             Longitude = longitude;
         }
-    
-       
+
+
+    }
 }
