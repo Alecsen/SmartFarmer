@@ -10,4 +10,6 @@ public interface IFieldDao
     Task<Field> GetFieldById(int fieldId);
 
     Task<IEnumerable<Field>> GetAllFields();
+
+    Task UpdateAsyncField(Field field);
 }

@@ -70,7 +70,9 @@ public class FieldLogic : IFieldLogic
             {
                 CalculateMoistureLevel(station, field);
                 Console.WriteLine($"for field {field.Name} id: {field.Id} After calculation moisture level: {field.MoistureLevel}");
+                await fieldDao.UpdateAsyncField(field);
             }
+            
         }
         return Task.CompletedTask;
         

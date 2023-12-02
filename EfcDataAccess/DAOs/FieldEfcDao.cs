@@ -78,4 +78,10 @@ public class FieldEfcDao : IFieldDao
 
         return fields;
     }
+
+    public async Task UpdateAsyncField(Field field)
+    {
+        context.Fields.Update(field);
+        await context.SaveChangesAsync();
+    }
 }
