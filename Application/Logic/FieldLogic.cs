@@ -24,7 +24,7 @@ public class FieldLogic : IFieldLogic
         {
             throw new Exception($"The Id {ownerId} is not a valid number");
         }
-        
+
         return fieldDao.GetFieldsByOwnerId(ownerId);
     }
 
@@ -37,7 +37,7 @@ public class FieldLogic : IFieldLogic
         {
             throw new Exception("There is not location data so field cannot be created");
         }
-        
+
         Field field = new Field
         {
             Name = dto.FieldName,
@@ -51,46 +51,74 @@ public class FieldLogic : IFieldLogic
         };
         var created = await fieldDao.CreateAsync(field);
 
-        await weatherStationDao.CreateWeatherStationAsync(created.Id);
-        
+        await weatherStationDao.CreateWeatherStationByFieldIdAsync(created.Id);
+
         return created;
     }
 
-    public Task PerformCalculation()
+    public async Task<Task> PerformCalculation()
     {
-            Console.WriteLine("Jeg tror hvis den her bliver kaldt 1 gang i sekundet så virker det");
-            return Task.CompletedTask;
+        
+        var fieldsToUpdate = await fieldDao.GetAllFields();
+
+        foreach (var field in fieldsToUpdate)
+        {
+            Console.WriteLine($"for field {field.Name} id: {field.Id} inital moisture level: {field.MoistureLevel}");
+            WeatherStation? station = await weatherStationDao.GetByFieldId(field.Id);
+
+            if (station != null)
+            {
+                CalculateMoistureLevel(station, field);
+                Console.WriteLine($"for field {field.Name} id: {field.Id} After calculation moisture level: {field.MoistureLevel}");
+            }
+        }
+        return Task.CompletedTask;
+        
+    }
+
+ 
+
+    private void CalculateMoistureLevel(WeatherStation weatherStationForField, Field field)
+    {
+        double precipitation = weatherStationForField.Precipitation;
+        double evaporation = weatherStationForField.Evaporation;
+
+
+        field.MoistureLevel += precipitation + evaporation;
+        
+
     }
 
 
     private static double CalculatePolygonArea(string coordinatesString)
-{
-    // Parse the input string to extract coordinates
-    IList<MapPoint> coordinates = ParseCoordinatesString(coordinatesString);
-
-    double area = 0;
-
-    if (coordinates.Count > 2)
     {
-        for (var i = 0; i < coordinates.Count - 1; i++)
+        // Parse the input string to extract coordinates
+        IList<MapPoint> coordinates = ParseCoordinatesString(coordinatesString);
+
+        double area = 0;
+
+        if (coordinates.Count > 2)
         {
-            MapPoint p1 = coordinates[i];
-            MapPoint p2 = coordinates[i + 1];
-            area += ConvertToRadian(p2.Longitude - p1.Longitude) * (2 + Math.Sin(ConvertToRadian(p1.Latitude)) + Math.Sin(ConvertToRadian(p2.Latitude)));
+            for (var i = 0; i < coordinates.Count - 1; i++)
+            {
+                MapPoint p1 = coordinates[i];
+                MapPoint p2 = coordinates[i + 1];
+                area += ConvertToRadian(p2.Longitude - p1.Longitude) * (2 + Math.Sin(ConvertToRadian(p1.Latitude)) +
+                                                                        Math.Sin(ConvertToRadian(p2.Latitude)));
+            }
+
+            area = area * 6378137 * 6378137 / 2;
         }
 
-        area = area * 6378137 * 6378137 / 2;
+        double absoluteArea = Math.Abs(area);
+
+        return absoluteArea;
+
+        
     }
 
-    double absoluteArea = Math.Abs(area);
-
-    return absoluteArea;
-
-
-}
-
     private static IList<MapPoint> ParseCoordinatesString(string coordinatesString)
-{
+    {
         List<MapPoint> coordinates = new List<MapPoint>();
 
         // Split the input string into individual coordinate pairs
@@ -102,7 +130,7 @@ public class FieldLogic : IFieldLogic
             string[] values = pair.Replace("(", "").Replace(")", "").Split(new[] { ", " }, StringSplitOptions.None);
 
             // Parse latitude and longitude and add to the coordinates list
-            double latitude = double.Parse(values[1]);  // Latitude is the second value
+            double latitude = double.Parse(values[1]); // Latitude is the second value
             double longitude = double.Parse(values[0]); // Longitude is the first value
 
             coordinates.Add(new MapPoint(latitude, longitude));
@@ -111,7 +139,8 @@ public class FieldLogic : IFieldLogic
         return coordinates;
     }
 
-    private static double ConvertToRadian(double input){
+    private static double ConvertToRadian(double input)
+    {
         return input * Math.PI / 180;
     }
 
@@ -126,6 +155,7 @@ public class FieldLogic : IFieldLogic
             Latitude = latitude;
             Longitude = longitude;
         }
-    
-       
+
+
+    }
 }

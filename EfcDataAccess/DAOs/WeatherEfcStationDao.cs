@@ -3,9 +3,7 @@ using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-
 namespace EfcDataAccess.DAOs;
-
 public class WeatherEfcStationDao : IWeatherStationDao
 {
     
@@ -17,7 +15,7 @@ public class WeatherEfcStationDao : IWeatherStationDao
     }
 
 
-    public async Task<WeatherStation> CreateWeatherStationAsync(int fieldId)
+    public async Task<WeatherStation> CreateWeatherStationByFieldIdAsync(int fieldId)
     {
         WeatherStation toCreate = new WeatherStation
         {
@@ -37,9 +35,13 @@ public class WeatherEfcStationDao : IWeatherStationDao
         throw new NotImplementedException();
     }
 
-    public Task<WeatherStation> GetByFieldId(int id)
+    //This method is currently a bit "unfishned, it only have the abbilty to return 1 weather station per field, which makes sense for our program now, but might be liable for a change in the future
+    public async Task<WeatherStation?> GetByFieldId(int fieldId)
     {
-        throw new NotImplementedException();
+        IEnumerable<WeatherStation> weatherStation = await context.WeatherStations.Where(station => station.FieldId == fieldId).ToListAsync();
+
+        return weatherStation.FirstOrDefault();
+        
     }
 
     public async Task<IEnumerable<WeatherStation>> GetWeatherStations()
@@ -59,3 +61,4 @@ public class WeatherEfcStationDao : IWeatherStationDao
     }
     
 }
+

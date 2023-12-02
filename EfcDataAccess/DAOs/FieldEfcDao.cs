@@ -71,4 +71,11 @@ public class FieldEfcDao : IFieldDao
 
         return returnField;
     }
+
+    public async Task<IEnumerable<Field>> GetAllFields()
+    {
+        var fields = await context.Fields.ToListAsync();
+
+        return fields;
+    }
 }
