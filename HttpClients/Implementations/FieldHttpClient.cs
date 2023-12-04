@@ -36,6 +36,22 @@ public class FieldHttpClient : IFieldService
         return fields;
     }
 
+    public async Task<Field> GetFieldById(int fieldId)
+    {
+        HttpResponseMessage response = await client.GetAsync($"Field/{fieldId}");
+        String result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
+        var field = JsonSerializer.Deserialize<Field>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return field;
+    }
+
     public async Task<Field> CreateField(FieldCreationDto dto)
     {
         HttpResponseMessage response = await client.PostAsJsonAsync("/Field", dto);

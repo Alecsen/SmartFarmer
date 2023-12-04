@@ -1,13 +1,13 @@
-@page "/ViewField"
+@page "/ViewField/{fieldId}"
 @using HttpClients.ClientInterfaces
-@using Domain.DTOs
+@using Domain.Models
 @inject IFieldService fieldService
 @inject IUserService userService
 
 <AuthorizeView>
     <h3>ViewField</h3>
     
-    @if (fields != null)
+    @if (field != null)
     {
         <table class="table">
             <thead>
@@ -16,15 +16,12 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var item in fields)
-            {
                 <tr>
-                    <td>@item.FieldName</td>
+                    <td>@field.Name</td>
                 </tr>
                 <tr>
-                    <td>@item.locationData</td>
+                    <td>@field.Area</td>
                 </tr>
-            }
             </tbody>
         </table>
     }
@@ -36,17 +33,17 @@
 </AuthorizeView>
 
 @code {
-    private IEnumerable<FieldLookupDto>? fields;
+    private Field? field;
     private string msg = "";
-    private int currentUserId;
+    
+    [Parameter]
+    public int fieldId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        currentUserId = await userService.GetCurrentUserId();
-        
         try
         {
-            fields = await fieldService.GetFieldsByUserId(currentUserId);
+            field = await fieldService.GetFieldById(fieldId);
         }
         catch (Exception e)
         {

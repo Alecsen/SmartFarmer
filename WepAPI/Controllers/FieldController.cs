@@ -32,6 +32,21 @@ public class FieldController: ControllerBase
         }
     }
 
+    [HttpGet]
+    public async Task<ActionResult<Field>> GetFieldsById(int fieldId)
+    {
+        try
+        {
+            var field = await fieldLogic.GetByIdAsync(fieldId);
+            return Ok(field);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
     [HttpPost]
     public async Task<ActionResult<Field>> CreateAsync([FromBody] FieldCreationDto dto)
     {
