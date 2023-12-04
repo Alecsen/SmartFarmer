@@ -1,6 +1,7 @@
 ﻿using Application.LogicInterface;
 using Domain.DTOs;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WepAPI.Controllers;
@@ -16,6 +17,7 @@ public class FieldController: ControllerBase
         this.fieldLogic = fieldLogic;
     }
 
+    [Authorize]
     [HttpGet("{ownerId}")]
     public async Task<ActionResult<IEnumerable<FieldLookupDto>>> GetFieldsByOwner(int ownerId)
     {
@@ -31,7 +33,7 @@ public class FieldController: ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<Field>> CreateAsync([FromBody] FieldCreationDto dto)
     {

@@ -51,7 +51,8 @@ public class UsersController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-
+    
+    [Authorize]
     [HttpPatch]
     [Route("EditUser")]
     public async Task<ActionResult> UpdateAsync([FromBody] ProfileUpdateDto dto)
