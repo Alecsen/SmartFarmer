@@ -41,7 +41,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            UserSearchParametersDTO parameter = new(username);
+            UserLookupDto parameter = new(username);
             var user = await userLogic.GetAsync(parameter);
             return Ok(user);
         }
@@ -51,7 +51,8 @@ public class UsersController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-
+    
+    [Authorize]
     [HttpPatch]
     [Route("EditUser")]
     public async Task<ActionResult> UpdateAsync([FromBody] ProfileUpdateDto dto)

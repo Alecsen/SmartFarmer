@@ -1,34 +1,65 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject IFieldService fieldService
 @inject IUserService userService
-@inject ISensorService sensorService
+@inject NavigationManager navMgr;
 
 @page "/MapView"
 @using HttpClients.ClientInterfaces
 @using Domain.DTOs
-@using Domain.Models
-<AuthorizeView>
-<h3>Dine marker</h3>
 
-<div id="mapid" style="height: 400px;"></div>
+@if (currentUserId == -1)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <AuthorizeView>
+        <Header>
+            <h3>Dine marker</h3>
+            <div>Her kan du se et overblik over alle dine marker og du har mulighed for at filtrere, ændre og slette marker</div>
+        </Header>
 
- <div class="buttons">
-        <NavLink class="btn btn-primary" href="FieldView">Tilføj mark</NavLink>
-        <button class="btn">Rediger mark</button>
-        <button class="btn">Slet mark</button>
-        <button class="btn">Importer marker</button>
-    </div>
-    
-    
-</AuthorizeView>
+        <div id="mapid" style="height: 400px;"></div>
+
+        <div class="buttons">
+            <NavLink class="btn btn-primary" href="FieldView">Tilføj mark</NavLink>
+            <button class="btn">Rediger mark</button>
+            <button class="btn">Slet mark</button>
+            <button class="btn">Importer marker</button>
+        </div>
+
+        <h2>Dine marker</h2>
+        <div class="flex-container">
+        @if (fields != null)
+        {
+            foreach (var item in fields)
+            {
+                <div class="fields-container" @onclick="ViewField">
+                    <table class="fields-table">
+                        <tr>
+                            <td><b>@item.FieldName</b></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%;"><b>Crop type</b>:</td>
+                            <td style="width: 70%;"><div class="field-value">@item.CropType</div></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%;"><b>Area:</b></td>
+                            <td style="width: 70%;"><div class="field-value">@item.Area</div></td>
+                        </tr>
+                    </table>
+                </div>
+            }
+        }
+        </div>
+    </AuthorizeView>
+}
+
 @code {
     private IEnumerable<FieldLookupDto>? fields;
-    private IEnumerable<SensorLookupDto>? sensors;
     private int currentUserId;
     private string msg = "";
     private ElementReference mapElement;
-    private string geoLocationData = null;
-    private string testData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)";
     
     protected override async Task OnInitializedAsync()
     {
@@ -37,23 +68,6 @@
         try
         {
             fields = await fieldService.GetFieldsByUserId(currentUserId);
-            if (fields != null)
-            {
-                try
-                {
-                    foreach (FieldLookupDto field in fields)
-                    {
-                        sensors = await sensorService.GetSensorsByFieldId(field.Id);
-                    }
-                    
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    msg = e.Message;
-                }
-            }
-            
         }
         catch (Exception e)
         {
@@ -68,8 +82,6 @@
     // You can perform additional actions here, such as calling JavaScript interop methods
             await JSRuntime.InvokeVoidAsync("initializeMap");
             await DrawAllPolygons();
-            await AddPoint();
-        
     }
 
     private async Task DrawAllPolygons()
@@ -83,20 +95,10 @@
             await JSRuntime.InvokeVoidAsync("drawPolygons", coordinateStrings);
         }
     }
-    private async Task AddPoint()
+
+    private void ViewField()
     {
-        if (sensors != null)
-        {
-            foreach (var sensor in sensors)
-            {
-                double latitude = sensor.Latitude;
-                double longitude = sensor.Longitude;
-                double moistureLevel = sensor.MoistureLevel;
-                Console.WriteLine($"this is a sensor with location {latitude} {longitude}");
-                await JSRuntime.InvokeVoidAsync("addPointToMap", latitude, longitude, moistureLevel);
-            }
-        }
-        
+        navMgr.NavigateTo("/ViewField");
     }
 }
 

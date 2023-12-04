@@ -147,10 +147,11 @@ function convertGeoJsonToCoordinatesString(geoJson) {
     for (var i = 0; i < coordinates.length; i++) {
         // Tjekker for at undgå gentagne koordinater i streg
         if (i === 0 ||
-            !(coordinates[i][0].toFixed(6) === coordinates[i - 1][0].toFixed(3) &&
-                coordinates[i][1].toFixed(6) === coordinates[i - 1][1].toFixed(3))) {
+            !(coordinates[i][0].toFixed(6) === coordinates[i - 1][0].toFixed(6) &&
+                coordinates[i][1].toFixed(6) === coordinates[i - 1][1].toFixed(6))) {
             formattedCoordinates.push("(" + coordinates[i][0].toFixed(6) + ", " + coordinates[i][1].toFixed(6) + ")");
         }
+
     }
 
     return formattedCoordinates.join(", ");

@@ -1,0 +1,55 @@
+<!-- FieldPopup.razor -->
+<div class="popup" style="@($"display: {(IsVisible ? "block" : "none")}")">
+    <h3>Enter Field Details</h3>
+    
+    <div>
+        <label for="fieldName">Field Name:</label>
+        <input id="fieldName" @bind="FieldName" />
+    </div>
+
+    <div>
+        <label for="cropType">Crop Type:</label>
+        <select id="cropType" @bind="SelectedCropType">
+            @foreach (var cropType in CropTypes)
+            {
+                <option value="@cropType">@cropType</option>
+            }
+        </select>
+    </div>
+
+    <button @onclick="SaveField">Save</button>
+</div>
+
+@code {
+    private string FieldName { get; set; }
+    private string SelectedCropType { get; set; } = CropTypes.First(); // Set default value
+    private bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback<(string fieldName, string cropType)> OnFieldSaved { get; set; }
+
+    private static readonly List<string> CropTypes = new List<string>
+    {
+        "Wheat",
+        "Corn",
+        "Rice",
+        "Barly",
+        "Soybeans"
+    };
+
+    private void SaveField()
+    {
+        OnFieldSaved.InvokeAsync((FieldName, SelectedCropType));
+        IsVisible = false;
+    }
+
+    public void Show()
+    {
+        IsVisible = true;
+    }
+
+    public void Close()
+    {
+        IsVisible = false;
+    }
+}

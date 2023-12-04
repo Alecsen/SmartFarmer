@@ -20,29 +20,23 @@ public class DatabaseInitializer
     {
         return new List<Field>
         {
-            new Field {Id = 1, OwnerId = 1, Name = "RolfMark1", LocationData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)" },
-            new Field {Id = 2, OwnerId = 1, Name = "RolfMark2", LocationData = "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)" },
-            new Field {Id = 3, OwnerId = 2, Name = "AlecsenMark1", LocationData = "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)" },
-            new Field {Id = 4, OwnerId = 2, Name = "AlecsenMark2", LocationData = "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)" },
-            new Field {Id = 5, OwnerId = 3, Name = "MariasMark1", LocationData = "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)" },
+            new Field {Id = 1, OwnerId = 1, Name = "RolfMark1", LocationData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)", CropType = "Wheat", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255},
+            new Field {Id = 2, OwnerId = 1, Name = "RolfMark2", LocationData = "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)", CropType = "Barly", ImportanceLevel = 3, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field {Id = 3, OwnerId = 2, Name = "AlecsenMark1", LocationData = "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)", CropType = "Soybeans", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field {Id = 4, OwnerId = 2, Name = "AlecsenMark2", LocationData = "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)", CropType = "Oat", ImportanceLevel = 3, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field {Id = 5, OwnerId = 3, Name = "MariasMark1", LocationData = "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)", CropType = "Wheat", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
             
         };
     }
 
-    public static List<Sensor> GetSensors()
+    public static List<WeatherStation> GetWeatherStations()
     {
-        return new List<Sensor>
+        return new List<WeatherStation>
         {
-            new Sensor {Id = 1,FieldId = 1, Longitude = -100.3, Latitude = 50.3, MoistureLevel = 50 },
-            new Sensor {Id = 2,FieldId = 1, Longitude = -100.3, Latitude = 50.4, MoistureLevel = 55 },
-            new Sensor {Id = 3,FieldId = 2, Longitude = -100.5, Latitude = 51.3, MoistureLevel = 60 },
-            new Sensor {Id = 4,FieldId = 2, Longitude = -100.3, Latitude = 51.3, MoistureLevel = 65 },
-            new Sensor {Id = 5,FieldId = 3, Longitude = -102.2, Latitude = 52.4, MoistureLevel = 50 },
-            new Sensor {Id = 6, FieldId = 3, Longitude = -102.4, Latitude = 52.4, MoistureLevel = 55 },
-            new Sensor {Id = 7,FieldId = 4, Longitude = -103.2, Latitude = 53.4, MoistureLevel = 60 },
-            new Sensor {Id = 8,FieldId = 4, Longitude = -103.4, Latitude = 53.4, MoistureLevel = 65 },
-            new Sensor {Id = 9,FieldId = 5, Longitude = -104.2, Latitude = 54.4, MoistureLevel = 50 },
-            new Sensor {Id = 10,FieldId = 5, Longitude = -104.4, Latitude = 54.4, MoistureLevel = 55 },
+            new WeatherStation{Id = 1, WindDirection = "Syd", WindSpeed = 4, Precipitation = 2.5, Evaporation = 0},
+            new WeatherStation{Id = 2, WindDirection = "Nord", WindSpeed = 2, Precipitation = 1, Evaporation = -1},
+            new WeatherStation{Id = 3, WindDirection = "Syd", WindSpeed = 6, Precipitation = 0, Evaporation = -4},
+            new WeatherStation{Id = 4, WindDirection = "Vest", WindSpeed = 8, Precipitation = 2.5, Evaporation = 0}
         };
     }
     
@@ -62,29 +56,13 @@ public class DatabaseInitializer
     {
         return new List<Field>
         {
-            new Field { OwnerId = 1, Name = "RolfMark1", LocationData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)" },
-            new Field { OwnerId = 1, Name = "RolfMark2", LocationData = "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)" },
-            new Field {OwnerId = 2, Name = "AlecsenMark1", LocationData = "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)" },
-            new Field { OwnerId = 2, Name = "AlecsenMark2", LocationData = "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)" },
-            new Field { OwnerId = 3, Name = "MariasMark1", LocationData = "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)" },
+            new Field {OwnerId = 1, Name = "RolfMark1", LocationData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)", CropType = "Wheat", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255},
+            new Field {OwnerId = 1, Name = "RolfMark2", LocationData = "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)", CropType = "Barly", ImportanceLevel = 3, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field {OwnerId = 2, Name = "AlecsenMark1", LocationData = "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)", CropType = "Soybeans", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field {OwnerId = 2, Name = "AlecsenMark2", LocationData = "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)", CropType = "Oat", ImportanceLevel = 3, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field { OwnerId = 3, Name = "MariasMark1", LocationData = "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)", CropType = "Wheat", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
             
         };
     }
-
-    public static List<Sensor> GetSensorsNoId()
-    {
-        return new List<Sensor>
-        {
-            new Sensor {FieldId = 1, Longitude = -100.3, Latitude = 50.3, MoistureLevel = 50 },
-            new Sensor {FieldId = 1, Longitude = -100.3, Latitude = 50.4, MoistureLevel = 55 },
-            new Sensor {FieldId = 2, Longitude = -100.5, Latitude = 51.3, MoistureLevel = 60 },
-            new Sensor {FieldId = 2, Longitude = -100.3, Latitude = 51.3, MoistureLevel = 65 },
-            new Sensor {FieldId = 3, Longitude = -102.2, Latitude = 52.4, MoistureLevel = 50 },
-            new Sensor { FieldId = 3, Longitude = -102.4, Latitude = 52.4, MoistureLevel = 55 },
-            new Sensor {FieldId = 4, Longitude = -103.2, Latitude = 53.4, MoistureLevel = 60 },
-            new Sensor {FieldId = 4, Longitude = -103.4, Latitude = 53.4, MoistureLevel = 65 },
-            new Sensor {FieldId = 5, Longitude = -104.2, Latitude = 54.4, MoistureLevel = 50 },
-            new Sensor {FieldId = 5, Longitude = -104.4, Latitude = 54.4, MoistureLevel = 55 },
-        };
-    }
+    
 }

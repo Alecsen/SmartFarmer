@@ -1,0 +1,58 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+}
+
+h2 {
+    text-align: center;
+    color: #285244;
+    margin-bottom: 20px;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.fields-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 300px;
+    max-width: 30%;
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #5b9e8b;
+    cursor: pointer; /* Change cursor on hover to indicate clickability */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.fields-container:hover {
+    background-color: #4c8d75; /* Darker color on hover */
+}
+
+.fields-table {
+    width: 100%;
+    min-width: 100px;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.field-value {
+    padding: 8px;
+    box-sizing: border-box;
+    background-color: #68b6a3;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Add some spacing for better readability */
+.fields-container td {
+    padding: 8px;
+}

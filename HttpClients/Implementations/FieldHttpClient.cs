@@ -1,7 +1,9 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
+using HttpClients.AuthServices;
 using HttpClients.ClientInterfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +23,7 @@ public class FieldHttpClient : IFieldService
 
     public async Task<IEnumerable<FieldLookupDto>> GetFieldsByUserId(int userId)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JwtAuthService.Jwt);
         HttpResponseMessage response = await client.GetAsync($"Field/{userId}");
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
@@ -38,6 +41,7 @@ public class FieldHttpClient : IFieldService
 
     public async Task<Field> CreateField(FieldCreationDto dto)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JwtAuthService.Jwt);
         HttpResponseMessage response = await client.PostAsJsonAsync("/Field", dto);
         string result = await response.Content.ReadAsStringAsync();
 

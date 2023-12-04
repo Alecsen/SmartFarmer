@@ -23,7 +23,7 @@ public class UserLogicTests
     {
         // Arrange
         var userName = "alecsen";
-        var UserSearchParameters = new UserSearchParametersDTO(userName);
+        var UserSearchParameters = new UserLookupDto(userName);
         var expectedUser = new User { Username = userName };
 
         userDaoMock.Setup(dao => dao.GetByUsernameAsync(userName)).ReturnsAsync(expectedUser);

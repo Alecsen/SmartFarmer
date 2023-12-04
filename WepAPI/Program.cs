@@ -1,8 +1,12 @@
+using System.Reflection;
 using System.Text;
+using Application;
 using Application.DAOInterface;
+using Application.EventHandlers;
 using Application.Logic;
 using Application.LogicInterface;
 using Domain.Auth;
+using Domain.Models;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,9 +29,15 @@ public class Program
         builder.Services.AddScoped<IFieldDao, FieldEfcDao>();
         builder.Services.AddScoped<IUserLogic, UserLogic>();
         builder.Services.AddScoped<IFieldLogic, FieldLogic>();
-        builder.Services.AddScoped<ISensorLogic, SensorLogic>();
-        builder.Services.AddScoped<ISensorDao, SensorEfcDao>();
+        builder.Services.AddScoped<WeatherStationDataGenerator>();
+        builder.Services.AddScoped<IWeatherStationDao, WeatherEfcStationDao>();
+        builder.Services.AddScoped<IWeatherStationLogic, WeatherStationLogic>();
+        builder.Services.AddScoped<IIrrigationMachineDao, IrrigationMachineEfcDao>();
+        builder.Services.AddScoped<IIrrigationMachineLogic, IrrigationMachineLogic>();
         builder.Services.AddDbContext<SmartFarmerAppContext>();
+        builder.Services.AddHostedService<WeatherStationDataGenerator>();
+        builder.Services.AddScoped<FieldLogic>();
+        builder.Services.AddMediatR(c=> c.RegisterServicesFromAssemblyContaining<MediatREnetryRegrisation>());
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
             options.RequireHttpsMetadata = false;
@@ -41,10 +51,11 @@ public class Program
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
             };
         });
-
+        
         AuthorizationPolicies.AddPolicies(builder.Services);
 
         var app = builder.Build();
+        
 
         app.UseCors(x => x
             .AllowAnyMethod()

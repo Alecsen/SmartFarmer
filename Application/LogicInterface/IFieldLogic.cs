@@ -8,4 +8,5 @@ public interface IFieldLogic
     public Task<IEnumerable<FieldLookupDto>> GetAsync(int ownerId);
 
     Task<Field> CreateAsync(FieldCreationDto dto);
+    Task<Task> PerformCalculation();
 }

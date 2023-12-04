@@ -5,14 +5,17 @@ namespace EfcDataAccess;
 
 public class SmartFarmerAppContext : DbContext
 {
+    /*
     public SmartFarmerAppContext(DbContextOptions<SmartFarmerAppContext> options)
         : base(options)
     {
     }
+    */
     
     public DbSet<User> Users { get; set; }
     public DbSet<Field> Fields { get; set; }
-    public DbSet<Sensor> Sensors { get; set; }
+    public DbSet<WeatherStation> WeatherStations { get; set; }
+    public DbSet<IrrigationMachine> IrrigationMachines { get; set; }
     
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,12 +31,12 @@ public class SmartFarmerAppContext : DbContext
     {
         modelBuilder.Entity<User>().HasKey(user => user.Id);
         modelBuilder.Entity<Field>().HasKey(field => field.Id);
-        modelBuilder.Entity<Sensor>().HasKey(sensor => sensor.Id);
-        
+        modelBuilder.Entity<WeatherStation>().HasKey(weatherStation => weatherStation.Id);
+        modelBuilder.Entity<IrrigationMachine>().HasKey(irrigationMachine => irrigationMachine.Id);
         
         modelBuilder.Entity<User>().HasData(DatabaseInitializer.GetAuthenticationUsers());
         modelBuilder.Entity<Field>().HasData(DatabaseInitializer.GetFields());
-        modelBuilder.Entity<Sensor>().HasData(DatabaseInitializer.GetSensors());
-        
+        modelBuilder.Entity<WeatherStation>().HasData(DatabaseInitializer.GetWeatherStations());
+
     }
 }

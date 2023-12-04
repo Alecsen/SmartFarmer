@@ -1,9 +1,12 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
+using HttpClients.AuthServices;
 using HttpClients.ClientInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace HttpClients.Implementations;
@@ -73,8 +76,10 @@ public class UserHttpClient : IUserService
         return user;
     }
 
+    
     public async Task<int> GetCurrentUserId()
     {
+        
         var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
@@ -87,8 +92,10 @@ public class UserHttpClient : IUserService
         return -1; // Or throw an exception or return a nullable int if you prefer
     }
     
+    
     public async Task UpdateAsync(ProfileUpdateDto dto)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JwtAuthService.Jwt);
         string dtoAsJson = JsonSerializer.Serialize(dto);
         StringContent body = new StringContent(dtoAsJson, Encoding.UTF8, "application/json");
 
