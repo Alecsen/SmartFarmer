@@ -56,11 +56,11 @@ public class DatabaseInitializer
     {
         return new List<Field>
         {
-            new Field { OwnerId = 1, Name = "RolfMark1", LocationData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
-            new Field { OwnerId = 1, Name = "RolfMark2", LocationData = "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
-            new Field {OwnerId = 2, Name = "AlecsenMark1", LocationData = "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
-            new Field { OwnerId = 2, Name = "AlecsenMark2", LocationData = "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
-            new Field { OwnerId = 3, Name = "MariasMark1", LocationData = "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field {OwnerId = 1, Name = "RolfMark1", LocationData = "(-100.123, 50.456), (-100.789, 50.456), (-100.789, 50.123), (-100.123, 50.123)", CropType = "Wheat", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255},
+            new Field {OwnerId = 1, Name = "RolfMark2", LocationData = "(-101.123, 51.456), (-101.789, 51.456), (-101.789, 51.123), (-101.123, 51.123)", CropType = "Barly", ImportanceLevel = 3, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field {OwnerId = 2, Name = "AlecsenMark1", LocationData = "(-102.123, 52.456), (-102.789, 52.456), (-102.789, 52.123), (-102.123, 52.123)", CropType = "Soybeans", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field {OwnerId = 2, Name = "AlecsenMark2", LocationData = "(-103.123, 53.456), (-103.789, 53.456), (-103.789, 53.123), (-103.123, 53.123)", CropType = "Oat", ImportanceLevel = 3, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
+            new Field { OwnerId = 3, Name = "MariasMark1", LocationData = "(-104.123, 54.456), (-104.789, 54.456), (-104.789, 54.123), (-104.123, 54.123)", CropType = "Wheat", ImportanceLevel = 1, SoilType = 4, FieldCapacity = 10, MoistureLevel = 2.5, Area = 255 },
             
         };
     }
