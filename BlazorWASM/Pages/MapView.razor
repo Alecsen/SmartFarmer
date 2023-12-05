@@ -34,7 +34,7 @@ else
         {
             foreach (var item in fields)
             {
-                <div class="fields-container" @onclick="() => ViewField(item.Id)">
+                <div class="fields-container" @onclick="() => ViewField(item.Id.ToString())">
                     <table class="fields-table">
                         <tr>
                             <td><b>@item.FieldName</b></td>
@@ -96,7 +96,7 @@ else
         }
     }
 
-    private void ViewField(int fieldId)
+    private void ViewField(string fieldId)
     {
         Console.WriteLine("Dette er det valgte fieldId: " + fieldId);
         navMgr.NavigateTo($"/ViewField/{fieldId}");

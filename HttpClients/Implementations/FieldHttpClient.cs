@@ -21,7 +21,7 @@ public class FieldHttpClient : IFieldService
 
     public async Task<IEnumerable<FieldLookupDto>> GetFieldsByUserId(int userId)
     {
-        HttpResponseMessage response = await client.GetAsync($"Field/{userId}");
+        HttpResponseMessage response = await client.GetAsync($"Field/FieldOwner/{userId}");
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
@@ -38,18 +38,18 @@ public class FieldHttpClient : IFieldService
 
     public async Task<Field> GetFieldById(int fieldId)
     {
-        HttpResponseMessage response = await client.GetAsync($"Field/{fieldId}");
+        HttpResponseMessage response = await client.GetAsync($"/Field/{fieldId}");
         String result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception(result);
         }
 
-        var field = JsonSerializer.Deserialize<Field>(result, new JsonSerializerOptions
+        Field field = JsonSerializer.Deserialize<Field>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
-        return field;
+        return field; 
     }
 
     public async Task<Field> CreateField(FieldCreationDto dto)
