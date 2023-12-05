@@ -4,5 +4,5 @@ namespace Application.DAOInterface;
 
 public interface ICropTypeImportanceDao
 {
-    Task<CropTypeImportance> GetCropTypeByOwnerId(int ownerId);
+    Task<CropTypeImportance> GetCropTypeByOwnerId(int userId);
 }
