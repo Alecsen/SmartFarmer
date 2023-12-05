@@ -16,7 +16,7 @@ public class FieldController: ControllerBase
         this.fieldLogic = fieldLogic;
     }
 
-    [HttpGet("{ownerId}")]
+    [HttpGet("FieldOwner/{ownerId}")]
     public async Task<ActionResult<IEnumerable<FieldLookupDto>>> GetFieldsByOwner(int ownerId)
     {
         try
@@ -24,6 +24,21 @@ public class FieldController: ControllerBase
             var fields = await fieldLogic.GetAsync(ownerId);
             return Ok(fields);
 
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpGet("{fieldId}")]
+    public async Task<ActionResult<Field>> GetFieldsById(int fieldId)
+    {
+        try
+        {
+            var field = await fieldLogic.GetByIdAsync(fieldId);
+            return Ok(field);
         }
         catch (Exception e)
         {

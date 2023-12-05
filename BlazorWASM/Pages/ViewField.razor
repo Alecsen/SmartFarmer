@@ -1,52 +1,33 @@
-@page "/ViewField"
+@page "/ViewField/{fieldId}"
 @using HttpClients.ClientInterfaces
+@using Domain.Models
 @using Domain.DTOs
 @inject IFieldService fieldService
 @inject IUserService userService
 
 <AuthorizeView>
     <h3>ViewField</h3>
-    
-    @if (fields != null)
-    {
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Field name</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in fields)
-            {
-                <tr>
-                    <td>@item.FieldName</td>
-                </tr>
-                <tr>
-                    <td>@item.locationData</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    }
-    @if (!string.IsNullOrEmpty(msg))
-    {
-        <label style="color: red">@msg</label>
-    }
-    
+    <p>FieldName: @fieldName</p>
 </AuthorizeView>
 
 @code {
-    private IEnumerable<FieldLookupDto>? fields;
+    private Field field;
     private string msg = "";
-    private int currentUserId;
+    private string fieldName;
+    
+    [Parameter]
+    public string fieldId { get; set; }
+    
+    private int FieldIdAsInt => int.Parse(fieldId);
 
     protected override async Task OnInitializedAsync()
     {
-        currentUserId = await userService.GetCurrentUserId();
-        
         try
         {
-            fields = await fieldService.GetFieldsByUserId(currentUserId);
+            var result = await fieldService.GetFieldById(FieldIdAsInt);
+            Console.WriteLine("JSON Response: " + result); // Log the JSON response
+            field = result;
+            fieldName = field.Name;
         }
         catch (Exception e)
         {

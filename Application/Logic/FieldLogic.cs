@@ -28,6 +28,16 @@ public class FieldLogic : IFieldLogic
         return fieldDao.GetFieldsByOwnerId(ownerId);
     }
 
+    public Task<Field> GetByIdAsync(int fieldId)
+    {
+        if (fieldId == -1)
+        {
+            throw new Exception($"The field id {fieldId} is not a valid number");
+        }
+
+        return fieldDao.GetFieldById(fieldId);
+    }
+
     public async Task<Field> CreateAsync(FieldCreationDto dto)
     {
         //checking if the user exists
