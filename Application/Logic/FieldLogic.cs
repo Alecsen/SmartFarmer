@@ -54,7 +54,6 @@ public class FieldLogic : IFieldLogic
             OwnerId = dto.OwnerId,
             LocationData = dto.LocationData,
             CropType = dto.CropType,
-            ImportanceLevel = dto.ImportanceLevel,
             SoilType = dto.SoilType,
             FieldCapacity = dto.FieldCapacity,
             Area = CalculatePolygonArea(dto.LocationData)
