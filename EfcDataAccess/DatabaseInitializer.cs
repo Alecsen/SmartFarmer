@@ -39,6 +39,14 @@ public class DatabaseInitializer
             new WeatherStation{Id = 4, WindDirection = "Vest", WindSpeed = 8, Precipitation = 2.5, Evaporation = 0}
         };
     }
+
+    public static List<CropTypeImportance> GetCropTypeImportances()
+    {
+        return new List<CropTypeImportance>
+        {
+            new CropTypeImportance{Id = 1, CropType = "barley"}
+        };
+    }
     
      public static List<User> GetAuthenticationUsersNoId()
     {
