@@ -1,6 +1,7 @@
 ﻿using Application.LogicInterface;
 using Domain.DTOs;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WepAPI.Controllers;
@@ -16,6 +17,7 @@ public class FieldController: ControllerBase
         this.fieldLogic = fieldLogic;
     }
 
+    [Authorize]
     [HttpGet("FieldOwner/{ownerId}")]
     public async Task<ActionResult<IEnumerable<FieldLookupDto>>> GetFieldsByOwner(int ownerId)
     {
