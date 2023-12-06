@@ -30,5 +30,13 @@ public class IrrigationMachineEfcDao : IIrrigationMachineDao
         await context.SaveChangesAsync();
         return newIrrigationMachine.Entity;
     }
-    
+
+    public Task<List<IrrigationMachine>> GetIrrigationMachineByOwnerId(int ownerId)
+    {
+        var irrigationMachine = context.IrrigationMachines
+            .Where(irrigationMachine => irrigationMachine.OwnerId == ownerId)
+            .ToListAsync();
+        
+        return irrigationMachine;
+    }
 }

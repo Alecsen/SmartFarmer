@@ -34,4 +34,9 @@ public class IrrigationMachineLogic : IIrrigationMachineLogic
         
         return created;
     }
+
+    public async Task<List<IrrigationMachine>> GetByOwnerIdAsync(int ownerId)
+    {
+       return await irrigationMachineDao.GetIrrigationMachineByOwnerId(ownerId);
+    }
 }

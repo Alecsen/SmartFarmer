@@ -32,6 +32,22 @@ public class IrrigationMachineController: ControllerBase
         }
     }
 
+    [HttpGet("getByOwnerId/{ownerId}")]
+    public async Task<ActionResult<IEnumerable<IrrigationMachine>>> GetByOwnerId(int ownerId)
+    {
+        try
+        {
+            var irrigationMachines = await irrigationMachineLogic.GetByOwnerIdAsync(ownerId);
+            return Ok(irrigationMachines);
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
     [HttpPost]
     public async Task<ActionResult<IrrigationMachine>> CreateAsync([FromBody] IrrigationMachineCreationDto dto)
     {

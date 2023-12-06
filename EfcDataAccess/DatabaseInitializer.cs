@@ -40,6 +40,19 @@ public class DatabaseInitializer
         };
     }
 
+    public static List<IrrigationMachine> GetIrrigationMachine()
+    {
+        return new List<IrrigationMachine>
+        {
+            new IrrigationMachine { Id = 1, OwnerId = 1, FieldId = 1, WaterAmount = 600, IsRunning = false },
+            new IrrigationMachine { Id = 2, OwnerId = 1, FieldId = 2, WaterAmount = 600, IsRunning = false },
+            new IrrigationMachine { Id = 3, OwnerId = 2, FieldId = 3, WaterAmount = 750, IsRunning = false },
+            new IrrigationMachine { Id = 4, OwnerId = 2, FieldId = 4, WaterAmount = 850, IsRunning = false },
+            new IrrigationMachine { Id = 5, OwnerId = 3, FieldId = 5, WaterAmount = 600, IsRunning = false }
+        };
+    }
+
+
     public static List<CropTypeImportance> GetCropTypeImportances()
     {
         return new List<CropTypeImportance>
