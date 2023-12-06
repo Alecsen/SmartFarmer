@@ -37,6 +37,7 @@ public class SmartFarmerAppContext : DbContext
         modelBuilder.Entity<User>().HasData(DatabaseInitializer.GetAuthenticationUsers());
         modelBuilder.Entity<Field>().HasData(DatabaseInitializer.GetFields());
         modelBuilder.Entity<WeatherStation>().HasData(DatabaseInitializer.GetWeatherStations());
+        modelBuilder.Entity<IrrigationMachine>().HasData(DatabaseInitializer.GetIrrigationMachine());
 
     }
 }
