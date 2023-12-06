@@ -1,7 +1,10 @@
-﻿using Application.DAOInterface;
+﻿using System.Globalization;
+using Application.DAOInterface;
 using Application.LogicInterface;
 using Domain.DTOs;
 using Domain.Models;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 
 namespace Application.Logic;
 
@@ -56,8 +59,9 @@ public class FieldLogic : IFieldLogic
             CropType = dto.CropType,
             SoilType = dto.SoilType,
             FieldCapacity = dto.FieldCapacity,
-            Area = CalculatePolygonArea(dto.LocationData)
+            Area = CalculateAreaFromString(dto.LocationData)
         };
+        
         var created = await fieldDao.CreateAsync(field);
 
         await weatherStationDao.CreateWeatherStationByFieldIdAsync(created.Id);
@@ -72,13 +76,13 @@ public class FieldLogic : IFieldLogic
 
         foreach (var field in fieldsToUpdate)
         {
-            Console.WriteLine($"for field {field.Name} id: {field.Id} inital moisture level: {field.MoistureLevel}");
+           // Console.WriteLine($"for field {field.Name} id: {field.Id} inital moisture level: {field.MoistureLevel}");
             WeatherStation? station = await weatherStationDao.GetByFieldId(field.Id);
 
             if (station != null)
             {
                 CalculateMoistureLevel(station, field);
-                Console.WriteLine($"for field {field.Name} id: {field.Id} After calculation moisture level: {field.MoistureLevel}");
+             //   Console.WriteLine($"for field {field.Name} id: {field.Id} After calculation moisture level: {field.MoistureLevel}");
                 await fieldDao.UpdateAsyncField(field);
             }
             
@@ -99,74 +103,49 @@ public class FieldLogic : IFieldLogic
         
 
     }
-
-
-    private static double CalculatePolygonArea(string coordinatesString)
+    
+   
+    
+    public double CalculateAreaFromString(string coordinateString)
     {
-        // Parse the input string to extract coordinates
-        IList<MapPoint> coordinates = ParseCoordinatesString(coordinatesString);
-
-        double area = 0;
-
-        if (coordinates.Count > 2)
+        var koordinater = ParseCoordinatesString(coordinateString);
+        if (koordinater.Count < 3)
         {
-            for (var i = 0; i < coordinates.Count - 1; i++)
+            throw new ArgumentException("Der skal være mindst 3 koordinater for at danne et polygon.");
+        }
+
+        // Tilføj det første punkt til slutningen af listen for at lukke polygonen
+        koordinater.Add(koordinater[0]);
+
+        var polygon = new Polygon(new LinearRing(koordinater.ToArray()));
+        return polygon.Area * 1000000; // Arealet returneres i kvadratmeter
+    }
+
+    private List<Coordinate> ParseCoordinatesString(string coordinateString)
+    {
+        var koordinater = new List<Coordinate>();
+        var parSplit = coordinateString.Split(new[] { "), (" }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var par in parSplit)
+        {
+            var rensetPar = par.Trim('(', ')');
+            var punkter = rensetPar.Split(',');
+
+            if (punkter.Length == 2)
             {
-                MapPoint p1 = coordinates[i];
-                MapPoint p2 = coordinates[i + 1];
-                area += ConvertToRadian(p2.Longitude - p1.Longitude) * (2 + Math.Sin(ConvertToRadian(p1.Latitude)) +
-                                                                        Math.Sin(ConvertToRadian(p2.Latitude)));
+                if (double.TryParse(punkter[0].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out double lon) &&
+                    double.TryParse(punkter[1].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out double lat))
+                {
+                    koordinater.Add(new Coordinate(lon, lat));
+                }
+                else
+                {
+                    throw new ArgumentException("Ugyldigt koordinatformat.");
+                }
             }
-
-            area = area * 6378137 * 6378137 / 2;
         }
 
-        double absoluteArea = Math.Abs(area);
-
-        return absoluteArea;
-
-        
+        return koordinater;
     }
-
-    private static IList<MapPoint> ParseCoordinatesString(string coordinatesString)
-    {
-        List<MapPoint> coordinates = new List<MapPoint>();
-
-        // Split the input string into individual coordinate pairs
-        string[] pairs = coordinatesString.Split(new[] { "), (" }, StringSplitOptions.RemoveEmptyEntries);
-
-        foreach (var pair in pairs)
-        {
-            // Remove parentheses and split the pair into latitude and longitude
-            string[] values = pair.Replace("(", "").Replace(")", "").Split(new[] { ", " }, StringSplitOptions.None);
-
-            // Parse latitude and longitude and add to the coordinates list
-            double latitude = double.Parse(values[1]); // Latitude is the second value
-            double longitude = double.Parse(values[0]); // Longitude is the first value
-
-            coordinates.Add(new MapPoint(latitude, longitude));
-        }
-
-        return coordinates;
-    }
-
-    private static double ConvertToRadian(double input)
-    {
-        return input * Math.PI / 180;
-    }
-
-    // Assuming you have a MapPoint class defined as follows:
-    public class MapPoint
-    {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-
-        public MapPoint(double latitude, double longitude)
-        {
-            Latitude = latitude;
-            Longitude = longitude;
-        }
-
-
-    }
+    
 }
