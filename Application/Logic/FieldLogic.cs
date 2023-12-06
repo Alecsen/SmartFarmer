@@ -27,7 +27,7 @@ public class FieldLogic : IFieldLogic
         {
             throw new Exception($"The Id {ownerId} is not a valid number");
         }
-
+        
         return fieldDao.GetFieldsByOwnerId(ownerId);
     }
 
@@ -146,6 +146,24 @@ public class FieldLogic : IFieldLogic
         }
 
         return koordinater;
+    }
+    
+    
+    //method for legacy fields, not used anymore but might be useful in the future
+    public async Task CalculateAreaForAllFields()
+    {
+        // Retrieve all fields from the database
+        var fields = await fieldDao.GetAllFields();
+
+        foreach (var field in fields)
+        {
+            // Calculate the area for each field
+            double area = CalculateAreaFromString(field.LocationData);
+
+            // Update the field's area in the database
+            field.Area = area;
+            await fieldDao.UpdateAsyncField(field);
+        }
     }
     
 }
