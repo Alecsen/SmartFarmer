@@ -9,10 +9,12 @@ public class IrrigationMachineLogic : IIrrigationMachineLogic
 {
     
     private readonly IIrrigationMachineDao irrigationMachineDao;
+    private readonly IUserDao userDao;
 
-    public IrrigationMachineLogic(IIrrigationMachineDao irrigationMachineDao)
+    public IrrigationMachineLogic(IIrrigationMachineDao irrigationMachineDao, IUserDao userDao)
     {
         this.irrigationMachineDao = irrigationMachineDao;
+        this.userDao = userDao;
     }
 
     public Task<IEnumerable<IrrigationMachine>> GetAsync(int fieldId)
@@ -22,11 +24,24 @@ public class IrrigationMachineLogic : IIrrigationMachineLogic
 
     public async Task<IrrigationMachine> CreateAsync(IrrigationMachineCreationDto dto)
     {
+
+        if (dto.OwnerId != null)
+        {
+            try
+            {
+                // This method will throw an exception if the user does not exist
+                await userDao.GetByUserIdAsync(dto.OwnerId);
+            }
+            catch (InvalidOperationException)
+            {
+                // Handle the exception here, for example, you can throw a new exception with a custom message
+                throw new InvalidOperationException("The user does not exist.");
+            }
+        }
         
         IrrigationMachine irrigationMachine = new IrrigationMachine
         {
-            Id = dto.Id,
-            FieldId = dto.FieldId,
+            OwnerId = dto.OwnerId,
             WaterAmount = dto.WaterAmount,
             IsRunning = dto.IsRunning
         };
