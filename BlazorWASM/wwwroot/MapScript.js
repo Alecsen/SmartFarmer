@@ -57,28 +57,6 @@ function createPolygonFromPoints() {
     map.o
 }
 
-function drawPolygonFromCoordinateString(coordinateString) {
-
-    currentPolygons.forEach(polygon => map.removeLayer(polygon));
-    currentPolygons = [];
-
-    var coordinatePairs = coordinateString.match(/\(([^)]+)\)/g).map(function(coord) {
-        return coord.replace(/[()]/g, '');
-    });
-
-    var coordinates = coordinatePairs.map(function(pair) {
-        var parts = pair.split(', ');
-        return [parseFloat(parts[1]), parseFloat(parts[0])]; // Leaflet expects [lat, lng]
-    });
-
-    var polygon = L.polygon(coordinates, {color: 'blue'}).addTo(map);
-    currentPolygons.push(polygon);
-
-    // Extend the bounds to include each polygon's bounds
-    allBounds.extend(polygon.getBounds());
-}
-
-
 function zoomToFitAllFields() {
     if (!allBounds.isValid()) {
         console.error("Bounds are not valid.");

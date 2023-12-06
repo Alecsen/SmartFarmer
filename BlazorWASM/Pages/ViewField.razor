@@ -1,19 +1,32 @@
+@inject IFieldService fieldService
+@inject IJSRuntime JSRuntime
+@inject IUserService userService
+
 @page "/ViewField/{fieldId}"
 @using HttpClients.ClientInterfaces
 @using Domain.Models
-@using Domain.DTOs
-@inject IFieldService fieldService
-@inject IUserService userService
 
-<AuthorizeView>
-    <h3>ViewField</h3>
-    <p>FieldName: @fieldName</p>
-</AuthorizeView>
+@if (currentUserId == -1)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <AuthorizeView>
+        <h3>ViewField</h3>
+        <p>FieldName: @fieldName</p>
+        <h3>Kortoversigt</h3>
+        <div id="mapid" style="height: 400px; width: 60%"></div>
+    </AuthorizeView>
+}
+
 
 @code {
     private Field field;
+    private List<Field> _fields = new List<Field>();
     private string msg = "";
     private string fieldName;
+    private int currentUserId;
     
     [Parameter]
     public string fieldId { get; set; }
@@ -22,17 +35,42 @@
 
     protected override async Task OnInitializedAsync()
     {
+        currentUserId = await userService.GetCurrentUserId();
         try
         {
-            var result = await fieldService.GetFieldById(FieldIdAsInt);
-            Console.WriteLine("JSON Response: " + result); // Log the JSON response
-            field = result;
+            field = await fieldService.GetFieldById(FieldIdAsInt);
+            _fields.Add(field);
             fieldName = field.Name;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             msg = e.Message;
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+    // This code will be executed only after the first render
+            await JSRuntime.InvokeVoidAsync("initializeMap");
+            await DrawAllPolygons();
+        }
+    }
+    
+    private async Task DrawAllPolygons()
+    {
+        if (_fields != null)
+        {
+            var coordinateStrings = _fields.Where(f => !string.IsNullOrWhiteSpace(f.LocationData))
+                .Select(f => f.LocationData)
+                .ToList();
+
+            await JSRuntime.InvokeVoidAsync("drawPolygons", coordinateStrings);
+        }
+        else
+        {
+            Console.WriteLine("Cant draw");
         }
     }
 
