@@ -6,15 +6,35 @@
 @using HttpClients.ClientInterfaces
 @using Domain.Models
 
-@if (currentUserId == -1)
+@if (field == null)
 {
     <p>Loading...</p>
+    Console.WriteLine("Field = null");
 }
 else
 {
     <AuthorizeView>
-        <h3>ViewField</h3>
-        <p>FieldName: @fieldName</p>
+        <div class="fieldInfo_container">
+                    <h3>@field.Name</h3>
+                    <table class="fields-table">
+                        <tr>
+                            <td style="width: 30%;">Areal</td>
+                            <td class="field-value" style="width: 70%;">@field.Area</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%;">Afgrød</td>
+                            <td class="field-value" style="width: 70%;">@field.CropType</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%;">Aktuel jordfugtighed</td>
+                            <td class="field-value" style="width: 70%;">@field.MoistureLevel</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%;">Jordytype</td>
+                            <td class="field-value" style="width: 70%;">@field.SoilType</td>
+                        </tr>
+                    </table>
+            </div>
         <h3>Kortoversigt</h3>
         <div id="mapid" style="height: 400px; width: 60%"></div>
     </AuthorizeView>
@@ -25,8 +45,6 @@ else
     private Field field;
     private List<Field> _fields = new List<Field>();
     private string msg = "";
-    private string fieldName;
-    private int currentUserId;
     
     [Parameter]
     public string fieldId { get; set; }
@@ -35,12 +53,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        currentUserId = await userService.GetCurrentUserId();
         try
         {
             field = await fieldService.GetFieldById(FieldIdAsInt);
             _fields.Add(field);
-            fieldName = field.Name;
         }
         catch (Exception e)
         {
@@ -52,7 +68,15 @@ else
     {
         if (firstRender)
         {
-    // This code will be executed only after the first render
+    // Wait for the asynchronous operation to complete before using the 'field' variable
+            await Task.Delay(1);
+
+            if (field == null)
+            {
+    // Data is still being loaded, return without executing further rendering logic.
+                return;
+            }
+
             await JSRuntime.InvokeVoidAsync("initializeMap");
             await DrawAllPolygons();
         }
