@@ -13,12 +13,14 @@ public class FieldLogic : IFieldLogic
     private readonly IFieldDao fieldDao;
     private readonly IUserDao userDao;
     private readonly IWeatherStationDao weatherStationDao;
+    private readonly IIrrigationMachineDao irrigationMachineDao;
 
-    public FieldLogic(IFieldDao fieldDao, IUserDao userDao, IWeatherStationDao weatherStationDao)
+    public FieldLogic(IFieldDao fieldDao, IUserDao userDao, IWeatherStationDao weatherStationDao, IIrrigationMachineDao irrigationMachineDao)
     {
         this.fieldDao = fieldDao;
         this.userDao = userDao;
         this.weatherStationDao = weatherStationDao;
+        this.irrigationMachineDao = irrigationMachineDao;
     }
 
     public Task<IEnumerable<FieldLookupDto>> GetAsync(int ownerId)
@@ -78,10 +80,11 @@ public class FieldLogic : IFieldLogic
         {
            // Console.WriteLine($"for field {field.Name} id: {field.Id} inital moisture level: {field.MoistureLevel}");
             WeatherStation? station = await weatherStationDao.GetByFieldId(field.Id);
-
+            IEnumerable<IrrigationMachine> machine = await irrigationMachineDao.GetIrrigationMachineByFieldId(field.Id);
+            
             if (station != null)
             {
-                CalculateMoistureLevel(station, field);
+                CalculateMoistureLevel(station, field,machine);
              //   Console.WriteLine($"for field {field.Name} id: {field.Id} After calculation moisture level: {field.MoistureLevel}");
                 await fieldDao.UpdateAsyncField(field);
             }
@@ -93,14 +96,24 @@ public class FieldLogic : IFieldLogic
 
  
 
-    private void CalculateMoistureLevel(WeatherStation weatherStationForField, Field field)
+    private void CalculateMoistureLevel(WeatherStation weatherStationForField, Field field,
+        IEnumerable<IrrigationMachine> irrigationMachines)
     {
         double precipitation = weatherStationForField.Precipitation;
         double evaporation = weatherStationForField.Evaporation;
 
+        // Calculate the total amount of water spread by the irrigation machines (in cubic meters)
+        double totalWaterSpread = irrigationMachines.Where(machine => machine.IsRunning).Sum(machine => machine.WaterAmount) * 0.001;
 
-        field.MoistureLevel += precipitation + evaporation;
+        // Convert field area from hectares to square meters
+        double? fieldAreaInSquareMeters = field.Area * 10000;
+
+        // Calculate how many mm of water have been spread over the field
+        double? waterSpreadPerSquareMeter = (totalWaterSpread / fieldAreaInSquareMeters) * 1000;
         
+        
+        field.MoistureLevel += precipitation + evaporation + waterSpreadPerSquareMeter ?? 0;
+
 
     }
     

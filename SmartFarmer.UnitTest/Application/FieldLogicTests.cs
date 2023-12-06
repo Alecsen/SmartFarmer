@@ -13,14 +13,17 @@ public class FieldLogicTests
     private readonly Mock<IFieldDao> mockFieldDao;
     private readonly Mock<IUserDao> mockUserDao;
     private readonly Mock<IWeatherStationDao> mockWeatherStationDao;
+    private readonly Mock<IIrrigationMachineDao> irrigationMachineDao;
     private readonly FieldLogic sut;
 
     public FieldLogicTests()
     {
+       
         mockFieldDao = new Mock<IFieldDao>();
         mockUserDao = new Mock<IUserDao>();
         mockWeatherStationDao = new Mock<IWeatherStationDao>();
-        sut = new FieldLogic(mockFieldDao.Object, mockUserDao.Object,mockWeatherStationDao.Object);
+        irrigationMachineDao = new Mock<IIrrigationMachineDao>();
+        sut = new FieldLogic(mockFieldDao.Object, mockUserDao.Object,mockWeatherStationDao.Object, irrigationMachineDao.Object);
     }
 
     
