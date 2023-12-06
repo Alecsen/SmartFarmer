@@ -62,6 +62,21 @@ public class IrrigationMachineController: ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpPatch("{id}/{ownerId}")] 
+    public async Task<ActionResult<IrrigationMachine>> UpdateAsync(int id, int ownerId, [FromBody] IrrigationMachineUpdateDto dto)
+    {
+        try
+        {
+            IrrigationMachine updated = await irrigationMachineLogic.UpdateAsync(id, ownerId, dto);
+            return Ok(updated);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
     
     

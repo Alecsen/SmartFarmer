@@ -10,4 +10,5 @@ public interface IIrrigationMachineDao
     
     Task<IrrigationMachine> CreateAsync(IrrigationMachine irrigationMachine);
     Task<List<IrrigationMachine>> GetIrrigationMachineByOwnerId(int ownerId);
+    Task<IrrigationMachine> UpdateAsync(int id, IrrigationMachineUpdateDto dto);
 }

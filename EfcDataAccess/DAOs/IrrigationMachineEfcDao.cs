@@ -17,16 +17,17 @@ public class IrrigationMachineEfcDao : IIrrigationMachineDao
 
     public async Task<IEnumerable<IrrigationMachine>> GetIrrigationMachineByFieldId(int fieldId)
     {
-        var irrigationMachine = await context.IrrigationMachines 
+        var irrigationMachine = await context.IrrigationMachines
             .Where(irrigationMachine => irrigationMachine.FieldId == fieldId)
             .ToListAsync();
 
         return irrigationMachine;
     }
-    
+
     public async Task<IrrigationMachine> CreateAsync(IrrigationMachine irrigationMachine)
     {
-        EntityEntry<IrrigationMachine> newIrrigationMachine = await context.IrrigationMachines.AddAsync(irrigationMachine);
+        EntityEntry<IrrigationMachine> newIrrigationMachine =
+            await context.IrrigationMachines.AddAsync(irrigationMachine);
         await context.SaveChangesAsync();
         return newIrrigationMachine.Entity;
     }
@@ -36,7 +37,35 @@ public class IrrigationMachineEfcDao : IIrrigationMachineDao
         var irrigationMachine = context.IrrigationMachines
             .Where(irrigationMachine => irrigationMachine.OwnerId == ownerId)
             .ToListAsync();
-        
+
         return irrigationMachine;
+    }
+
+    public async Task<IrrigationMachine> UpdateAsync(int id, IrrigationMachineUpdateDto dto)
+    {
+        IrrigationMachine irrigationMachineToUpdate =
+            await context.IrrigationMachines.FirstOrDefaultAsync(machine => machine.Id == id) ??
+            throw new InvalidOperationException();
+
+        if (irrigationMachineToUpdate != null)
+        {
+            if (dto.FieldId != 0 && dto.FieldId != null)
+            {
+                irrigationMachineToUpdate.FieldId = dto.FieldId;
+            }
+            
+            irrigationMachineToUpdate.IsRunning = dto.IsRunning;
+            
+            
+            context.IrrigationMachines.Update(irrigationMachineToUpdate);
+            await context.SaveChangesAsync();
+
+            // Return the updated irrigation machine
+            return irrigationMachineToUpdate;
+        }
+        else
+        {
+            throw new InvalidOperationException($"Irrigation machine with id {id} not found.");
+        }
     }
 }

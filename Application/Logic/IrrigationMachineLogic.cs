@@ -10,11 +10,12 @@ public class IrrigationMachineLogic : IIrrigationMachineLogic
     
     private readonly IIrrigationMachineDao irrigationMachineDao;
     private readonly IUserDao userDao;
-
-    public IrrigationMachineLogic(IIrrigationMachineDao irrigationMachineDao, IUserDao userDao)
+    private readonly IFieldDao fieldDao;
+    public IrrigationMachineLogic(IIrrigationMachineDao irrigationMachineDao, IUserDao userDao, IFieldDao fieldDao)
     {
         this.irrigationMachineDao = irrigationMachineDao;
         this.userDao = userDao;
+        this.fieldDao = fieldDao;
     }
 
     public Task<IEnumerable<IrrigationMachine>> GetAsync(int fieldId)
@@ -53,5 +54,21 @@ public class IrrigationMachineLogic : IIrrigationMachineLogic
     public async Task<List<IrrigationMachine>> GetByOwnerIdAsync(int ownerId)
     {
        return await irrigationMachineDao.GetIrrigationMachineByOwnerId(ownerId);
+    }
+
+    public async Task<IrrigationMachine> UpdateAsync(int id, int ownerId, IrrigationMachineUpdateDto dto)
+    {
+        // Retrieve all the fields assigned to the user from the database
+        IEnumerable<FieldLookupDto> userFields = await fieldDao.GetFieldsByOwnerId(ownerId);
+
+        // Check if the new fieldId is in the list of fields assigned to the user
+        if (userFields.Any(field => field.Id == dto.FieldId))
+        {
+            return await irrigationMachineDao.UpdateAsync(id, dto);
+        }
+        else
+        {
+            throw new InvalidOperationException($"Field with id {dto.FieldId} not assigned to the user.");
+        }
     }
 }
