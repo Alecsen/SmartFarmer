@@ -11,4 +11,3 @@ data.json
 .vs/
 *.db-shm
 *.db-wal
-/EfcDataAccess/SmartFarmer.db
