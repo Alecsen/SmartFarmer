@@ -22,7 +22,7 @@ else
                 {
                     if (machine.IsRunning)
                     {
-                        <div class="running-Container">
+                        <div class="running-Container" @onclick="() => UnassignMachine(machine.Id)">
                             <table class="machine-table">
                                 <tr>
                                     <td>Nummer</td>
@@ -110,14 +110,30 @@ else
     {
         try
         {
-            Console.WriteLine("Chosen fieldId = " + fieldId);
-            Console.WriteLine("Current user id = " + _currentUserId);
             dto = new IrrigationMachineUpdateDto
             {
                 FieldId = fieldId,
                 IsRunning = true
             };
             await IrrigationMachineService.UpdateAsync(machineId, _currentUserId, dto);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private async Task UnassignMachine(int id)
+    {
+        try
+        {
+            dto = new IrrigationMachineUpdateDto
+            {
+                FieldId = 0,
+                IsRunning = false
+            };
+            await IrrigationMachineService.UpdateAsync(id, _currentUserId, dto);
         }
         catch (Exception e)
         {

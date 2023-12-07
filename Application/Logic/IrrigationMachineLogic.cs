@@ -62,7 +62,7 @@ public class IrrigationMachineLogic : IIrrigationMachineLogic
         IEnumerable<FieldLookupDto> userFields = await fieldDao.GetFieldsByOwnerId(ownerId);
 
         // Check if the new fieldId is in the list of fields assigned to the user
-        if (userFields.Any(field => field.Id == dto.FieldId))
+        if (userFields.Any(field => field.Id == dto.FieldId || dto.FieldId == 0))
         {
             await irrigationMachineDao.UpdateAsync(id, dto);
         }

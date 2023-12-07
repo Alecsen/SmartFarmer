@@ -49,11 +49,15 @@ public class IrrigationMachineEfcDao : IIrrigationMachineDao
 
         if (irrigationMachineToUpdate != null)
         {
+            //TODO find på tjek til fieldId der gør det muligt at unassign en maskine
+            /*
             if (dto.FieldId != 0 && dto.FieldId != null)
             {
                 irrigationMachineToUpdate.FieldId = dto.FieldId;
             }
+            */
             
+            irrigationMachineToUpdate.FieldId = dto.FieldId;
             irrigationMachineToUpdate.IsRunning = dto.IsRunning;
             
             
