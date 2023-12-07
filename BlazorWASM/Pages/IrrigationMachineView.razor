@@ -17,12 +17,12 @@ else
     <div>
         <div>
             <div class="flex-container">
-                <h4><b>Vandingsmaskine i brug</b></h4>
+                <b>Vandingsmaskine i brug</b>
                 @foreach (var machine in _machines)
                 {
                     if (machine.IsRunning)
                     {
-                        <div class="running-Container" @onclick="() => UnassignMachine(machine.Id)">
+                        <div class="info-container" @onclick="() => UnassignMachine(machine.Id)">
                             <table class="machine-table">
                                 <tr>
                                     <td>Nummer</td>
@@ -42,12 +42,12 @@ else
                 }
             </div>
             <div class="flex-container">
-                <h4><b>Ledige vandingsmaskiner</b></h4>
+                <b>Ledige vandingsmaskiner</b>
                 @foreach (var machine in _machines)
                 {
                     if (machine.IsRunning == false)
                     {
-                        <div class="unassigned-container" @onclick="() => ShowPopup(machine.Id)">
+                        <div class="info-container" @onclick="() => ShowPopup(machine.Id)">
                             <table class="machine-table">
                                 <tr>
                                     <td>Nummer</td>
