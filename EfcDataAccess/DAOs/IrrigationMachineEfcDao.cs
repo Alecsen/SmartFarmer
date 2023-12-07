@@ -43,7 +43,7 @@ public class IrrigationMachineEfcDao : IIrrigationMachineDao
 
     public async Task UpdateAsync(int id, IrrigationMachineUpdateDto dto)
     {
-        IrrigationMachine irrigationMachineToUpdate =
+        IrrigationMachine? irrigationMachineToUpdate =
             await context.IrrigationMachines.FirstOrDefaultAsync(machine => machine.Id == id) ??
             throw new InvalidOperationException();
 

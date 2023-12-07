@@ -16,7 +16,7 @@ else
     <h3>IrrigationMachineView</h3>
     <div>
         <div>
-            <div class="machine-container">
+            <div class="flex-container">
                 <h4><b>Vandingsmaskine i brug</b></h4>
                 @foreach (var machine in _machines)
                 {
@@ -41,13 +41,13 @@ else
                     }
                 }
             </div>
-            <div class="machine-container">
+            <div class="flex-container">
                 <h4><b>Ledige vandingsmaskiner</b></h4>
                 @foreach (var machine in _machines)
                 {
                     if (machine.IsRunning == false)
                     {
-                        <div unassigned-container @onclick="ShowPopup">
+                        <div class="unassigned-container" @onclick="() => ShowPopup(machine.Id)">
                             <table class="machine-table">
                                 <tr>
                                     <td>Nummer</td>
@@ -74,11 +74,13 @@ else
     private IEnumerable<IrrigationMachine> _machines = new List<IrrigationMachine>();
     private IEnumerable<FieldLookupDto> _fields = new List<FieldLookupDto>();
     private UpdateMachinePopup _popup;
+    private int machineId;
     private int fieldId;
     private IrrigationMachineUpdateDto dto;
 
-    public void ShowPopup()
+    private void ShowPopup(int id)
     {
+        machineId = id;
         _popup.Show();
     }
 
@@ -109,12 +111,13 @@ else
         try
         {
             Console.WriteLine("Chosen fieldId = " + fieldId);
+            Console.WriteLine("Current user id = " + _currentUserId);
             dto = new IrrigationMachineUpdateDto
             {
                 FieldId = fieldId,
                 IsRunning = true
             };
-            await IrrigationMachineService.UpdateAsync(fieldId, _currentUserId, dto);
+            await IrrigationMachineService.UpdateAsync(machineId, _currentUserId, dto);
         }
         catch (Exception e)
         {
