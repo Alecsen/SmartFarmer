@@ -9,7 +9,4 @@ public class FieldCreationDto
     public string? LocationData { get; set; }
     public string CropType { get; set; }
     public int SoilType { get; set; }
-    public double FieldCapacity { get; set; }
-    public double? Area { get; set; }
-   
 }

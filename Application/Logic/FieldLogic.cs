@@ -14,13 +14,30 @@ public class FieldLogic : IFieldLogic
     private readonly IUserDao userDao;
     private readonly IWeatherStationDao weatherStationDao;
     private readonly IIrrigationMachineDao irrigationMachineDao;
-
+    private readonly Dictionary<int, double> FieldCapcityForSoilType;
     public FieldLogic(IFieldDao fieldDao, IUserDao userDao, IWeatherStationDao weatherStationDao, IIrrigationMachineDao irrigationMachineDao)
     {
         this.fieldDao = fieldDao;
         this.userDao = userDao;
         this.weatherStationDao = weatherStationDao;
         this.irrigationMachineDao = irrigationMachineDao;
+        
+        FieldCapcityForSoilType = new Dictionary<int, double>
+        {
+            {1, 25},
+            {2, 35},
+            {3, 45},
+            {4, 55},
+            {5, 65},
+            {6, 75},
+            {7, 85},
+            {8, 95},
+            {9, 105},
+            {10, 115},
+            {11, 125},
+            {12, 135}
+        };
+        
     }
 
     public Task<IEnumerable<FieldLookupDto>> GetAsync(int ownerId)
@@ -53,6 +70,12 @@ public class FieldLogic : IFieldLogic
             throw new Exception("There is not location data so field cannot be created");
         }
 
+        // Use the SoilType to get the FieldCapacity from the dictionary
+        if (!FieldCapcityForSoilType.TryGetValue(dto.SoilType, out double fieldCapacity))
+        {
+            throw new Exception($"No field capacity found for soil type {dto.SoilType}");
+        }
+        
         Field field = new Field
         {
             Name = dto.FieldName,
@@ -60,7 +83,7 @@ public class FieldLogic : IFieldLogic
             LocationData = dto.LocationData,
             CropType = dto.CropType,
             SoilType = dto.SoilType,
-            FieldCapacity = dto.FieldCapacity,
+            FieldCapacity = fieldCapacity,
             Area = CalculateAreaFromString(dto.LocationData)
         };
         
