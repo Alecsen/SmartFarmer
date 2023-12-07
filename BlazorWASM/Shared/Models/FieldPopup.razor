@@ -16,17 +16,29 @@
             }
         </select>
     </div>
-
+    
+    <div>
+        <label for="soilType">Jordbunds typer</label>
+        <select id="soilType" @bind="setSoilType">
+            @foreach(var soilType in soilTypes)
+            {
+                <option value="@soilType">@soilType</option>
+            }
+        </select>
+    </div>
+    
+    
     <button @onclick="SaveField">Save</button>
 </div>
 
 @code {
     private string FieldName { get; set; }
     private string SelectedCropType { get; set; } = CropTypes.First(); // Set default value
+    private int setSoilType { get; set; } = soilTypes.First(); // Set default value
     private bool IsVisible { get; set; }
 
     [Parameter]
-    public EventCallback<(string fieldName, string cropType)> OnFieldSaved { get; set; }
+    public EventCallback<(string fieldName, string cropType, int soilType)> OnFieldSaved { get; set; }
 
     private static readonly List<string> CropTypes = new List<string>
     {
@@ -37,9 +49,24 @@
         "Soybeans"
     };
 
+    private static readonly List<int> soilTypes = new List<int>
+    {
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+    };
     private void SaveField()
     {
-        OnFieldSaved.InvokeAsync((FieldName, SelectedCropType));
+        OnFieldSaved.InvokeAsync((FieldName, SelectedCropType,setSoilType));
         IsVisible = false;
     }
 

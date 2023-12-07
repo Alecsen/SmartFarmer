@@ -67,10 +67,11 @@
         fieldPopup.Show();
     }
 
-    private void SaveFieldHandler((string fieldName, string cropType) fieldData)
+    private void SaveFieldHandler((string fieldName, string cropType,int soilType) fieldData)
     {
         fieldName = fieldData.fieldName;
         cropType = fieldData.cropType;
+        soilType = fieldData.soilType;
         CreateField();
     }
     
@@ -126,7 +127,8 @@
             FieldName = fieldName,
             LocationData = fieldToCreateLocationData,
             OwnerId = currentUserId,
-            CropType = cropType
+            CropType = cropType,
+            SoilType = soilType
         };
 
         await fieldService.CreateField(fieldToCreate);
