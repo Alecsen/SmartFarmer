@@ -40,7 +40,7 @@ namespace Application.Logic;
                     await GenerateAndUpdateData(weatherStationDao);
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken); // Juster intervallet efter behov
+                await Task.Delay(TimeSpan.FromSeconds(0.1), stoppingToken); // Juster intervallet efter behov
             }
         }
 
@@ -69,7 +69,7 @@ namespace Application.Logic;
                 station.WindDirection = GenerateNextWindDirection(station.WindDirection, random);
                 station.WindSpeed = GenerateWindSpeed(random);
                 station.Precipitation = GenerateNextPrecipitation(station, lastPrecipitation, random);
-                station.Evaporation = station.Precipitation > 0 ? 0 : -0.1;
+                station.Evaporation = station.Precipitation > 0 ? 0 : -0.15;
             }
             return stations;
         }
@@ -127,7 +127,7 @@ namespace Application.Logic;
         private double GenerateNextPrecipitation(WeatherStation station, double lastPrecipitation, Random random)
         {
             double heavyRainThreshold = 5.0; //tærskel for "meget regn"
-            double baseRainProbability = 0.12; //basischance for regn
+            double baseRainProbability = 0.08; //basischance for regn
             double heavyRainProbability = 0.001; //basischance for meget regn
 
             // Mindre stigning i chancen for regn, hvis det regnede i den foregående time
@@ -149,7 +149,7 @@ namespace Application.Logic;
             if (willRain)
             {
                 // Antag en normal nedbørsmængde
-                double precipitation = Math.Pow(random.NextDouble(), 2) * 4;
+                double precipitation = Math.Pow(random.NextDouble(), 2) * 3;
 
                 // Justering for "meget regn"
                 if (willBeHeavyRain)

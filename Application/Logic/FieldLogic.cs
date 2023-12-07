@@ -103,14 +103,15 @@ public class FieldLogic : IFieldLogic
         double evaporation = weatherStationForField.Evaporation;
 
         // Calculate the total amount of water spread by the irrigation machines (in cubic meters)
-        double totalWaterSpread = irrigationMachines.Where(machine => machine.IsRunning).Sum(machine => machine.WaterAmount) * 0.001;
+        double totalWaterSpread = irrigationMachines.Where(machine => machine.IsRunning).Sum(machine => machine.WaterAmount);
 
         // Convert field area from hectares to square meters
         double? fieldAreaInSquareMeters = field.Area * 10000;
 
         // Calculate how many mm of water have been spread over the field
-        double? waterSpreadPerSquareMeter = (totalWaterSpread / fieldAreaInSquareMeters) * 1000;
-        
+        double? waterSpreadPerSquareMeter = (totalWaterSpread / fieldAreaInSquareMeters)*1000;
+
+        Console.WriteLine($"Precipitation: {precipitation}, Evaporation: {evaporation}, Water spread: {waterSpreadPerSquareMeter}");
         
         field.MoistureLevel += precipitation + evaporation + waterSpreadPerSquareMeter ?? 0;
 
