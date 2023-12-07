@@ -41,7 +41,7 @@ public class IrrigationMachineEfcDao : IIrrigationMachineDao
         return irrigationMachine;
     }
 
-    public async Task<IrrigationMachine> UpdateAsync(int id, IrrigationMachineUpdateDto dto)
+    public async Task UpdateAsync(int id, IrrigationMachineUpdateDto dto)
     {
         IrrigationMachine irrigationMachineToUpdate =
             await context.IrrigationMachines.FirstOrDefaultAsync(machine => machine.Id == id) ??
@@ -59,9 +59,6 @@ public class IrrigationMachineEfcDao : IIrrigationMachineDao
             
             context.IrrigationMachines.Update(irrigationMachineToUpdate);
             await context.SaveChangesAsync();
-
-            // Return the updated irrigation machine
-            return irrigationMachineToUpdate;
         }
         else
         {

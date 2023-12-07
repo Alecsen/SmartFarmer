@@ -64,12 +64,12 @@ public class IrrigationMachineController: ControllerBase
     }
     
     [HttpPatch("{id}/{ownerId}")] 
-    public async Task<ActionResult<IrrigationMachine>> UpdateAsync(int id, int ownerId, [FromBody] IrrigationMachineUpdateDto dto)
+    public async Task<ActionResult> UpdateAsync(int id, int ownerId, [FromBody] IrrigationMachineUpdateDto dto)
     {
         try
-        {
-            IrrigationMachine updated = await irrigationMachineLogic.UpdateAsync(id, ownerId, dto);
-            return Ok(updated);
+        { 
+            await irrigationMachineLogic.UpdateAsync(id, ownerId, dto);
+            return Ok();
         }
         catch (Exception e)
         {

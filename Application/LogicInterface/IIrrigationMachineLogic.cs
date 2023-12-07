@@ -9,5 +9,5 @@ public interface IIrrigationMachineLogic
 
     Task<IrrigationMachine> CreateAsync(IrrigationMachineCreationDto dto);
     Task<List<IrrigationMachine>> GetByOwnerIdAsync(int ownerId);
-    Task<IrrigationMachine> UpdateAsync(int id, int ownerId, IrrigationMachineUpdateDto dto);
+    Task UpdateAsync(int id, int ownerId, IrrigationMachineUpdateDto dto);
 }

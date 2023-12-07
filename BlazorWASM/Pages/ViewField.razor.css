@@ -6,9 +6,7 @@
     max-width: 800px;
     margin: 50px 20px; /* Adjust the margin to move it away from the left */
     padding: 20px;
-    border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .fields-table {
@@ -19,10 +17,10 @@
 
 .fields-table td {
     padding: 8px;
-    border-top: none; /* Remove top border */
-    border-left: none; /* Remove left border */
-    border-right: none; /* Remove right border */
-    border-bottom: 1px solid #ddd; /* Add bottom border */
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #ddd; 
 }
 
 label {

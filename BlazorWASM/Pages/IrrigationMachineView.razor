@@ -1,0 +1,126 @@
+@page "/IrrigationMachineView"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs
+@using BlazorWASM.Shared.Models
+@inject IUserService UserService
+@inject IFieldService FieldServie
+@inject IIrrigationMachineService IrrigationMachineService
+
+@if (_machines == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h3>IrrigationMachineView</h3>
+    <div>
+        <div>
+            <div class="machine-container">
+                <h4><b>Vandingsmaskine i brug</b></h4>
+                @foreach (var machine in _machines)
+                {
+                    if (machine.IsRunning)
+                    {
+                        <div class="running-Container">
+                            <table class="machine-table">
+                                <tr>
+                                    <td>Nummer</td>
+                                    <td>@machine.Id</td>
+                                </tr>
+                                <tr>
+                                    <td>Placering på mark nummer</td>
+                                    <td>@machine.FieldId</td>
+                                </tr>
+                                <tr>
+                                    <td>Vandingskapacitet</td>
+                                    <td>@machine.WaterAmount</td>
+                                </tr>
+                            </table>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="machine-container">
+                <h4><b>Ledige vandingsmaskiner</b></h4>
+                @foreach (var machine in _machines)
+                {
+                    if (machine.IsRunning == false)
+                    {
+                        <div unassigned-container @onclick="ShowPopup">
+                            <table class="machine-table">
+                                <tr>
+                                    <td>Nummer</td>
+                                    <td>@machine.Id</td>
+                                </tr>
+                                <tr>
+                                    <td>Vandingskapacitet</td>
+                                    <td>@machine.WaterAmount</td>
+                                </tr>
+                            </table>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="popup">
+                <UpdateMachinePopup @ref="_popup" OnMachineSaved="SaveMachineHandler" Fields="@_fields" />
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private int _currentUserId;
+    private IEnumerable<IrrigationMachine> _machines = new List<IrrigationMachine>();
+    private IEnumerable<FieldLookupDto> _fields = new List<FieldLookupDto>();
+    private UpdateMachinePopup _popup;
+    private int fieldId;
+    private IrrigationMachineUpdateDto dto;
+
+    public void ShowPopup()
+    {
+        _popup.Show();
+    }
+
+    private async void SaveMachineHandler(int selectedFieldId)
+    {
+        fieldId = selectedFieldId;
+        await Update();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _currentUserId = await UserService.GetCurrentUserId();
+        try
+        {
+            _machines = await IrrigationMachineService.GetByOwnerId(_currentUserId);
+            _fields = await FieldServie.GetFieldsByUserId(_currentUserId);
+        }
+
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private async Task Update()
+    {
+        try
+        {
+            Console.WriteLine("Chosen fieldId = " + fieldId);
+            dto = new IrrigationMachineUpdateDto
+            {
+                FieldId = fieldId,
+                IsRunning = true
+            };
+            await IrrigationMachineService.UpdateAsync(fieldId, _currentUserId, dto);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+}

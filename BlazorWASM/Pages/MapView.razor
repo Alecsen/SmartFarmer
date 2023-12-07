@@ -30,27 +30,35 @@ else
 
         <h2>Dine marker</h2>
         <div class="flex-container">
-        @if (fields != null)
-        {
-            foreach (var item in fields)
+            @if (fields != null)
             {
-                <div class="fields-container" @onclick="() => ViewField(item.Id.ToString())">
-                    <table class="fields-table">
-                        <tr>
-                            <td><b>@item.FieldName</b></td>
-                        </tr>
-                        <tr>
-                            <td style="width: 30%;"><b>Crop type</b>:</td>
-                            <td style="width: 70%;"><div class="field-value">@item.CropType</div></td>
-                        </tr>
-                        <tr>
-                            <td style="width: 30%;"><b>Area:</b></td>
-                            <td style="width: 70%;"><div class="field-value">@item.Area</div></td>
-                        </tr>
-                    </table>
-                </div>
+                foreach (var item in fields)
+                {
+                    <div class="fields-container" @onclick="() => ViewField(item.Id.ToString())">
+                        <table class="fields-table">
+                            <tr>
+                                <td>
+                                    <b>@item.FieldName</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%;"><b>Crop type</b>:</td>
+                                <td style="width: 70%;">
+                                    <div class="field-value">@item.CropType</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%;">
+                                    <b>Area:</b>
+                                </td>
+                                <td style="width: 70%;">
+                                    <div class="field-value">@item.Area</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                }
             }
-        }
         </div>
     </AuthorizeView>
 }
@@ -60,7 +68,7 @@ else
     private int currentUserId;
     private string msg = "";
     private ElementReference mapElement;
-    
+
     protected override async Task OnInitializedAsync()
     {
         currentUserId = await userService.GetCurrentUserId();
@@ -75,13 +83,13 @@ else
             msg = e.Message;
         }
     }
-    
+
     protected override async Task OnParametersSetAsync()
     {
     // This method is called whenever parameters are set, including when navigating to the page
     // You can perform additional actions here, such as calling JavaScript interop methods
-            await JSRuntime.InvokeVoidAsync("initializeMap");
-            await DrawAllPolygons();
+        await JSRuntime.InvokeVoidAsync("initializeMap");
+        await DrawAllPolygons();
     }
 
     private async Task DrawAllPolygons()
@@ -101,5 +109,5 @@ else
         Console.WriteLine("Dette er det valgte fieldId: " + fieldId);
         navMgr.NavigateTo($"/ViewField/{fieldId}");
     }
-}
 
+}

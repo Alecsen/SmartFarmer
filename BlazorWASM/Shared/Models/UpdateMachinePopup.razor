@@ -1,0 +1,42 @@
+@using Domain.DTOs
+<div class="popup" style="@($"display: {(IsVisible ? "block" : "none")}")">
+<h3>Angiv placering af vandingsmaskine</h3>
+    <div>
+        <label for="fieldId">Mark id</label>
+        <select id="fieldId" @bind="SelectedFieldId">
+            @foreach (var field in Fields)
+            {
+                <option value="@field.Id">@field.FieldName</option>
+            }
+        </select>
+    </div>
+    <button @onclick="Save">Save</button>
+</div>
+
+@code {
+    private int SelectedFieldId { get; set; }
+    private bool IsVisible { get; set; }
+    
+    [Parameter]
+    public EventCallback<int> OnMachineSaved { get; set; }
+    
+    [Parameter]
+    public IEnumerable<FieldLookupDto> Fields { get; set; }
+
+
+    private void Save()
+    {
+        OnMachineSaved.InvokeAsync((SelectedFieldId));
+        IsVisible = false;
+    }
+
+    public void Show()
+    {
+        IsVisible = true;
+    }
+
+    public void Close()
+    {
+        IsVisible = false;
+    }
+}
