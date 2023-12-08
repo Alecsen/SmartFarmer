@@ -1,9 +1,11 @@
 ﻿@page "/"
 @using Domain.DTOs
+@using Domain.Models
 @using HttpClients.ClientInterfaces
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IFieldService fieldService
 @inject IUserService userService
+@inject IIrrigationMachineService irrigationMachineService
 <AuthorizeView>
     <NotAuthorized>
     <PageTitle>Index</PageTitle>
@@ -16,24 +18,43 @@
 
 
     <Authorized>
-    <div class="dashboard-container">
-        @if (fields != null && fields.Any())
-        {
-            var topFields = fields.OrderBy(f => f.MoistureLevel).Take(3);
-            foreach (var field in topFields)
+        <h3>De marker, der mangler mest vand</h3>
+        <div class="dashboard-container">
+            @if (fields != null && fields.Any())
             {
-                <div class="field-card">
-                    <h3>@field.FieldName</h3>
-                    <p>Field Capacity: @field.FieldCapacity</p>
-                    <RadzenProgressBar Unit="@GetProgressBarUnit(field)" class=".rz-color-black" ProgressBarStyle="ProgressBarStyle.Light" Value="@field.MoistureLevel" Max="field.FieldCapacity" Style="height: 20px" Color="@(field.MoistureLevel < 5 ? "red" : (field.MoistureLevel > 5 ? "yellow" : "green"))"/>
-                </div>
+                var topFields = fields.OrderBy(f => f.MoistureLevel).Take(3);
+                foreach (var field in topFields)
+                {
+                    <div class="field-card">
+                        <h3>@field.FieldName</h3>
+                        <p>Mark kapacitet @field.FieldCapacity</p>
+                        <RadzenProgressBar Unit="@GetProgressBarUnit(field)" class=".rz-color-black" ProgressBarStyle="ProgressBarStyle.Light" Value="@field.MoistureLevel" Max="field.FieldCapacity" Style="height: 20px" Color="@(field.MoistureLevel < 5 ? "red" : (field.MoistureLevel > 5 ? "yellow" : "green"))"/>
+                    </div>
+                }
             }
-        }
-        else
-        {
-            <p>@msg</p>
-        }
-    </div>
+            else
+            {
+                <p>@msg</p>
+            }
+        </div>
+        <h3>Ledige vandingsmaskiner</h3>
+        <div class="dashboard-container">
+
+            @if (freeMachines != null && freeMachines.Any())
+            {
+                foreach (var machine in freeMachines)
+                {
+                    <div class="machine-card">
+                        <h3>Maskine nummer: @machine.Id</h3>
+                        <p>Vandingskapacitet: @machine.WaterAmount</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Der er ingen ledige vandingsmaskiner.</p>
+            }
+        </div>
     </Authorized>
 </AuthorizeView>
 
@@ -42,7 +63,7 @@
     private IEnumerable<FieldLookupDto>? fields;
     private string msg = "";
     private int currentUserId;
-
+    private IEnumerable<IrrigationMachine>? freeMachines;
     protected override async Task OnInitializedAsync()
     {
         currentUserId = await userService.GetCurrentUserId();
@@ -50,6 +71,8 @@
         try
         {
             fields = await fieldService.GetFieldsByUserId(currentUserId);
+            var machines = await irrigationMachineService.GetByOwnerId(currentUserId);
+            freeMachines = machines.Where(m => !m.IsRunning);
         }
         catch (Exception e)
         {

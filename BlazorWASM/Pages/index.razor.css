@@ -9,3 +9,20 @@
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
+.machine-card {
+    border: 1px solid rgba(0, 123, 255, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    background-color: #f8f9fa;
+    transition: transform .2s;
+}
+
+.machine-card h3 {
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.machine-card p {
+    color: #6c757d;
+}
