@@ -30,10 +30,21 @@ function initializeMapEditable() {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-
-    var drawControl = new L.Control.Draw();
+    
+    var drawControl = new L.Control.Draw({
+        draw: {
+            polyline: false,
+            polygon: true, // Tillad kun polygon-tegning
+            rectangle: false,
+            circle: false,
+            circlemarker: false,
+            marker: false
+        },
+        edit: {
+            featureGroup: drawnFeatures
+        }
+    });
     map.addControl(drawControl);
-
     map.addLayer(drawnFeatures);
 
     // Event listener for map click, only adds marker if addMarkerOnClick is true

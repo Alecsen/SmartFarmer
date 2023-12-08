@@ -40,7 +40,7 @@ namespace Application.Logic;
                     await GenerateAndUpdateData(weatherStationDao);
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(0.1), stoppingToken); // Juster intervallet efter behov
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken); // Juster intervallet efter behov
             }
         }
 
