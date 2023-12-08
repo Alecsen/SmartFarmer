@@ -130,14 +130,23 @@ public class FieldLogic : IFieldLogic
 
         // Convert field area from hectares to square meters
         double? fieldAreaInSquareMeters = field.Area * 10000;
-
         // Calculate how many mm of water have been spread over the field
         double? waterSpreadPerSquareMeter = (totalWaterSpread / fieldAreaInSquareMeters)*1000;
 
         Console.WriteLine($"Precipitation: {precipitation}, Evaporation: {evaporation}, Water spread: {waterSpreadPerSquareMeter}");
         
-        field.MoistureLevel += precipitation + evaporation + waterSpreadPerSquareMeter ?? 0;
-
+        double newMoistureLevel = field.MoistureLevel += precipitation + evaporation + waterSpreadPerSquareMeter ?? 0;
+        
+        // Check if the new moisture level exceeds the field capacity
+        if (newMoistureLevel > field.FieldCapacity)
+        {
+            Console.WriteLine($"The new moisture level ({newMoistureLevel}) exceeds the field capacity ({field.FieldCapacity}). Setting moisture level to field capacity.");
+            field.MoistureLevel = field.FieldCapacity;
+        }
+        else
+        {
+            field.MoistureLevel = newMoistureLevel;
+        }
 
     }
     
