@@ -8,10 +8,12 @@
 
 <AuthorizeView>
     <Authorized>
+        Logout
         <img class="icon" src="img/Logout.png" @onclick="Logout"/>
         <img class="icon" src="img/Profile.png" @onclick="Profile" alt="View profile">
     </Authorized>
     <NotAuthorized>
+        Login
         <img class="icon" src="img/Login.png" @onclick="Login"/>
     </NotAuthorized>
 </AuthorizeView>
