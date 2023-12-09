@@ -20,9 +20,21 @@ else
                 <b>Vandingsmaskine i brug</b>
                 @foreach (var machine in _machines)
                 {
-                    if (machine.IsRunning)
+                    if (machine.FieldId != 0)
                     {
-                        <div class="info-container" @onclick="() => UnassignMachine(machine.Id)">
+                        <div class="info-container">
+                            <div class="button-row">
+                                <div>
+                                    <label class="switch">
+                                        <input type="checkbox" @bind="@machine.IsRunning" @onclick="() => TurnOnOff(machine.Id, machine.IsRunning, machine.FieldId)">
+                                        <span class="slider round"></span>
+                                        <label>@machineState</label>
+                                    </label>
+                                </div>
+                                <div>
+                                    <button @onclick="() => UnassignMachine(machine.Id)">Flyt til ledig</button>
+                                </div>
+                            </div>
                             <table class="machine-table">
                                 <tr>
                                     <td>Nummer</td>
@@ -45,7 +57,7 @@ else
                 <b>Ledige vandingsmaskiner</b>
                 @foreach (var machine in _machines)
                 {
-                    if (machine.IsRunning == false)
+                    if (machine.FieldId == 0)
                     {
                         <div class="info-container" @onclick="() => ShowPopup(machine.Id)">
                             <table class="machine-table">
@@ -63,7 +75,7 @@ else
                 }
             </div>
             <div class="popup">
-                <UpdateMachinePopup @ref="_popup" OnMachineSaved="SaveMachineHandler" Fields="@_fields" />
+                <UpdateMachinePopup @ref="_popup" OnMachineSaved="SaveMachineHandler" Fields="@_fields"/>
             </div>
         </div>
     </div>
@@ -75,8 +87,10 @@ else
     private IEnumerable<FieldLookupDto> _fields = new List<FieldLookupDto>();
     private UpdateMachinePopup _popup;
     private int machineId;
-    private int fieldId;
     private IrrigationMachineUpdateDto dto;
+    private bool value;
+    private bool toggleSwitch;
+    private string machineState = "hej";
 
     private void ShowPopup(int id)
     {
@@ -86,8 +100,7 @@ else
 
     private async void SaveMachineHandler(int selectedFieldId)
     {
-        fieldId = selectedFieldId;
-        await Update();
+        await Update(selectedFieldId);
     }
 
     protected override async Task OnInitializedAsync()
@@ -97,6 +110,7 @@ else
         {
             _machines = await IrrigationMachineService.GetByOwnerId(_currentUserId);
             _fields = await FieldServie.GetFieldsByUserId(_currentUserId);
+            StateHasChanged();
         }
 
         catch (Exception e)
@@ -106,7 +120,7 @@ else
         }
     }
 
-    private async Task Update()
+    private async Task Update(int fieldId)
     {
         try
         {
@@ -116,6 +130,7 @@ else
                 IsRunning = true
             };
             await IrrigationMachineService.UpdateAsync(machineId, _currentUserId, dto);
+            StateHasChanged();
         }
         catch (Exception e)
         {
@@ -134,6 +149,41 @@ else
                 IsRunning = false
             };
             await IrrigationMachineService.UpdateAsync(id, _currentUserId, dto);
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private async Task TurnOnOff(int id, bool onOff, int fieldId)
+    {
+        try
+        {
+            Console.WriteLine("M Id: " + id + " Status: " + onOff);
+            if (onOff)
+            {
+                dto = new IrrigationMachineUpdateDto
+                {
+                    FieldId = fieldId,
+                    IsRunning = false
+                };
+                machineState = "Off";
+            }
+            else
+            {
+                dto = new IrrigationMachineUpdateDto
+                {
+                    FieldId = fieldId,
+                    IsRunning = true
+                };
+                machineState = "On";
+            }
+            await IrrigationMachineService.UpdateAsync(id, _currentUserId, dto);
+            StateHasChanged();
+            
         }
         catch (Exception e)
         {
