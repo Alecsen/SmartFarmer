@@ -22,6 +22,15 @@ else
                {
                    if (machine.FieldId != 0)
                    {
+                       string onoff = "";
+                       if (machine.IsRunning)
+                       {
+                           onoff = "On";
+                       }
+                       else
+                       {
+                           onoff = "Off";
+                       }
                        <div class="info-container">
                            <div class="button-row">
                                <div>
@@ -46,7 +55,7 @@ else
                                </tr>
                                <tr>
                                    <td>Status</td>
-                                   <td>@machineState</td>
+                                   <td>@onoff</td>
                                </tr>
                            </table>
                        </div>
@@ -90,7 +99,6 @@ else
     private IrrigationMachineUpdateDto dto;
     private bool value;
     private bool toggleSwitch;
-    private string machineState;
 
     private void ShowPopup(int id)
     {
@@ -169,7 +177,6 @@ else
                     FieldId = fieldId,
                     IsRunning = false
                 };
-                machineState = "Off";
             }
             else
             {
@@ -178,7 +185,6 @@ else
                     FieldId = fieldId,
                     IsRunning = true
                 };
-                machineState = "On";
             }
             await IrrigationMachineService.UpdateAsync(id, _currentUserId, dto);
             

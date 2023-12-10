@@ -5,12 +5,12 @@
 }
 
 .info-container {
-    border: 1px solid #ddd;
     padding: 10px;
     margin: 10px;
     width: 40%; /* Adjust the width as needed */
     min-width: 400px;
     position: relative;
+    background-color: #e3e3e3;
 }
 
 .button-row {
@@ -38,6 +38,7 @@ header {
     display: inline-block;
     width: 60px;
     height: 34px;
+    right: 10px;
 }
 
 /* Hide default HTML checkbox */
