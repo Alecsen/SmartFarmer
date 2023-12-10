@@ -1,41 +1,36 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-}
-
-h3 {
-    color: #333;
-}
-
 .flex-container {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
+    align-items: flex-start;
 }
 
 .info-container {
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #ddd;
     padding: 10px;
     margin: 10px;
-    width: 60%;
-    cursor: pointer;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s;
+    width: 40%; /* Adjust the width as needed */
+    min-width: 400px;
+    position: relative;
 }
 
-.info-container:hover {
-    background-color: #e0e0e0;
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+header {
+    font-family: "72 Black";
+    padding: 10px;
 }
 
 .machine-table {
     width: 100%;
-    border-collapse: collapse;
+    margin-top: 10px;
 }
 
-.machine-table td {
-    padding: 8px;
-}
 
 /* The switch - the box around the slider */
 .switch {

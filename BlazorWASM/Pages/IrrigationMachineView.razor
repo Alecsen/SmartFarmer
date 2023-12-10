@@ -16,43 +16,43 @@ else
     <h3>IrrigationMachineView</h3>
     <div>
         <div>
-            <div class="flex-container">
-                <b>Vandingsmaskine i brug</b>
-                @foreach (var machine in _machines)
-                {
-                    if (machine.FieldId != 0)
-                    {
-                        <div class="info-container">
-                            <div class="button-row">
-                                <div>
-                                    <label class="switch">
-                                        <input type="checkbox" @bind="@machine.IsRunning" @onclick="() => TurnOnOff(machine.Id, machine.IsRunning, machine.FieldId)">
-                                        <span class="slider round"></span>
-                                        <label>@machineState</label>
-                                    </label>
-                                </div>
-                                <div>
-                                    <button @onclick="() => UnassignMachine(machine.Id)">Flyt til ledig</button>
-                                </div>
-                            </div>
-                            <table class="machine-table">
-                                <tr>
-                                    <td>Nummer</td>
-                                    <td>@machine.Id</td>
-                                </tr>
-                                <tr>
-                                    <td>Placering på mark nummer</td>
-                                    <td>@machine.FieldId</td>
-                                </tr>
-                                <tr>
-                                    <td>Vandingskapacitet</td>
-                                    <td>@machine.WaterAmount</td>
-                                </tr>
-                            </table>
-                        </div>
-                    }
-                }
-            </div>
+           <div class="flex-container">
+               <b>Vandingsmaskine i brug</b>
+               @foreach (var machine in _machines)
+               {
+                   if (machine.FieldId != 0)
+                   {
+                       <div class="info-container">
+                           <div class="button-row">
+                               <div>
+                                   <label class="switch">
+                                       <input type="checkbox" @bind="@machine.IsRunning" @onclick="() => TurnOnOff(machine.Id, machine.IsRunning, machine.FieldId)">
+                                       <span class="slider round"></span>
+                                   </label>
+                               </div>
+                               <div>
+                                   <button class="unassign" @onclick="() => UnassignMachine(machine.Id)">Flyt til ledig</button>
+                               </div>
+                           </div>
+                           <header>@machine.Id</header>
+                           <table class="machine-table">
+                               <tr>
+                                   <td>Placering på mark nummer</td>
+                                   <td>@machine.FieldId</td>
+                               </tr>
+                               <tr>
+                                   <td>Vandingskapacitet</td>
+                                   <td>@machine.WaterAmount</td>
+                               </tr>
+                               <tr>
+                                   <td>Status</td>
+                                   <td>@machineState</td>
+                               </tr>
+                           </table>
+                       </div>
+                   }
+               }
+           </div>
             <div class="flex-container">
                 <b>Ledige vandingsmaskiner</b>
                 @foreach (var machine in _machines)
@@ -90,7 +90,7 @@ else
     private IrrigationMachineUpdateDto dto;
     private bool value;
     private bool toggleSwitch;
-    private string machineState = "hej";
+    private string machineState;
 
     private void ShowPopup(int id)
     {
@@ -110,7 +110,6 @@ else
         {
             _machines = await IrrigationMachineService.GetByOwnerId(_currentUserId);
             _fields = await FieldServie.GetFieldsByUserId(_currentUserId);
-            StateHasChanged();
         }
 
         catch (Exception e)
@@ -130,7 +129,6 @@ else
                 IsRunning = true
             };
             await IrrigationMachineService.UpdateAsync(machineId, _currentUserId, dto);
-            StateHasChanged();
         }
         catch (Exception e)
         {
@@ -149,7 +147,8 @@ else
                 IsRunning = false
             };
             await IrrigationMachineService.UpdateAsync(id, _currentUserId, dto);
-            StateHasChanged();
+            
+            await InvokeAsync(StateHasChanged);
         }
         catch (Exception e)
         {
@@ -182,7 +181,6 @@ else
                 machineState = "On";
             }
             await IrrigationMachineService.UpdateAsync(id, _currentUserId, dto);
-            StateHasChanged();
             
         }
         catch (Exception e)
@@ -191,5 +189,5 @@ else
             throw;
         }
     }
-
+    
 }
