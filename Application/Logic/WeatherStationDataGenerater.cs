@@ -21,12 +21,7 @@ namespace Application.Logic;
             _mediator = mediator;
         }
         
-        // Alec
-        private void OnWeatherChanged()
-        {
-            Console.WriteLine("Weather changed");
-        }
-
+       
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _lastGeneratedData = new WeatherStation(); 

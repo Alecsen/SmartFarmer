@@ -30,11 +30,7 @@ public class WeatherEfcStationDao : IWeatherStationDao
         return newWeatherStation.Entity;
     }
 
-    public Task<WeatherStationLookupDto> GetById(int id)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     //This method is currently a bit "unfishned, it only have the abbilty to return 1 weather station per field, which makes sense for our program now, but might be liable for a change in the future
     public async Task<WeatherStation?> GetByFieldId(int fieldId)
     {

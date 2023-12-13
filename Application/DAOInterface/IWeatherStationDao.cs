@@ -6,7 +6,7 @@ namespace Application.DAOInterface;
 public interface IWeatherStationDao
 {
     Task<WeatherStation> CreateWeatherStationByFieldIdAsync(int fieldId);
-    Task<WeatherStationLookupDto> GetById(int id);
+ 
     Task<WeatherStation?> GetByFieldId(int id);
 
     Task<IEnumerable<WeatherStation>> GetWeatherStations(); 
