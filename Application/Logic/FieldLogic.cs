@@ -96,22 +96,16 @@ public class FieldLogic : IFieldLogic
 
     public async Task<Task> PerformCalculation()
     {
-        
         var fieldsToUpdate = await fieldDao.GetAllFields();
-
         foreach (var field in fieldsToUpdate)
         {
-           // Console.WriteLine($"for field {field.Name} id: {field.Id} inital moisture level: {field.MoistureLevel}");
             WeatherStation? station = await weatherStationDao.GetByFieldId(field.Id);
             IEnumerable<IrrigationMachine> machine = await irrigationMachineDao.GetIrrigationMachineByFieldId(field.Id);
-            
             if (station != null)
             {
                 CalculateMoistureLevel(station, field,machine);
-             //   Console.WriteLine($"for field {field.Name} id: {field.Id} After calculation moisture level: {field.MoistureLevel}");
                 await fieldDao.UpdateAsyncField(field);
             }
-            
         }
         return Task.CompletedTask;
         
@@ -130,6 +124,7 @@ public class FieldLogic : IFieldLogic
 
         // Convert field area from hectares to square meters
         double? fieldAreaInSquareMeters = field.Area * 10000;
+        
         // Calculate how many mm of water have been spread over the field
         double? waterSpreadPerSquareMeter = (totalWaterSpread / fieldAreaInSquareMeters)*1000;
 
