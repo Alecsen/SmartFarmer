@@ -38,7 +38,6 @@ public class AuthController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine("bro der virker ikke");
             return BadRequest(e.Message);
             
         }

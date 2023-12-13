@@ -18,7 +18,7 @@ public class FieldController: ControllerBase
     }
 
     [Authorize]
-    [HttpGet("{ownerId}")]
+    [HttpGet("FieldOwner/{ownerId}")]
     public async Task<ActionResult<IEnumerable<FieldLookupDto>>> GetFieldsByOwner(int ownerId)
     {
         try
@@ -33,7 +33,22 @@ public class FieldController: ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    [Authorize]
+
+    [HttpGet("{fieldId}")]
+    public async Task<ActionResult<Field>> GetFieldsById(int fieldId)
+    {
+        try
+        {
+            var field = await fieldLogic.GetByIdAsync(fieldId);
+            return Ok(field);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
     [HttpPost]
     public async Task<ActionResult<Field>> CreateAsync([FromBody] FieldCreationDto dto)
     {

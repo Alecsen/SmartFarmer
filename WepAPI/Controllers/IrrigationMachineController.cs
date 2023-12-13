@@ -32,6 +32,22 @@ public class IrrigationMachineController: ControllerBase
         }
     }
 
+    [HttpGet("getByOwnerId/{ownerId}")]
+    public async Task<ActionResult<IEnumerable<IrrigationMachine>>> GetByOwnerId(int ownerId)
+    {
+        try
+        {
+            var irrigationMachines = await irrigationMachineLogic.GetByOwnerIdAsync(ownerId);
+            return Ok(irrigationMachines);
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
     [HttpPost]
     public async Task<ActionResult<IrrigationMachine>> CreateAsync([FromBody] IrrigationMachineCreationDto dto)
     {
@@ -39,6 +55,21 @@ public class IrrigationMachineController: ControllerBase
         {
             IrrigationMachine created = await irrigationMachineLogic.CreateAsync(dto);
             return Created($"/irrigationMachine/{created.Id}", created);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpPatch("{id}/{ownerId}")] 
+    public async Task<ActionResult> UpdateAsync(int id, int ownerId, [FromBody] IrrigationMachineUpdateDto dto)
+    {
+        try
+        { 
+            await irrigationMachineLogic.UpdateAsync(id, ownerId, dto);
+            return Ok();
         }
         catch (Exception e)
         {

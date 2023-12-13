@@ -1,57 +1,100 @@
-@page "/ViewField"
-@using HttpClients.ClientInterfaces
-@using Domain.DTOs
 @inject IFieldService fieldService
+@inject IJSRuntime JSRuntime
 @inject IUserService userService
 
-<AuthorizeView>
-    <h3>ViewField</h3>
-    
-    @if (fields != null)
-    {
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Field name</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in fields)
-            {
-                <tr>
-                    <td>@item.FieldName</td>
-                </tr>
-                <tr>
-                    <td>@item.locationData</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    }
-    @if (!string.IsNullOrEmpty(msg))
-    {
-        <label style="color: red">@msg</label>
-    }
-    
-</AuthorizeView>
+@page "/ViewField/{fieldId}"
+@using HttpClients.ClientInterfaces
+@using Domain.Models
+
+@if (field == null)
+{
+    <p>Loading...</p>
+    Console.WriteLine("Field = null");
+}
+else
+{
+    <AuthorizeView>
+        <div class="fieldInfo_container">
+                    <h3>@field.Name</h3>
+                    <table class="fields-table">
+                        <tr>
+                            <td style="width: 30%;">Areal</td>
+                            <td class="field-value" style="width: 70%;">@field.Area</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%;">Afgrød</td>
+                            <td class="field-value" style="width: 70%;">@field.CropType</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%;">Aktuel jordfugtighed</td>
+                            <td class="field-value" style="width: 70%;">@field.MoistureLevel</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%;">Jordtype</td>
+                            <td class="field-value" style="width: 70%;">@field.SoilType</td>
+                        </tr>
+                    </table>
+            </div>
+        <h3>Kortoversigt</h3>
+        <div id="mapid" style="height: 400px; width: 60%"></div>
+    </AuthorizeView>
+}
+
 
 @code {
-    private IEnumerable<FieldLookupDto>? fields;
+    private Field field;
+    private List<Field> _fields = new List<Field>();
     private string msg = "";
-    private int currentUserId;
+    
+    [Parameter]
+    public string fieldId { get; set; }
+    
+    private int FieldIdAsInt => int.Parse(fieldId);
 
     protected override async Task OnInitializedAsync()
     {
-        currentUserId = await userService.GetCurrentUserId();
-        
         try
         {
-            fields = await fieldService.GetFieldsByUserId(currentUserId);
+            field = await fieldService.GetFieldById(FieldIdAsInt);
+            _fields.Add(field);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             msg = e.Message;
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+    // Wait for the asynchronous operation to complete before using the 'field' variable
+            await Task.Delay(1);
+
+            if (field == null)
+            {
+    // Data is still being loaded, return without executing further rendering logic.
+                return;
+            }
+
+            await JSRuntime.InvokeVoidAsync("initializeMap");
+            await DrawAllPolygons();
+        }
+    }
+    
+    private async Task DrawAllPolygons()
+    {
+        if (_fields != null)
+        {
+            var coordinateStrings = _fields.Where(f => !string.IsNullOrWhiteSpace(f.LocationData))
+                .Select(f => f.LocationData)
+                .ToList();
+
+            await JSRuntime.InvokeVoidAsync("drawPolygons", coordinateStrings);
+        }
+        else
+        {
+            Console.WriteLine("Cant draw");
         }
     }
 

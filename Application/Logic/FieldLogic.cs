@@ -1,7 +1,10 @@
-﻿using Application.DAOInterface;
+﻿using System.Globalization;
+using Application.DAOInterface;
 using Application.LogicInterface;
 using Domain.DTOs;
 using Domain.Models;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 
 namespace Application.Logic;
 
@@ -10,12 +13,31 @@ public class FieldLogic : IFieldLogic
     private readonly IFieldDao fieldDao;
     private readonly IUserDao userDao;
     private readonly IWeatherStationDao weatherStationDao;
-
-    public FieldLogic(IFieldDao fieldDao, IUserDao userDao, IWeatherStationDao weatherStationDao)
+    private readonly IIrrigationMachineDao irrigationMachineDao;
+    private readonly Dictionary<int, double> FieldCapcityForSoilType;
+    public FieldLogic(IFieldDao fieldDao, IUserDao userDao, IWeatherStationDao weatherStationDao, IIrrigationMachineDao irrigationMachineDao)
     {
         this.fieldDao = fieldDao;
         this.userDao = userDao;
         this.weatherStationDao = weatherStationDao;
+        this.irrigationMachineDao = irrigationMachineDao;
+        
+        FieldCapcityForSoilType = new Dictionary<int, double>
+        {
+            {1, 25},
+            {2, 35},
+            {3, 45},
+            {4, 55},
+            {5, 65},
+            {6, 75},
+            {7, 85},
+            {8, 95},
+            {9, 105},
+            {10, 115},
+            {11, 125},
+            {12, 135}
+        };
+        
     }
 
     public Task<IEnumerable<FieldLookupDto>> GetAsync(int ownerId)
@@ -24,8 +46,18 @@ public class FieldLogic : IFieldLogic
         {
             throw new Exception($"The Id {ownerId} is not a valid number");
         }
-
+        
         return fieldDao.GetFieldsByOwnerId(ownerId);
+    }
+
+    public Task<Field> GetByIdAsync(int fieldId)
+    {
+        if (fieldId == -1)
+        {
+            throw new Exception($"The field id {fieldId} is not a valid number");
+        }
+
+        return fieldDao.GetFieldById(fieldId);
     }
 
     public async Task<Field> CreateAsync(FieldCreationDto dto)
@@ -38,17 +70,23 @@ public class FieldLogic : IFieldLogic
             throw new Exception("There is not location data so field cannot be created");
         }
 
+        // Use the SoilType to get the FieldCapacity from the dictionary
+        if (!FieldCapcityForSoilType.TryGetValue(dto.SoilType, out double fieldCapacity))
+        {
+            throw new Exception($"No field capacity found for soil type {dto.SoilType}");
+        }
+        
         Field field = new Field
         {
             Name = dto.FieldName,
             OwnerId = dto.OwnerId,
             LocationData = dto.LocationData,
             CropType = dto.CropType,
-            ImportanceLevel = dto.ImportanceLevel,
             SoilType = dto.SoilType,
-            FieldCapacity = dto.FieldCapacity,
-            Area = CalculatePolygonArea(dto.LocationData)
+            FieldCapacity = fieldCapacity,
+            Area = CalculateAreaFromString(dto.LocationData)
         };
+        
         var created = await fieldDao.CreateAsync(field);
 
         await weatherStationDao.CreateWeatherStationByFieldIdAsync(created.Id);
@@ -58,21 +96,16 @@ public class FieldLogic : IFieldLogic
 
     public async Task<Task> PerformCalculation()
     {
-        
         var fieldsToUpdate = await fieldDao.GetAllFields();
-
         foreach (var field in fieldsToUpdate)
         {
-            Console.WriteLine($"for field {field.Name} id: {field.Id} inital moisture level: {field.MoistureLevel}");
             WeatherStation? station = await weatherStationDao.GetByFieldId(field.Id);
-
+            IEnumerable<IrrigationMachine> machine = await irrigationMachineDao.GetIrrigationMachineByFieldId(field.Id);
             if (station != null)
             {
-                CalculateMoistureLevel(station, field);
-                Console.WriteLine($"for field {field.Name} id: {field.Id} After calculation moisture level: {field.MoistureLevel}");
+                CalculateMoistureLevel(station, field,machine);
                 await fieldDao.UpdateAsyncField(field);
             }
-            
         }
         return Task.CompletedTask;
         
@@ -80,84 +113,98 @@ public class FieldLogic : IFieldLogic
 
  
 
-    private void CalculateMoistureLevel(WeatherStation weatherStationForField, Field field)
+    private void CalculateMoistureLevel(WeatherStation weatherStationForField, Field field,
+        IEnumerable<IrrigationMachine> irrigationMachines)
     {
         double precipitation = weatherStationForField.Precipitation;
         double evaporation = weatherStationForField.Evaporation;
 
+        // Calculate the total amount of water spread by the irrigation machines (in cubic meters)
+        double totalWaterSpread = irrigationMachines.Where(machine => machine.IsRunning).Sum(machine => machine.WaterAmount);
 
-        field.MoistureLevel += precipitation + evaporation;
+        // Convert field area from hectares to square meters
+        double? fieldAreaInSquareMeters = field.Area * 10000;
         
+        // Calculate how many mm of water have been spread over the field
+        double? waterSpreadPerSquareMeter = (totalWaterSpread / fieldAreaInSquareMeters)*1000;
+
+        Console.WriteLine($"Precipitation: {precipitation}, Evaporation: {evaporation}, Water spread: {waterSpreadPerSquareMeter}");
+        
+        double newMoistureLevel = field.MoistureLevel += precipitation + evaporation + waterSpreadPerSquareMeter ?? 0;
+        
+        // Check if the new moisture level exceeds the field capacity
+        if (newMoistureLevel > field.FieldCapacity)
+        {
+            Console.WriteLine($"The new moisture level ({newMoistureLevel}) exceeds the field capacity ({field.FieldCapacity}). Setting moisture level to field capacity.");
+            field.MoistureLevel = field.FieldCapacity;
+        }
+        else
+        {
+            field.MoistureLevel = newMoistureLevel;
+        }
 
     }
-
-
-    private static double CalculatePolygonArea(string coordinatesString)
+    
+   
+    
+    public double CalculateAreaFromString(string coordinateString)
     {
-        // Parse the input string to extract coordinates
-        IList<MapPoint> coordinates = ParseCoordinatesString(coordinatesString);
-
-        double area = 0;
-
-        if (coordinates.Count > 2)
+        var koordinater = ParseCoordinatesString(coordinateString);
+        if (koordinater.Count < 3)
         {
-            for (var i = 0; i < coordinates.Count - 1; i++)
+            throw new ArgumentException("Der skal være mindst 3 koordinater for at danne et polygon.");
+        }
+
+        // Tilføj det første punkt til slutningen af listen for at lukke polygonen
+        koordinater.Add(koordinater[0]);
+
+        var polygon = new Polygon(new LinearRing(koordinater.ToArray()));
+        return polygon.Area * 1000000; // Arealet returneres i kvadratmeter
+    }
+
+    private List<Coordinate> ParseCoordinatesString(string coordinateString)
+    {
+        var koordinater = new List<Coordinate>();
+        var parSplit = coordinateString.Split(new[] { "), (" }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var par in parSplit)
+        {
+            var rensetPar = par.Trim('(', ')');
+            var punkter = rensetPar.Split(',');
+
+            if (punkter.Length == 2)
             {
-                MapPoint p1 = coordinates[i];
-                MapPoint p2 = coordinates[i + 1];
-                area += ConvertToRadian(p2.Longitude - p1.Longitude) * (2 + Math.Sin(ConvertToRadian(p1.Latitude)) +
-                                                                        Math.Sin(ConvertToRadian(p2.Latitude)));
+                if (double.TryParse(punkter[0].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out double lon) &&
+                    double.TryParse(punkter[1].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out double lat))
+                {
+                    koordinater.Add(new Coordinate(lon, lat));
+                }
+                else
+                {
+                    throw new ArgumentException("Ugyldigt koordinatformat.");
+                }
             }
-
-            area = area * 6378137 * 6378137 / 2;
         }
 
-        double absoluteArea = Math.Abs(area);
-
-        return absoluteArea;
-
-        
+        return koordinater;
     }
-
-    private static IList<MapPoint> ParseCoordinatesString(string coordinatesString)
+    
+    
+    //method for legacy fields, not used anymore but might be useful in the future
+    public async Task CalculateAreaForAllFields()
     {
-        List<MapPoint> coordinates = new List<MapPoint>();
+        // Retrieve all fields from the database
+        var fields = await fieldDao.GetAllFields();
 
-        // Split the input string into individual coordinate pairs
-        string[] pairs = coordinatesString.Split(new[] { "), (" }, StringSplitOptions.RemoveEmptyEntries);
-
-        foreach (var pair in pairs)
+        foreach (var field in fields)
         {
-            // Remove parentheses and split the pair into latitude and longitude
-            string[] values = pair.Replace("(", "").Replace(")", "").Split(new[] { ", " }, StringSplitOptions.None);
+            // Calculate the area for each field
+            double area = CalculateAreaFromString(field.LocationData);
 
-            // Parse latitude and longitude and add to the coordinates list
-            double latitude = double.Parse(values[1]); // Latitude is the second value
-            double longitude = double.Parse(values[0]); // Longitude is the first value
-
-            coordinates.Add(new MapPoint(latitude, longitude));
+            // Update the field's area in the database
+            field.Area = area;
+            await fieldDao.UpdateAsyncField(field);
         }
-
-        return coordinates;
     }
-
-    private static double ConvertToRadian(double input)
-    {
-        return input * Math.PI / 180;
-    }
-
-    // Assuming you have a MapPoint class defined as follows:
-    public class MapPoint
-    {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-
-        public MapPoint(double latitude, double longitude)
-        {
-            Latitude = latitude;
-            Longitude = longitude;
-        }
-
-
-    }
+    
 }
