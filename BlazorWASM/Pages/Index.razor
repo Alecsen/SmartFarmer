@@ -8,27 +8,96 @@
 @inject IIrrigationMachineService irrigationMachineService
 <AuthorizeView>
     <NotAuthorized>
-    <PageTitle>Index</PageTitle>
+    <PageTitle>Forside</PageTitle>
 
+        <br/>
 
-    <h1>Velkommen til Smart Farmer!</h1>
+        <h1>Velkommen til SmartFarmer</h1> <br/>
+        
+        <hr class="hr-divider">
+        <br/>
+        <h2>Revolutionerende Vandingsstyring til Fremtidens Landbrug</h2>
     
-        <p>Vær venlig at logge ind :)</p>
+        <div class="background">
+            <div class="row">
+                <div class="column">
+                
+                    <br/>
+                    <p><b>Optimer dit udbytte, minimer spild, og dyrk succes med SmartFarmer!</b></p>
+                    <p>SmartFarmer er din partner i vækst. Vores brugervenlige grænseflade og avancerede teknologi 
+                        gør det nemt for dig at tage kontrol over din vanding. Gør dig klar til at opleve landbrug på 
+                        et nyt niveau. <br/> <br/> 
+                        <i>Tilmeld dig SmartFarmer <NavLink href="/CreateUser">her</NavLink> og 
+                        dyrk fremtidens succes allerede i dag!</i><br/> <br/> 
+                    
+                        Læs mere herunder! 👇
+                    
+                    </p>
+                    
+                    
+        
+                </div>
+            
+                <div class="column image-container">  
+                    <img src="img/irrigationmachine.jpg" alt="Billede af vandingsmaskine" />
+                </div>
+                
+            </div></div>
+        
+         <hr class="hr-divider">
+        <br/>
+        
+        <div>
+            <h2>Hvorfor SmartFarmer?</h2><br/>
+        
+        
+            <p class="why-description">🌱 <b>Maximer dit Udbytte</b> <br/><br/> Tag kontrol over din mark med vores avancerede algoritmer, der tilpasser sig dine afgrøders unikke behov 
+                og sikrer maksimalt udbytte pr. dråbe vand.<br/><br/><br/>
+           
+                💧 <b>Minimer Spild</b> <br/><br/> Farvel til unødvendigt vandspild! SmartFarmer giver dig den præcision, der er nødvendig for at levere nøjagtig 
+                den mængde vand, dine afgrøder kræver – intet mere, intet mindre.<br/><br/><br/>
+           
+                📈 <b>Optimeret Vandingsstrategi</b><br/><br/> Udvikl en vindende vandingsstrategi baseret på realtidsdata og historiske mønstre. SmartFarmer hjælper 
+                dig med at træffe informerede beslutninger, der styrker din mark og din forretning.<br/><br/><br/>
+            
+            
+                ♻️ <b>Bæredygtighed i Fokus</b><br/><br/>  Vi forpligter os til bæredygtighed. Med SmartFarmer minimerer du udvaskning af næringsstoffer, øger produktiviteten på marken og 
+                udnytter dine ressourcer ansvarsfuldt, hvilket ikke kun gavner din bedrift, men også miljøet.
+                Du tager dermed ikke kun kontrol over din mark, men du investerer også i en mere bæredygtig fremtid for landbruget. </p>
+        </div>
+        
+        
+           <hr class="hr-divider">
+        <br/>
+        
+        <div>
+                    <h2>Vil du vide mere?</h2><br/>
+                
+                
+            <p class="contact"><b>Kontakt Agrometer på tlf. 99 99 99 99</b> <br/><br/><br/><br/><br/><br/></p>
+                </div>
+        
+        
+        
     </NotAuthorized>
 
 
     <Authorized>
-        <h3>De marker, der mangler mest vand</h3>
+        <h3>Marker med størst vandingsbehov</h3>
         <div class="dashboard-container">
             @if (fields != null && fields.Any())
             {
                 var topFields = fields.OrderBy(f => f.MoistureLevel).Take(3);
                 foreach (var field in topFields)
                 {
-                    <div class="field-card">
+                    <div class="field-card @GetDivColorClass(field)">
                         <h3>@field.FieldName</h3>
-                        <p>Mark kapacitet @field.FieldCapacity</p>
-                        <RadzenProgressBar Unit="@GetProgressBarUnit(field)" class=".rz-color-black" ProgressBarStyle="ProgressBarStyle.Light" Value="@field.MoistureLevel" Max="field.FieldCapacity" Style="height: 20px" Color="@(field.MoistureLevel < 5 ? "red" : (field.MoistureLevel > 5 ? "yellow" : "green"))"/>
+                        <p>Markkapacitet (mm): @field.FieldCapacity</p>
+                        
+                        <RadzenProgressBar Unit="@GetProgressBarUnit(field)" class=".rz-color-black"  ProgressBarStyle="@GetProgressBarStyle(field)"
+                                           Value="@field.MoistureLevel" Max="field.FieldCapacity" Style="height: 20px" />
+                        
+                        
                     </div>
                 }
             }
@@ -37,6 +106,9 @@
                 <p>@msg</p>
             }
         </div>
+        
+        <br/>
+        
         <h3>Ledige vandingsmaskiner</h3>
         <div class="dashboard-container">
 
@@ -45,8 +117,8 @@
                 foreach (var machine in freeMachines)
                 {
                     <div class="machine-card">
-                        <h3>Maskine nummer: @machine.Id</h3>
-                        <p>Vandingskapacitet: @machine.WaterAmount</p>
+                        <h3>Maskinenummer: @machine.Id</h3>
+                        <p>Vandingskapacitet (m3/t): @machine.WaterAmount</p>
                     </div>
                 }
             }
@@ -59,15 +131,16 @@
 </AuthorizeView>
 
 @code{
-    
+
     private IEnumerable<FieldLookupDto>? fields;
     private string msg = "";
     private int currentUserId;
     private IEnumerable<IrrigationMachine>? freeMachines;
+
     protected override async Task OnInitializedAsync()
     {
         currentUserId = await userService.GetCurrentUserId();
-        
+
         try
         {
             fields = await fieldService.GetFieldsByUserId(currentUserId);
@@ -80,10 +153,33 @@
             msg = e.Message;
         }
     }
-    
+
     private string GetProgressBarUnit(FieldLookupDto field)
     {
         return $" ud af {field.FieldCapacity}";
     }
 
+    private ProgressBarStyle GetProgressBarStyle(FieldLookupDto field)
+    {
+        double moisturePercentage = (field.MoistureLevel / field.FieldCapacity) * 100;
+
+        if (moisturePercentage >= 80)
+        {
+            return ProgressBarStyle.Success;
+        }
+        else if (moisturePercentage >= 50)
+        {
+            return ProgressBarStyle.Warning;
+        }
+        else
+        {
+            return ProgressBarStyle.Danger;
+        }
+    }
+
+    
+    private string GetDivColorClass(FieldLookupDto field)
+    {
+        return field.MoistureLevel < 1 ? "div-color-red" : string.Empty;
+    }
 }
