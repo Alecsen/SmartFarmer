@@ -31,7 +31,6 @@ public class Program
         builder.Services.AddScoped<IFieldLogic, FieldLogic>();
         builder.Services.AddScoped<WeatherStationDataGenerator>();
         builder.Services.AddScoped<IWeatherStationDao, WeatherEfcStationDao>();
-        builder.Services.AddScoped<IWeatherStationLogic, WeatherStationLogic>();
         builder.Services.AddScoped<IIrrigationMachineDao, IrrigationMachineEfcDao>();
         builder.Services.AddScoped<IIrrigationMachineLogic, IrrigationMachineLogic>();
         builder.Services.AddDbContext<SmartFarmerAppContext>();
